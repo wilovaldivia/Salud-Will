@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#121214">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>SALUD 12 Semanas</title>
+<style>
+:root{
+  --bg:#121214; --card:#1d1d21; --card2:#25252b; --text:#f4f4f5; --muted:#a6a6ad;
+  --line:#34343a; --accent:#f1f1f1; --good:#c8f7c5; --warn:#ffe39a; --bad:#ffb1b1;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);padding-bottom:90px}
+header{position:sticky;top:0;z-index:10;background:rgba(18,18,20,.94);backdrop-filter:blur(12px);padding:calc(14px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid var(--line)}
+h1{font-size:20px;margin:0 0 4px}
+.small{font-size:12px;color:var(--muted)}
+main{padding:14px;max-width:780px;margin:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.card h2{font-size:16px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metric{background:var(--card2);border-radius:14px;padding:10px}
+.metric b{display:block;font-size:18px;margin-top:3px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
+input,select,textarea,button{font:inherit}
+input,select,textarea{width:100%;background:#161619;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px}
+textarea{min-height:76px}
+button{border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:#111;font-weight:700}
+button.secondary{background:#2d2d33;color:var(--text);border:1px solid var(--line)}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.check{display:flex;align-items:flex-start;gap:10px;background:var(--card2);padding:10px;border-radius:12px;margin:8px 0}
+.check input{width:22px;height:22px;margin:0;flex:0 0 auto}
+.check span{font-size:14px;line-height:1.25}
+.badge{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px;background:#303038;color:#ddd}
+.badge.warn{background:#4b4022;color:var(--warn)}
+.progress{height:10px;background:#2b2b31;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;background:#f2f2f2;width:0}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(18,18,20,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:20}
+.nav button{background:transparent;color:var(--muted);padding:6px 2px;font-size:11px}
+.nav button.active{color:white}
+.section{display:none}.section.active{display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+canvas{width:100%;height:180px;background:#161619;border-radius:12px}
+.notice{font-size:13px;line-height:1.35;background:#2a241b;color:#ffe4a8;border:1px solid #5a4a2d;border-radius:12px;padding:10px}
+.ok{font-size:13px;line-height:1.35;background:#1d2b1f;color:#d4ffd2;border:1px solid #315737;border-radius:12px;padding:10px}
+hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>SALUD 12 Semanas</h1>
+  <div class="small">Recomposición corporal · 92 kg · 1.82 m · objetivo: cintura ↓, pecho y brazos ↑</div>
+</header>
+
+<main>
+<section id="inicio" class="section active">
+  <div class="card">
+    <h2>Hoy</h2>
+    <div class="grid">
+      <div class="metric"><span class="small">Fecha</span><b id="todayLabel">—</b></div>
+      <div class="metric"><span class="small">Cumplimiento</span><b id="scoreTxt">0%</b></div>
+      <div class="metric"><span class="small">Proteína objetivo</span><b>175 g</b></div>
+      <div class="metric"><span class="small">Agua</span><b>2.5–3 L</b></div>
+    </div>
+    <div style="margin-top:10px" class="progress"><div id="scoreBar"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Check diario</h2>
+    <div class="check"><input type="checkbox" data-check="sleep"><span>Dormí aproximadamente 7.5–8 h.</span></div>
+    <div class="check"><input type="checkbox" data-check="water"><span>Tomé 2.5–3 L de agua.</span></div>
+    <div class="check"><input type="checkbox" data-check="protein"><span>Alcancé aproximadamente 175 g de proteína.</span></div>
+    <div class="check"><input type="checkbox" data-check="vegetables"><span>Incluí verduras en al menos 2 comidas.</span></div>
+    <div class="check"><input type="checkbox" data-check="steps"><span>Tuve movimiento diario/caminata adicional.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Suplementos de hoy</h2>
+    <div class="check"><input type="checkbox" data-check="d3"><span><b>Vitamina D3 Mason</b><br>1 cápsula (400 UI), con desayuno y comida con algo de grasa.</span></div>
+    <div class="check"><input type="checkbox" data-check="fish"><span><b>Fish Oil Sunvit</b><br>1 cápsula con desayuno o almuerzo.</span></div>
+    <div class="check"><input type="checkbox" data-check="creatine"><span><b>Creatina DY</b><br>1 scoop (5 g monohidrato) todos los días.</span></div>
+    <div id="preWorkoutCard" class="check"><input type="checkbox" data-check="pre"><span><b>Blood & Guts</b><br>Solo si entrenas por la mañana. Evitar por la noche.</span></div>
+    <div class="notice">El preentreno aporta ~186 mg de cafeína por scoop. Evítalo en entrenamientos de 20:00 y procura que tu última cafeína sea antes de 14:00–15:00.</div>
+  </div>
+</section>
+
+<section id="alimentacion" class="section">
+  <div class="card">
+    <h2>Plan nutricional</h2>
+    <div class="grid3">
+      <div class="metric"><span class="small">Entreno</span><b>~2600</b><span class="small">kcal</span></div>
+      <div class="metric"><span class="small">Descanso</span><b>~2400</b><span class="small">kcal</span></div>
+      <div class="metric"><span class="small">Proteína</span><b>175 g</b><span class="small">diarios</span></div>
+    </div>
+    <p class="small">Punto de partida por 14 días. Ajusta solo según evolución de cintura, rendimiento y peso promedio.</p>
+  </div>
+
+  <div class="card">
+    <h2>Plantilla diaria</h2>
+    <table>
+      <tr><th>Momento</th><th>Objetivo / ejemplo</th></tr>
+      <tr><td>Preentreno AM</td><td>Plátano; opcional 1–2 tostadas si tienes hambre.</td></tr>
+      <tr><td>Desayuno</td><td>3 huevos + 150–200 g claras + 60–80 g avena + fruta. Sin lactosa.</td></tr>
+      <tr><td>Almuerzo</td><td>180–200 g proteína + arroz/papa/camote + verduras + grasa saludable.</td></tr>
+      <tr><td>Colación</td><td>Atún, huevos, pollo/pavo o yogur alto en proteína sin lactosa.</td></tr>
+      <tr><td>Cena</td><td>180–200 g proteína + verduras + carbohidrato moderado.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Registro de hoy</h2>
+    <label>Proteína estimada (g)</label><input id="proteinInput" type="number" min="0" max="300" placeholder="Ej. 170">
+    <label style="margin-top:8px">Agua (L)</label><input id="waterInput" type="number" step="0.1" min="0" max="8" placeholder="Ej. 2.8">
+    <label style="margin-top:8px">Notas de alimentación</label><textarea id="foodNotes" placeholder="Qué comiste, hambre, digestión, antojos..."></textarea>
+    <button style="margin-top:10px" onclick="saveToday()">Guardar día</button>
+  </div>
+</section>
+
+<section id="entreno" class="section">
+  <div class="card">
+    <h2>Sesión de hoy</h2>
+    <div class="row">
+      <div><label>Entrenamiento</label>
+        <select id="workoutSelect" onchange="renderWorkout()">
+          <option value="">Descanso / caminar</option>
+          <option value="A">A · Pecho + tríceps</option>
+          <option value="B">B · Piernas + abdomen</option>
+          <option value="C">C · Espalda + bíceps</option>
+          <option value="D">D · Pecho + brazos + piernas</option>
+        </select>
+      </div>
+      <div><label>Horario</label>
+        <select id="timeSelect" onchange="updatePreworkoutWarning()">
+          <option value="am">07:00–09:00</option>
+          <option value="pm">20:00–21:00</option>
+        </select>
+      </div>
+    </div>
+    <div id="pwWarn" class="ok" style="margin-top:10px">Entreno AM: el preentreno puede usarse si lo toleras.</div>
+    <div id="workoutBox" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <h2>Regla de progresión</h2>
+    <p class="small">Semanas 1–2: técnica, deja 2–3 repeticiones en reserva. Semanas 3–6: suma repeticiones. Semana 7: descarga 30–40%. Semanas 8–11: segundo bloque. Semana 12: evaluación.</p>
+    <div class="notice">Si reaparece dolor agudo en el hombro izquierdo, pérdida de fuerza o dolor nocturno, suspende el movimiento que lo provoca y busca evaluación profesional.</div>
+  </div>
+</section>
+
+<section id="progreso" class="section">
+  <div class="card">
+    <h2>Registrar progreso</h2>
+    <div class="row">
+      <div><label>Peso (kg)</label><input id="weightInput" type="number" step="0.1" placeholder="92.0"></div>
+      <div><label>Cintura (cm)</label><input id="waistInput" type="number" step="0.1" placeholder="75.0"></div>
+    </div>
+    <label style="margin-top:8px">Flexiones máximas con buena técnica</label><input id="pushupInput" type="number" min="0" placeholder="Ej. 18">
+    <button style="margin-top:10px" onclick="addProgress()">Agregar registro</button>
+  </div>
+  <div class="card">
+    <h2>Tendencia</h2>
+    <canvas id="chart" width="700" height="220"></canvas>
+    <div id="trendText" class="small" style="margin-top:8px">Aún no hay suficientes registros.</div>
+  </div>
+  <div class="card">
+    <h2>Últimos registros</h2>
+    <div id="history"></div>
+  </div>
+</section>
+
+<section id="datos" class="section">
+  <div class="card">
+    <h2>Configuración</h2>
+    <label>Meta de proteína (g/día)</label><input id="proteinTarget" type="number" value="175">
+    <label style="margin-top:8px">Meta de agua (L/día)</label><input id="waterTarget" type="number" step="0.1" value="2.7">
+    <button style="margin-top:10px" onclick="saveSettings()">Guardar metas</button>
+  </div>
+  <div class="card">
+    <h2>Exportar / respaldo</h2>
+    <p class="small">Los datos se guardan localmente en tu iPhone/navegador. Puedes descargar un respaldo JSON.</p>
+    <div class="row">
+      <button onclick="exportData()">Exportar</button>
+      <button class="secondary" onclick="resetData()">Reiniciar</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Medición de cintura</h2>
+    <p class="small">Mide por la mañana, abdomen relajado, a la altura del ombligo, después de una exhalación normal. Haz 3 lecturas y usa el promedio.</p>
+  </div>
+</section>
+</main>
+
+<div class="nav">
+  <button class="active" data-tab="inicio">Hoy</button>
+  <button data-tab="alimentacion">Comida</button>
+  <button data-tab="entreno">Entreno</button>
+  <button data-tab="progreso">Progreso</button>
+  <button data-tab="datos">Datos</button>
+</div>
+
+<script>
+const workouts = {
+ A:[
+  ["Flexiones","4 × 8–20"],["Press de piso con mancuernas","4 × 10–15"],["Flexiones con pies elevados","3 × 8–15"],
+  ["Press cerrado con mancuernas/barra","3 × 10–15"],["Flexiones cerradas","3 × 8–15"],["Crunch inverso","3 × 12–20"]
+ ],
+ B:[
+  ["Sentadilla goblet","4 × 12–20"],["Peso muerto rumano","4 × 10–15"],["Bulgarian split squat","3 × 8–12/pierna"],
+  ["Puente de glúteo","3 × 15–20"],["Pantorrillas","4 × 15–25"],["Plancha","3 × 30–60 s"],["Crunch inverso","3 × 12–20"]
+ ],
+ C:[
+  ["Remo a una mano","4 × 10–15"],["Remo con barra","4 × 10–15"],["Curl mancuernas","4 × 8–15"],
+  ["Curl martillo","3 × 8–12"],["Curl con barra","3 × 10–15"],["Flexiones escapulares","3 × 12–15"],["Plancha lateral","3 × 30–45 s/lado"]
+ ],
+ D:[
+  ["Flexiones lentas (3 s bajada)","4 × 10–20"],["Press de piso con mancuernas","3 × 12–20"],["Bulgarian split squat","3 × 10–15/pierna"],
+  ["Peso muerto rumano","3 × 12–15"],["Curl bíceps","3 × 10–15"],["Flexiones cerradas","3 × 8–15"],["Core","3 series"]
+ ]
+};
+
+const key = d => "salud_day_"+d;
+const isoToday = () => new Date().toISOString().slice(0,10);
+
+function loadDay(){
+ const d=isoToday(), data=JSON.parse(localStorage.getItem(key(d))||"{}");
+ document.getElementById("todayLabel").textContent=new Date().toLocaleDateString("es-PE",{day:"2-digit",month:"short"});
+ document.querySelectorAll("[data-check]").forEach(el=>el.checked=!!data.checks?.[el.dataset.check]);
+ document.getElementById("proteinInput").value=data.protein||"";
+ document.getElementById("waterInput").value=data.water||"";
+ document.getElementById("foodNotes").value=data.notes||"";
+ document.getElementById("workoutSelect").value=data.workout||"";
+ document.getElementById("timeSelect").value=data.time||"am";
+ updateScore();
+ renderWorkout();
+ updatePreworkoutWarning();
+}
+function currentDayData(){
+ const d=isoToday(), old=JSON.parse(localStorage.getItem(key(d))||"{}");
+ const checks={};
+ document.querySelectorAll("[data-check]").forEach(el=>checks[el.dataset.check]=el.checked);
+ return {...old,checks,
+   protein:+document.getElementById("proteinInput").value||0,
+   water:+document.getElementById("waterInput").value||0,
+   notes:document.getElementById("foodNotes").value,
+   workout:document.getElementById("workoutSelect").value,
+   time:document.getElementById("timeSelect").value
+ };
+}
+function saveToday(){
+ localStorage.setItem(key(isoToday()),JSON.stringify(currentDayData()));
+ updateScore(); alert("Día guardado.");
+}
+document.addEventListener("change",e=>{
+ if(e.target.matches("[data-check]")){
+  localStorage.setItem(key(isoToday()),JSON.stringify(currentDayData())); updateScore();
+ }
+});
+function updateScore(){
+ const all=[...document.querySelectorAll("[data-check]")], done=all.filter(x=>x.checked).length;
+ const pct=Math.round(done/all.length*100);
+ document.getElementById("scoreTxt").textContent=pct+"%";
+ document.getElementById("scoreBar").style.width=pct+"%";
+}
+function renderWorkout(){
+ const w=document.getElementById("workoutSelect").value, box=document.getElementById("workoutBox");
+ if(!w){box.innerHTML='<div class="small">Día de descanso: caminata suave y movilidad.</div>';return}
+ box.innerHTML='<table><tr><th>Ejercicio</th><th>Trabajo</th></tr>'+workouts[w].map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")+'</table>';
+}
+function updatePreworkoutWarning(){
+ const pm=document.getElementById("timeSelect").value==="pm";
+ const el=document.getElementById("pwWarn");
+ el.className=pm?"notice":"ok";
+ el.textContent=pm?"Entreno PM: no uses Blood & Guts; puede interferir con tu sueño.":"Entreno AM: el preentreno puede usarse si lo toleras.";
+}
+function addProgress(){
+ const rec={date:isoToday(),weight:+document.getElementById("weightInput").value||null,waist:+document.getElementById("waistInput").value||null,pushups:+document.getElementById("pushupInput").value||null};
+ if(!rec.weight && !rec.waist && !rec.pushups){alert("Ingresa al menos un dato.");return}
+ const arr=JSON.parse(localStorage.getItem("salud_progress")||"[]");
+ arr.push(rec); localStorage.setItem("salud_progress",JSON.stringify(arr));
+ document.getElementById("weightInput").value=""; document.getElementById("waistInput").value=""; document.getElementById("pushupInput").value="";
+ renderProgress();
+}
+function renderProgress(){
+ const arr=JSON.parse(localStorage.getItem("salud_progress")||"[]").slice(-12);
+ document.getElementById("history").innerHTML=arr.length?'<table><tr><th>Fecha</th><th>kg</th><th>cm</th><th>Flex.</th></tr>'+arr.slice().reverse().map(r=>`<tr><td>${r.date}</td><td>${r.weight??"—"}</td><td>${r.waist??"—"}</td><td>${r.pushups??"—"}</td></tr>`).join("")+'</table>':'<div class="small">Sin registros.</div>';
+ drawChart(arr);
+ const valid=arr.filter(r=>r.waist);
+ if(valid.length>=2){
+  const diff=(valid[valid.length-1].waist-valid[0].waist).toFixed(1);
+  document.getElementById("trendText").textContent=`Cambio de cintura en registros visibles: ${diff>0?"+":""}${diff} cm.`;
+ }
+}
+function drawChart(arr){
+ const c=document.getElementById("chart"),ctx=c.getContext("2d");
+ ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle="#161619"; ctx.fillRect(0,0,c.width,c.height);
+ const vals=arr.filter(r=>r.waist).map(r=>r.waist);
+ if(vals.length<2){ctx.fillStyle="#a6a6ad";ctx.font="18px sans-serif";ctx.fillText("Registra al menos 2 medidas de cintura",40,110);return}
+ const min=Math.min(...vals)-1,max=Math.max(...vals)+1,pad=40;
+ ctx.strokeStyle="#555";ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,c.height-pad);ctx.lineTo(c.width-pad,c.height-pad);ctx.stroke();
+ ctx.strokeStyle="#f4f4f5";ctx.lineWidth=3;ctx.beginPath();
+ vals.forEach((v,i)=>{const x=pad+i*(c.width-2*pad)/(vals.length-1);const y=c.height-pad-(v-min)*(c.height-2*pad)/(max-min);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+ ctx.stroke();
+}
+function saveSettings(){
+ localStorage.setItem("salud_settings",JSON.stringify({protein:+document.getElementById("proteinTarget").value,water:+document.getElementById("waterTarget").value})); alert("Metas guardadas.");
+}
+function exportData(){
+ const payload={progress:JSON.parse(localStorage.getItem("salud_progress")||"[]"),settings:JSON.parse(localStorage.getItem("salud_settings")||"{}"),days:{}};
+ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith("salud_day_"))payload.days[k.replace("salud_day_","")]=JSON.parse(localStorage.getItem(k))}
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="salud-respaldo.json";a.click();
+}
+function resetData(){
+ if(confirm("¿Eliminar todos los datos guardados en esta app?")){
+  Object.keys(localStorage).filter(k=>k.startsWith("salud_")).forEach(k=>localStorage.removeItem(k));
+  location.reload();
+ }
+}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.tab).classList.add("active");
+ if(b.dataset.tab==="progreso")renderProgress();
+});
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
+loadDay(); renderProgress();
+</script>
+</body>
+</html>
