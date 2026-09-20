@@ -1,11 +1,12 @@
 {
-  "name": "SALUD 12 Semanas",
-  "short_name": "SALUD 12S",
+  "name": "RENACE v3 — Nuevo Inicio",
+  "short_name": "RENACE",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#121214",
-  "theme_color": "#121214",
-  "description": "Control diario de alimentación, suplementación, entrenamiento y progreso corporal.",
+  "background_color": "#101315",
+  "theme_color": "#101315",
+  "description": "App personal de recomposición corporal, alimentación, entrenamiento y progreso.",
   "icons": [
     {
       "src": "icon-192.png",
