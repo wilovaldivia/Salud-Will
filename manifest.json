@@ -1,12 +1,12 @@
 {
-  "name": "RENACE v3 — Nuevo Inicio",
+  "name": "RENACE — Nuevo inicio",
   "short_name": "RENACE",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101315",
   "theme_color": "#101315",
-  "description": "App personal de recomposición corporal, alimentación, entrenamiento y progreso.",
+  "description": "Nutrición, entrenamiento y progreso. Datos locales, sin cuenta.",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,5 +18,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "id": "./"
 }
