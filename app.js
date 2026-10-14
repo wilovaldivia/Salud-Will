@@ -2,7 +2,7 @@
 const K='renace3_';
 const isoToday=()=>Renace.localDate(new Date());
 const getJSON=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
-const setJSON=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const setJSON=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){notifyUser('No se pudo guardar. Revisa el espacio disponible o el modo privado del navegador.');throw e}};
 const value=id=>document.getElementById(id).value;
 const num=id=>+value(id)||null;
 
@@ -76,7 +76,7 @@ const weekPlans=[
 
 function getProfile(){return {...defaultProfile(),...getJSON(K+'profile',{})}}
 function dayData(date=isoToday()){return getJSON(K+'day_'+date,{sleep:null,water:null,foods:[],supp:{},workout:"",trainingTime:"am",exercises:{},rpe:null,shoulderPain:null,trainingNotes:""})}
-function saveDay(d,date=isoToday()){setJSON(K+'day_'+date,d);renderAll()}
+function saveDay(d,date=isoToday()){d.goals={...getProfile()};delete d.goals.preferredFoods;delete d.goals.restrictions;setJSON(K+'day_'+date,d);d.summary=compliance(date);delete d.summary.t;setJSON(K+'day_'+date,d);renderAll();notifyUser('Guardado en este navegador.')}
 
 function removeFood(id){const d=dayData();d.foods=d.foods.filter(x=>x.id!==id);saveDay(d)}
 function totals(d){return d.foods.reduce((a,x)=>({kcal:a.kcal+x.kcal,protein:a.protein+x.protein,carbs:a.carbs+x.carbs,fat:a.fat+x.fat}),{kcal:0,protein:0,carbs:0,fat:0})}
@@ -84,12 +84,12 @@ function totals(d){return d.foods.reduce((a,x)=>({kcal:a.kcal+x.kcal,protein:a.p
 function weekPhase(w){if(w<=2)return"Adaptación";if(w<=6)return"Progresión";if(w===7)return"Descarga";if(w<=11)return"Segundo bloque";return"Evaluación"}
 let timerSec=90,timerRun=false,timerInt=null;
 function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function setTimer(s){timerSec=s;timerRun=false;clearInterval(timerInt);document.getElementById('timerTxt').textContent=fmt(timerSec);document.getElementById('timerBtn').textContent='Iniciar'}
+function setTimer(s){if(document.getElementById('restDuration'))document.getElementById('restDuration').value=String(s);timerSec=s;timerRun=false;clearInterval(timerInt);document.getElementById('timerTxt').textContent=fmt(timerSec);document.getElementById('timerBtn').textContent='Iniciar'}
 function pastDates(n){const a=[];for(let i=n-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);a.push(Renace.localDate(d))}return a}
 function renderProgress(){
  const a=getJSON(K+'measurements',[]),metric=value('chartMetric'),labels={abdomen:"Abdomen",chest:"Pecho",arm:"Brazo",quad:"Cuádriceps",calf:"Pantorrilla",weight:"Peso"},valid=a.filter(x=>x[metric]!=null);
  drawChart(valid.map(x=>({d:x.date,v:x[metric]})),labels[metric]);let txt="Aún no hay suficientes registros.";
- if(valid.length>=2){const diff=(valid.at(-1)[metric]-valid[0][metric]).toFixed(1);txt=`Cambio de ${labels[metric].toLowerCase()}: ${diff>0?'+':''}${diff} ${metric==='weight'?'kg':'cm'}.`}
+ if(valid.length>=2){const diff=(valid[valid.length-1][metric]-valid[0][metric]).toFixed(1);txt=`Cambio de ${labels[metric].toLowerCase()}: ${diff>0?'+':''}${diff} ${metric==='weight'?'kg':'cm'}.`}
  document.getElementById('trendText').textContent=txt;
  document.getElementById('measureHistory').innerHTML=a.length?'<table><tr><th>Fecha</th><th>kg</th><th>Abd.</th><th>Pecho</th><th>Brazo</th><th>Quad.</th><th>Pant.</th></tr>'+a.slice().reverse().map(x=>`<tr><td>${x.date}</td><td>${x.weight??'—'}</td><td>${x.abdomen??'—'}</td><td>${x.chest??'—'}</td><td>${x.arm??'—'}</td><td>${x.quad??'—'}</td><td>${x.calf??'—'}</td></tr>`).join('')+'</table>':'<div class="small">Sin mediciones.</div>';
 }

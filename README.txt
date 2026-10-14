@@ -1,37 +1,39 @@
-RENACE v3.0 — edición local preparada para evolución comercial
+TEMPLE 3.1 — actualización desde RENACE, 13 de octubre de 2026
 
-PUBLICAR EN GITHUB PAGES
-1. Exporta un respaldo desde la versión anterior antes de reemplazar archivos.
-2. Descomprime el ZIP y sube TODOS sus archivos y carpetas al nivel principal del repositorio existente. No subas el ZIP ni una carpeta contenedora.
-3. En Settings > Pages, publica desde la rama main y /(root), o conserva tu configuración actual.
-4. Abre la misma URL HTTPS y recarga. La actualización de caché sucede tras la descarga de los archivos nuevos.
-5. iPhone: Safari > Compartir > Añadir a pantalla de inicio. Android: opción Instalar del navegador compatible.
-6. Abre con conexión una vez para preparar el modo sin conexión. No abras index.html como archivo: el service worker necesita HTTPS o localhost.
+PUBLICAR / ACTUALIZAR
+1. Desde RENACE exporta un respaldo JSON antes de actualizar.
+2. Descomprime el ZIP y sube todos los archivos y docs al nivel principal del mismo repositorio. Mantén la misma URL de GitHub Pages.
+3. Conserva Pages publicado desde tu rama y carpeta actuales. No subas el ZIP como único archivo.
+4. Abre la URL publicada con conexión. Si aparece «Actualización preparada», pulsa Recargar; se descarga un conjunto completo de archivos para evitar mezclas de versiones.
+5. No borres los datos del navegador para actualizar. Si pasas de Brave a Safari, exporta desde Brave e importa desde Safari: cada navegador tiene su propio almacenamiento.
+6. iPhone: abre la URL publicada con Safari y usa Compartir → Añadir a pantalla de inicio. El nombre/icono de un acceso ya instalado puede seguir mostrando RENACE hasta recrearlo. Conserva un respaldo antes de cambiar la instalación.
+7. El modo sin conexión está disponible tras la primera descarga completa. Abrir index.html como archivo local no instala el service worker; usa HTTPS o un servidor local para comprobar la PWA.
 
-DATOS Y ACTUALIZACIÓN
-Se mantienen las claves renace3_ y la base IndexedDB renace3_photos. La actualización es aditiva: conserva alimentos registrados, medidas y fotografías. Se conserva una copia interna del perfil previo (renace3_pre-v3.0-profile).
-Cambiar de URL/origen, navegador o dispositivo NO transfiere datos. Borrar datos del navegador puede eliminarlos. Usa Exportar JSON / Importar JSON; el respaldo nuevo incluye las fotos.
-Los usuarios anteriores deben completar edad, sexo, actividad y equipo antes de continuar. Los suplementos históricos permanecen en sus registros, pero NO se convierten automáticamente en planes de suplementos; configura los actuales desde Comida.
-Los respaldos v3 pueden importarse: no incluían fotos. La importación combina fechas y reemplaza las coincidentes; exporta primero para poder revertir.
-No hay cuenta, cloud, pagos, analítica ni solicitudes a servicios nutricionales externos. El servidor de Pages sirve solo archivos de la app. Los registros permanecen en el navegador; no están cifrados por la aplicación.
+QUÉ CAMBIÓ
+- Nombre TEMPLE e isotipo de las tres piedras en el encabezado e iconos. Versión solo al pie con copyright, ayuda, contacto y privacidad.
+- Pestañas navegables incluso sin perfil. Generar menú requiere un perfil guardado y muestra indicaciones claras si falta.
+- Controles compactos y paneles expandibles/reducibles, con estado recordado en el dispositivo.
+- Determinación global: promedio de adherencia de los días con registros reales. Se conserva al cambiar de día; se muestra por separado el cumplimiento de hoy. Puede subir o bajar con los nuevos registros, no es una barra monótona de nivel.
+- Resúmenes de días anteriores congelados. Los registros legados reciben una primera estimación usando el perfil disponible durante la migración; no se inventan objetivos históricos desconocidos.
+- Se elimina Informe semanal por duplicar Highlights. El único resumen semanal indica músculos trabajados y principales alimentos.
+- Recuperación: energía, fatiga, estrés, movilidad y molestias, además de sueño y agua. Los síntomas orientan la sugerencia de sesión; no se usan como penalización en el score.
+- Menú diario orientado al objetivo calórico/proteico y al tipo de sesión; porciones aproximadas, restricciones y preferencias. Sus totales se muestran antes de registrar lo realmente consumido. No se suma automáticamente a las ingestas.
+- Alimentos agrupados por categorías y ordenados alfabéticamente dentro de cada categoría. Días de suplementos en fila adaptable.
+- Entrenamiento sugerido usando grupos principales completados en los dos días anteriores, RPE, fatiga y molestias. Es una recomendación que debes aplicar voluntariamente.
+- Descansos 15–60 s, selector en pasos de 5 y atajos 15/30/45/60. No es un límite fisiológico: puedes tomar descansos mayores fuera del contador si lo necesitas.
+- Fin de sesión organizado en cuatro bloques, dos por columna, con botón de guardado propio.
 
-NOVEDADES
-Mi Progreso: Determinación con score y nivel; barras de energía, proteína, carbohidratos, grasas, sueño y agua; semana lunes-domingo; highlights de series por músculo y alimentos por frecuencia, kcal y proteína.
-Comida: sueño/agua en pasos de 0.5; menú semanal antes del registro; catálogo ampliado de 52 alimentos globales/peruanos; gramos, ml y medidas domésticas específicas; etiqueta personalizada reutilizable. Suplementos propios con dosis, unidad, días, horario, tipo, cafeína y notas.
-Entreno: semanas 1–12 modifican series, repeticiones, RIR, tempo y descanso. La sesión previa comparable (últimos 30 días), RPE, cumplimiento y molestias moderan la próxima propuesta. El equipo define alternativas. Horario 11–12 y personalizado; descanso 30/45/60/90, sonido y vibración compatibles. Molestias múltiples.
-Progreso: controles de medidas ±0.5, Gráfico corporal, fotos e historial conservados.
-Mi info: onboarding adulto genérico, objetivos, cálculo metabólico sin somatotipos, restricciones/preferidos múltiples, trabajo/viajes, experiencia, equipo y días disponibles.
+DATOS Y CONTACTO
+Se conservan las claves renace3_ e IndexedDB renace3_photos: no hay migración a un almacenamiento distinto ni pérdida intencional de historial. No se trasladan datos entre dominios o navegadores sin respaldo.
+El contacto no tiene correo ni teléfono inventados. Para activarlo, edita supportEmail y/o supportWhatsApp en config.js (WhatsApp: código de país + número, solo dígitos). La ayuda y privacidad funcionan aunque no haya canal de contacto configurado.
+No hay cuentas, cloud, pagos ni analítica. La arquitectura queda preparada para su futura evolución; no es un binario de tienda.
 
-ALCANCE DE LAS ESTIMACIONES
-Mifflin–St Jeor: 10×kg + 6.25×cm − 5×edad + 5 (masculino) o −161 (femenino). Se multiplica por actividad total 1.2–1.9, que YA incluye entrenamientos. Meta: −15% para perder grasa; +8% para ganar masa; mantenimiento para los demás objetivos. Proteína 1.8 g/kg para perder grasa/recomposición y 1.6 para otros; grasa 28% de energía; carbohidratos como resto. Son reglas de producto orientativas, no una medición metabólica ni prescripción clínica. No es el modelo dinámico NIDDK. No se recalibran automáticamente con la evolución de peso.
-El agua y sueño son metas editables. El score promedia nutrición, recuperación, actividad registrada y suplementos programados; sin suplementos ese componente se excluye. No es una medida de salud, eficacia o beneficio muscular. Los músculos reflejan series completadas asignadas al grupo principal, sin inferir resultados fisiológicos.
-Catálogo compacto orientativo: conserva la base original y añade valores aproximados. No es una extracción certificada íntegra de USDA/INS ni tiene garantía de 95%. Recetas peruanas y unidades domésticas tienen más variación. Para productos comerciales utiliza sus etiquetas y gramos/ml.
-El menú usa restricciones y preferidos, y ofrece opciones transportables según trabajo/viajes. Las cantidades son orientativas, NO optimizadas al objetivo calórico. No garantiza ausencia de trazas/alérgenos. Suplementos con calorías deben registrarse también como alimento; no se suman automáticamente al checklist.
-No es un dispositivo médico; uso general para adultos. Antes de publicar comercialmente hace falta una revisión nutricional/de entrenamiento y de accesibilidad.
+PRUEBAS
+Se comprobó el cambio entre pestañas, guardado de perfil y generación de menú diario en Safari de macOS. También se probaron navegación, recuperación, sesión sugerida, guardado y paneles en el navegador integrado. Pruebas automáticas: progreso entre días, sugerencia de descanso ante dolor, evitar grupos principales recientes, cantidades/calorías del menú y restricciones veganas/sin gluten.
+No se certifica todavía Safari/Brave de iPhone o vibración/sonido en dispositivos físicos; la incidencia original de tu equipo/URL no pudo reproducirse exactamente. No se afirma que Brave y Safari compartan registros.
 
-COMPATIBILIDAD
-Sonido requiere iniciar el cronómetro con un gesto del usuario. Vibración depende de dispositivo/navegador (puede no estar disponible en iPhone). En segundo plano el navegador puede suspender alertas; el tiempo mostrado se corrige con el reloj al reanudar. No son notificaciones del sistema.
-Datos locales sujetos al espacio disponible del navegador. Respaldos con fotos pueden ser grandes.
+ESTIMACIONES
+No hay alimentos dirigidos selectivamente a un músculo. El menú distribuye proteína y energía para apoyar recuperación general y entrenamiento, con sus totales aproximados. No es una dieta clínica; confirma etiquetas, trazas y alergias. El historial muscular cuenta series del grupo principal y no mide crecimiento.
+El cálculo metabólico mantiene Mifflin–St Jeor con actividad total y objetivo, sin somatotipos ni doble recuento del gasto de entrenamiento. Los alimentos siguen siendo referencias orientativas, no un catálogo certificado con precisión del 95%.
 
-DOCUMENTACIÓN
-Consulta docs/ACTUALIZACION.md, docs/ARQUITECTURA.md y docs/PRIVACIDAD.md.
+Consulta docs/ACTUALIZACION_TEMPLE.md para el detalle y sugerencias para la siguiente etapa.

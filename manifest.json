@@ -1,12 +1,12 @@
 {
-  "name": "RENACE — Nuevo inicio",
-  "short_name": "RENACE",
+  "name": "TEMPLE — Fortaleza diaria",
+  "short_name": "TEMPLE",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101315",
   "theme_color": "#101315",
-  "description": "Nutrición, entrenamiento y progreso. Datos locales, sin cuenta.",
+  "description": "Nutrición, recuperación, fuerza y progreso. Datos locales.",
   "icons": [
     {
       "src": "icon-192.png",

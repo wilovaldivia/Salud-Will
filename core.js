@@ -1,6 +1,6 @@
 /* Pure domain rules. Native wrappers can replace adapters without changing rules. */
 const Renace = {
- version:'3.0.0', schema:4,
+ version:'3.1.0', schema:4,
  capabilities:{local:true,accounts:false,cloud:false,payments:false,pro:false},
  localDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`},
  week(date=new Date()){const start=new Date(date.getFullYear(),date.getMonth(),date.getDate());start.setDate(start.getDate()-(start.getDay()+6)%7);return Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return this.localDate(d)})},

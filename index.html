@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#101315">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>RENACE v3.0</title>
+<title>TEMPLE</title>
 <style>
 :root{
   --bg:#101315;--card:#181c1e;--card2:#202629;--card3:#14181a;--line:#2d3539;
@@ -48,11 +48,11 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
 .pill{display:inline-block;border-radius:999px;background:#2c342f;color:#dce8d8;padding:4px 8px;font-size:10px}
 @media(min-width:760px){main{padding:18px}.grid4{grid-template-columns:repeat(4,1fr)}}
 </style>
-</head>
+<link rel="stylesheet" href="experience.css"><link rel="icon" href="icon-192.png"></head>
 <body>
-<header><div class="brand"><img src="logo.svg"><div><h1>RENACE v3.0</h1><p>Nuevo inicio · nutrición, fuerza, constancia y progreso</p></div></div></header>
+<header><div class="brand"><img src="logo.png"><div><h1>TEMPLE</h1><p>Fortaleza que se construye cada día</p></div></div></header>
 
-<main>
+<main><div id="statusMessage" role="status" aria-live="polite"></div>
 <!-- HOY -->
 <section id="hoy" class="section active">
   <div class="card">
@@ -137,10 +137,10 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
   <div class="card">
     <h2>Menú semanal sugerido</h2>
     <div class="row">
-      <div><label>Tipo de día</label><select id="menuDayType"><option value="train">Entrenamiento</option><option value="rest">Descanso</option></select></div>
+      <div><label>Tipo de día</label><select id="menuDayType"><option value="auto">Según sesión de hoy</option><option value="train">Entrenamiento</option><option value="rest">Descanso</option></select></div>
       <div><label>Preferencia</label><select id="menuPreference"><option value="balanced">Balanceado</option><option value="simple">Muy simple</option><option value="portable">Portable / trabajo</option></select></div>
     </div>
-    <button style="margin-top:10px" onclick="generateMenu()">Generar menú semanal</button>
+    <button style="margin-top:10px" onclick="generateMenu()">Generar menú diario</button>
     <div id="menuOutput" class="reportbox" style="margin-top:10px"></div>
   </div>
 
@@ -172,9 +172,9 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
   <div class="card">
     <h2>Cronómetro de descanso</h2>
     <div class="timer" id="timerTxt">01:30</div>
-    <div class="timerBtns">
+    <div class="timerBtns"><label for="restDuration">Descanso</label><select id="restDuration" onchange="setTimer(+this.value)"><option value="15">15 s</option><option value="20">20 s</option><option value="25">25 s</option><option value="30">30 s</option><option value="35">35 s</option><option value="40">40 s</option><option value="45">45 s</option><option value="50">50 s</option><option value="55">55 s</option><option value="60">60 s</option></select>
       <button class="secondary mini" onclick="setTimer(45)">45 s</button><button class="secondary mini" onclick="setTimer(60)">60 s</button>
-      <button class="secondary mini" onclick="setTimer(90)">90 s</button>
+      <button class="secondary mini" onclick="setTimer(15)">15 s</button>
       <button class="secondary mini" onclick="setTimer(30)">30 s</button>
       <button class="mini" onclick="toggleTimer()" id="timerBtn">Iniciar</button>
     </div>
@@ -289,7 +289,7 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
     <p class="small">Las fotos no se incluyen en el JSON para mantener el respaldo ligero. Los datos del perfil y registros sí.</p>
   </div>
 </section>
-</main>
+</main><footer><span>© <span id="copyrightYear"></span> TEMPLE · <span id="appVersion"></span></span><div><button onclick="openSupport('contact')">Contáctanos</button><button onclick="openSupport('help')">Atención al cliente</button><button onclick="openSupport('privacy')">Privacidad</button></div></footer><dialog id="supportDialog"><div id="supportContent"></div><button onclick="closeSupport()">Cerrar</button></dialog>
 
 <div class="nav">
   <button class="active" data-tab="hoy">Mi Progreso</button>
@@ -299,4 +299,4 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
   <button data-tab="datos">Mi info</button>
 </div>
 
-<script src="core.js"></script><script src="app.js"></script><script src="upgrade.js"></script></body></html>
+<script src="config.js"></script><script src="core.js"></script><script src="app.js"></script><script src="upgrade.js"></script><script src="experience.js"></script><script src="bootstrap.js"></script></body></html>
