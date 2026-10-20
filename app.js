@@ -1,5 +1,7 @@
 
-const K='renace3_';
+let K='renace3_';
+let entryDate=null;
+const activeDate=()=>entryDate||isoToday();
 const isoToday=()=>Renace.localDate(new Date());
 const getJSON=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
 const setJSON=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){notifyUser('No se pudo guardar. Revisa el espacio disponible o el modo privado del navegador.');throw e}};
@@ -75,8 +77,8 @@ const weekPlans=[
 ];
 
 function getProfile(){return {...defaultProfile(),...getJSON(K+'profile',{})}}
-function dayData(date=isoToday()){return getJSON(K+'day_'+date,{sleep:null,water:null,foods:[],supp:{},workout:"",trainingTime:"am",exercises:{},rpe:null,shoulderPain:null,trainingNotes:""})}
-function saveDay(d,date=isoToday()){d.goals={...getProfile()};delete d.goals.preferredFoods;delete d.goals.restrictions;setJSON(K+'day_'+date,d);d.summary=compliance(date);delete d.summary.t;setJSON(K+'day_'+date,d);renderAll();notifyUser('Guardado en este navegador.')}
+function dayData(date=activeDate()){return getJSON(K+'day_'+date,{sleep:null,water:null,foods:[],supp:{},workout:"",trainingTime:"am",exercises:{},rpe:null,shoulderPain:null,trainingNotes:""})}
+function saveDay(d,date=activeDate()){d.goals=d.goals||{...getProfile()};delete d.goals.preferredFoods;delete d.goals.restrictions;if(!d.suppPlan)d.suppPlan=dueSupps(date).map(x=>({...x}));setJSON(K+'day_'+date,d);d.summary=compliance(date);delete d.summary.t;setJSON(K+'day_'+date,d);renderAll();notifyUser('Guardado en este navegador.')}
 
 function removeFood(id){const d=dayData();d.foods=d.foods.filter(x=>x.id!==id);saveDay(d)}
 function totals(d){return d.foods.reduce((a,x)=>({kcal:a.kcal+x.kcal,protein:a.protein+x.protein,carbs:a.carbs+x.carbs,fat:a.fat+x.fat}),{kcal:0,protein:0,carbs:0,fat:0})}
@@ -85,7 +87,7 @@ function weekPhase(w){if(w<=2)return"Adaptación";if(w<=6)return"Progresión";if
 let timerSec=90,timerRun=false,timerInt=null;
 function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function setTimer(s){if(document.getElementById('restDuration'))document.getElementById('restDuration').value=String(s);timerSec=s;timerRun=false;clearInterval(timerInt);document.getElementById('timerTxt').textContent=fmt(timerSec);document.getElementById('timerBtn').textContent='Iniciar'}
-function pastDates(n){const a=[];for(let i=n-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);a.push(Renace.localDate(d))}return a}
+function pastDates(n){const a=[];for(let i=n-1;i>=0;i--){const d=new Date(activeDate()+'T12:00:00');d.setDate(d.getDate()-i);a.push(Renace.localDate(d))}return a}
 function renderProgress(){
  const a=getJSON(K+'measurements',[]),metric=value('chartMetric'),labels={abdomen:"Abdomen",chest:"Pecho",arm:"Brazo",quad:"Cuádriceps",calf:"Pantorrilla",weight:"Peso"},valid=a.filter(x=>x[metric]!=null);
  drawChart(valid.map(x=>({d:x.date,v:x[metric]})),labels[metric]);let txt="Aún no hay suficientes registros.";
@@ -103,7 +105,7 @@ function drawChart(vals,label){
 let dbPromise=null;
 function photoDB(){
  if(dbPromise)return dbPromise;
- dbPromise=new Promise((resolve,reject)=>{const req=indexedDB.open('renace3_photos',1);req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'})};req.onsuccess=e=>resolve(e.target.result);req.onerror=e=>reject(e.target.error)});
+ dbPromise=new Promise((resolve,reject)=>{const req=indexedDB.open(K==='renace3_'?'renace3_photos':K+'photos',1);req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'})};req.onsuccess=e=>resolve(e.target.result);req.onerror=e=>reject(e.target.error)});
  return dbPromise;
 }
 function fileToDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
@@ -119,7 +121,7 @@ async function renderPhotos(){
  req.onsuccess=()=>{const a=req.result.sort((x,y)=>y.date.localeCompare(x.date)).slice(0,9);document.getElementById('photoGallery').innerHTML=a.length?a.map(x=>`<div class="photoCard"><img src="${x.data}"><span>${x.date} · ${x.type}</span></div>`).join(''):'<div class="small">Sin fotos guardadas.</div>'}
 }
 
-function migrateV2(){
+function migrateV2(){if(K!=='renace3_')return;
  if(localStorage.getItem(K+'migrated'))return;
  const p2=getJSON('renace_profile',null); if(p2&&!localStorage.getItem(K+'profile'))setJSON(K+'profile',{...defaultProfile(),...p2});
  const m2=getJSON('renace_measurements',null); if(m2&&!localStorage.getItem(K+'measurements'))setJSON(K+'measurements',m2);

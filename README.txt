@@ -1,39 +1,24 @@
-TEMPLE 3.1 — actualización desde RENACE, 13 de octubre de 2026
+TEMPLE 3.3 — colección ilustrada uniforme — 20 de octubre de 2026
 
-PUBLICAR / ACTUALIZAR
-1. Desde RENACE exporta un respaldo JSON antes de actualizar.
-2. Descomprime el ZIP y sube todos los archivos y docs al nivel principal del mismo repositorio. Mantén la misma URL de GitHub Pages.
-3. Conserva Pages publicado desde tu rama y carpeta actuales. No subas el ZIP como único archivo.
-4. Abre la URL publicada con conexión. Si aparece «Actualización preparada», pulsa Recargar; se descarga un conjunto completo de archivos para evitar mezclas de versiones.
-5. No borres los datos del navegador para actualizar. Si pasas de Brave a Safari, exporta desde Brave e importa desde Safari: cada navegador tiene su propio almacenamiento.
-6. iPhone: abre la URL publicada con Safari y usa Compartir → Añadir a pantalla de inicio. El nombre/icono de un acceso ya instalado puede seguir mostrando RENACE hasta recrearlo. Conserva un respaldo antes de cambiar la instalación.
-7. El modo sin conexión está disponible tras la primera descarga completa. Abrir index.html como archivo local no instala el service worker; usa HTTPS o un servidor local para comprobar la PWA.
+NOVEDAD
+Las 30 variantes de ejercicio y movilidad utilizan una única línea gráfica: ilustración anatómica gris con músculos principales en coral, fondo marfil y fases de movimiento. No se mezclan fotografías, figuras simples y páginas escaneadas en las guías.
 
-QUÉ CAMBIÓ
-- Nombre TEMPLE e isotipo de las tres piedras en el encabezado e iconos. Versión solo al pie con copyright, ayuda, contacto y privacidad.
-- Pestañas navegables incluso sin perfil. Generar menú requiere un perfil guardado y muestra indicaciones claras si falta.
-- Controles compactos y paneles expandibles/reducibles, con estado recordado en el dispositivo.
-- Determinación global: promedio de adherencia de los días con registros reales. Se conserva al cambiar de día; se muestra por separado el cumplimiento de hoy. Puede subir o bajar con los nuevos registros, no es una barra monótona de nivel.
-- Resúmenes de días anteriores congelados. Los registros legados reciben una primera estimación usando el perfil disponible durante la migración; no se inventan objetivos históricos desconocidos.
-- Se elimina Informe semanal por duplicar Highlights. El único resumen semanal indica músculos trabajados y principales alimentos.
-- Recuperación: energía, fatiga, estrés, movilidad y molestias, además de sueño y agua. Los síntomas orientan la sugerencia de sesión; no se usan como penalización en el score.
-- Menú diario orientado al objetivo calórico/proteico y al tipo de sesión; porciones aproximadas, restricciones y preferencias. Sus totales se muestran antes de registrar lo realmente consumido. No se suma automáticamente a las ingestas.
-- Alimentos agrupados por categorías y ordenados alfabéticamente dentro de cada categoría. Días de suplementos en fila adaptable.
-- Entrenamiento sugerido usando grupos principales completados en los dos días anteriores, RPE, fatiga y molestias. Es una recomendación que debes aplicar voluntariamente.
-- Descansos 15–60 s, selector en pasos de 5 y atajos 15/30/45/60. No es un límite fisiológico: puedes tomar descansos mayores fuera del contador si lo necesitas.
-- Fin de sesión organizado en cuatro bloques, dos por columna, con botón de guardado propio.
+Cada guía tiene dos posiciones, nombres de músculos en español, indicaciones y ampliación de 100–250 %. En Entreno puedes abrir cada ejercicio o «Ver todas las guías ilustradas» para explorar la colección. Las planchas se identifican como posturas de mantenimiento; no deben alternarse las figuras como repeticiones.
 
-DATOS Y CONTACTO
-Se conservan las claves renace3_ e IndexedDB renace3_photos: no hay migración a un almacenamiento distinto ni pérdida intencional de historial. No se trasladan datos entre dominios o navegadores sin respaldo.
-El contacto no tiene correo ni teléfono inventados. Para activarlo, edita supportEmail y/o supportWhatsApp en config.js (WhatsApp: código de país + número, solo dígitos). La ayuda y privacidad funcionan aunque no haya canal de contacto configurado.
-No hay cuentas, cloud, pagos ni analítica. La arquitectura queda preparada para su futura evolución; no es un binario de tienda.
+MANUAL DE REFERENCIA
+Se consultaron las láminas disponibles del ejemplar de Delavier aportado para identificar regiones musculares y contrastar variantes. Las nuevas imágenes son ilustraciones originales generadas con IA: no son las láminas del libro ni una traducción de ellas. El manual completo y sus escaneos no se incluyen en este ZIP. No se presenta la colección como modelo anatómico clínico o validación profesional de la técnica.
 
-PRUEBAS
-Se comprobó el cambio entre pestañas, guardado de perfil y generación de menú diario en Safari de macOS. También se probaron navegación, recuperación, sesión sugerida, guardado y paneles en el navegador integrado. Pruebas automáticas: progreso entre días, sugerencia de descanso ante dolor, evitar grupos principales recientes, cantidades/calorías del menú y restricciones veganas/sin gluten.
-No se certifica todavía Safari/Brave de iPhone o vibración/sonido en dispositivos físicos; la incidencia original de tu equipo/URL no pudo reproducirse exactamente. No se afirma que Brave y Safari compartan registros.
+ACTUALIZAR
+1. Exporta tu respaldo habitual desde Mi info cuando puedas acceder.
+2. Publica TODO el contenido del ZIP en el mismo repositorio y dirección de GitHub Pages, incluidas exercises/anatomy/ y docs/.
+3. Abre actualizar.html dentro de la dirección de tu app y pulsa «Actualizar conservando mis datos».
+4. Tras la descarga, abre TEMPLE con el mismo perfil y PIN. La nueva versión figura solo al pie: v3.3.0.
+No borres el almacenamiento del navegador. Si el repositorio conserva archivos antiguos de guías, la nueva app no los carga; el ZIP solo incluye la colección nueva. La descarga inicial contiene las diez láminas originales para disponer de ellas sin conexión.
 
-ESTIMACIONES
-No hay alimentos dirigidos selectivamente a un músculo. El menú distribuye proteína y energía para apoyar recuperación general y entrenamiento, con sus totales aproximados. No es una dieta clínica; confirma etiquetas, trazas y alergias. El historial muscular cuenta series del grupo principal y no mide crecimiento.
-El cálculo metabólico mantiene Mifflin–St Jeor con actividad total y objetivo, sin somatotipos ni doble recuento del gasto de entrenamiento. Los alimentos siguen siendo referencias orientativas, no un catálogo certificado con precisión del 95%.
+DATOS
+Se conservan perfiles locales con PIN, historial por fechas, versiones de suplementos, alimentación, medidas, fotografías y la arquitectura local anterior. No hay cuentas en nube, sincronización, pagos ni analítica. Mantén la misma dirección y navegador; Safari y Brave no comparten sus datos. El PIN bloquea la interfaz, no cifra el almacenamiento.
 
-Consulta docs/ACTUALIZACION_TEMPLE.md para el detalle y sugerencias para la siguiente etapa.
+VALIDACIÓN
+Comprobación de cobertura de todos los nombres de las cuatro rutinas y sus alternativas por equipamiento. Los 30 registros apuntan a archivos de la misma colección, con encuadres y recursos de precarga. Pruebas de regresión de perfiles, fechas, suplementos y respaldo. Revisión visual de las diez láminas y comprobación de guías y ampliación dentro del navegador.
+
+Lee docs/GUIAS_UNIFORMES_3.3.md para conocer la colección, el tratamiento de variantes y sus límites.
