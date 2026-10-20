@@ -9,7 +9,3 @@ initFoods();loadProfile();migrateSummaries();renderAll();setTimer(30);if(!getPro
 }
 startIdentity().catch(error=>{console.error(error);identityFailure(error)});
 
-// Check updates before authentication, so a cached access error can receive its fix.
-if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('controllerchange',()=>{notifyUser('Actualización preparada. Recarga para usar la nueva versión.');const b=document.createElement('button');b.textContent='Recargar';b.onclick=()=>location.reload();if(document.body.classList.contains('auth-pending')){const notice=document.createElement('p');notice.textContent='Actualización preparada. ';notice.append(b);document.getElementById('identityDialog').append(notice)}else document.getElementById('statusMessage').append(b)});
-if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').then(reg=>reg.update()).catch(()=>{});
-

@@ -10,7 +10,7 @@ const TempleAnatomy={
       "Descenso controlado"
     ],
     "manualPage": 56,
-    "file": "exercises/anatomy/lamina-01.png",
+    "file": "anatomy-01.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -27,7 +27,7 @@ const TempleAnatomy={
       "Pecho hacia el suelo"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-01.png",
+    "file": "anatomy-01.png",
     "width": 1024,
     "height": 1536,
     "start": 512,
@@ -44,7 +44,7 @@ const TempleAnatomy={
       "Flexiona sin abrir codos"
     ],
     "manualPage": 56,
-    "file": "exercises/anatomy/lamina-01.png",
+    "file": "anatomy-01.png",
     "width": 1024,
     "height": 1536,
     "start": 1022,
@@ -61,7 +61,7 @@ const TempleAnatomy={
       "Extiende sobre el pecho"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-02.png",
+    "file": "anatomy-02.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -78,7 +78,7 @@ const TempleAnatomy={
       "Extiende sin separar las pesas"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-02.png",
+    "file": "anatomy-02.png",
     "width": 1024,
     "height": 1536,
     "start": 508,
@@ -95,7 +95,7 @@ const TempleAnatomy={
       "Acerca el pecho"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-02.png",
+    "file": "anatomy-02.png",
     "width": 1024,
     "height": 1536,
     "start": 948,
@@ -112,7 +112,7 @@ const TempleAnatomy={
       "Desciende con talones apoyados"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-03.png",
+    "file": "anatomy-03.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -129,7 +129,7 @@ const TempleAnatomy={
       "Desciende con control"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-03.png",
+    "file": "anatomy-03.png",
     "width": 1024,
     "height": 1536,
     "start": 512,
@@ -146,7 +146,7 @@ const TempleAnatomy={
       "Cadera atrás y espalda neutra"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-03.png",
+    "file": "anatomy-03.png",
     "width": 1024,
     "height": 1536,
     "start": 990,
@@ -163,7 +163,7 @@ const TempleAnatomy={
       "Lleva la cadera atrás"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-04.png",
+    "file": "anatomy-04.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -180,7 +180,7 @@ const TempleAnatomy={
       "Flexiona la pierna delantera"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-04.png",
+    "file": "anatomy-04.png",
     "width": 1024,
     "height": 1536,
     "start": 502,
@@ -197,7 +197,7 @@ const TempleAnatomy={
       "Paso atrás y descenso"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-04.png",
+    "file": "anatomy-04.png",
     "width": 1024,
     "height": 1536,
     "start": 983,
@@ -214,7 +214,7 @@ const TempleAnatomy={
       "Eleva sin arquear la espalda"
     ],
     "manualPage": 122,
-    "file": "exercises/anatomy/lamina-05.png",
+    "file": "anatomy-05.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -231,7 +231,7 @@ const TempleAnatomy={
       "Eleva ambos talones"
     ],
     "manualPage": 111,
-    "file": "exercises/anatomy/lamina-05.png",
+    "file": "anatomy-05.png",
     "width": 1024,
     "height": 1536,
     "start": 434,
@@ -248,7 +248,7 @@ const TempleAnatomy={
       "Enrolla suavemente la pelvis"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-05.png",
+    "file": "anatomy-05.png",
     "width": 1024,
     "height": 1536,
     "start": 1019,
@@ -265,7 +265,7 @@ const TempleAnatomy={
       "Mantén la alineación"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-06.png",
+    "file": "anatomy-06.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -282,7 +282,7 @@ const TempleAnatomy={
       "Eleva y mantén la cadera"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-06.png",
+    "file": "anatomy-06.png",
     "width": 1024,
     "height": 1536,
     "start": 510,
@@ -299,7 +299,7 @@ const TempleAnatomy={
       "Separa empujando el suelo"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-06.png",
+    "file": "anatomy-06.png",
     "width": 1024,
     "height": 1536,
     "start": 988,
@@ -316,7 +316,7 @@ const TempleAnatomy={
       "Lleva el codo hacia la cadera"
     ],
     "manualPage": 76,
-    "file": "exercises/anatomy/lamina-07.png",
+    "file": "anatomy-07.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -333,7 +333,7 @@ const TempleAnatomy={
       "Acerca la barra a las costillas"
     ],
     "manualPage": 77,
-    "file": "exercises/anatomy/lamina-07.png",
+    "file": "anatomy-07.png",
     "width": 1024,
     "height": 1536,
     "start": 487,
@@ -350,7 +350,7 @@ const TempleAnatomy={
       "Lleva ambos codos atrás"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-07.png",
+    "file": "anatomy-07.png",
     "width": 1024,
     "height": 1536,
     "start": 952,
@@ -367,7 +367,7 @@ const TempleAnatomy={
       "Flexiona sin balancear"
     ],
     "manualPage": 6,
-    "file": "exercises/anatomy/lamina-08.png",
+    "file": "anatomy-08.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -384,7 +384,7 @@ const TempleAnatomy={
       "Conserva el agarre neutro"
     ],
     "manualPage": 8,
-    "file": "exercises/anatomy/lamina-08.png",
+    "file": "anatomy-08.png",
     "width": 1024,
     "height": 1536,
     "start": 512,
@@ -401,7 +401,7 @@ const TempleAnatomy={
       "Flexiona con codos próximos"
     ],
     "manualPage": 11,
-    "file": "exercises/anatomy/lamina-08.png",
+    "file": "anatomy-08.png",
     "width": 1024,
     "height": 1536,
     "start": 1019,
@@ -418,7 +418,7 @@ const TempleAnatomy={
       "Lleva codos hacia atrás"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-09.png",
+    "file": "anatomy-09.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -435,7 +435,7 @@ const TempleAnatomy={
       "Flexiona manteniendo tensión"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-09.png",
+    "file": "anatomy-09.png",
     "width": 1024,
     "height": 1536,
     "start": 500,
@@ -452,7 +452,7 @@ const TempleAnatomy={
       "Flexiona contra presión suave"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-09.png",
+    "file": "anatomy-09.png",
     "width": 1024,
     "height": 1536,
     "start": 1004,
@@ -469,7 +469,7 @@ const TempleAnatomy={
       "Movilidad suave, sin dolor"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-10.png",
+    "file": "anatomy-10.png",
     "width": 1024,
     "height": 1536,
     "start": 0,
@@ -486,7 +486,7 @@ const TempleAnatomy={
       "Alterna piernas y brazos"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-10.png",
+    "file": "anatomy-10.png",
     "width": 1024,
     "height": 1536,
     "start": 539,
@@ -503,7 +503,7 @@ const TempleAnatomy={
       "Brazos en T, elevación pequeña"
     ],
     "manualPage": null,
-    "file": "exercises/anatomy/lamina-10.png",
+    "file": "anatomy-10.png",
     "width": 1024,
     "height": 1536,
     "start": 1054,

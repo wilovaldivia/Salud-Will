@@ -1,24 +1,29 @@
-TEMPLE 3.3 — colección ilustrada uniforme — 20 de octubre de 2026
+TEMPLE 3.3.1 — corrección de publicación en GitHub Pages
 
-NOVEDAD
-Las 30 variantes de ejercicio y movilidad utilizan una única línea gráfica: ilustración anatómica gris con músculos principales en coral, fondo marfil y fases de movimiento. No se mezclan fotografías, figuras simples y páginas escaneadas en las guías.
+DIAGNÓSTICO CONFIRMADO EN wilovaldivia/Salud-Will
+Los archivos principales publicados coinciden con la entrega 3.3.0. No se publicó exercises/anatomy/: faltaban las diez láminas. La caché anterior exigía todos esos archivos para instalarse y podía conservar la versión anterior al fallar una imagen. Los cambios de botones sí estaban en el repositorio, pero un navegador podía seguir usando su caché previa.
 
-Cada guía tiene dos posiciones, nombres de músculos en español, indicaciones y ampliación de 100–250 %. En Entreno puedes abrir cada ejercicio o «Ver todas las guías ilustradas» para explorar la colección. Las planchas se identifican como posturas de mantenimiento; no deben alternarse las figuras como repeticiones.
+ESTE ZIP NO REQUIERE SUBIR CARPETAS
+Todos los archivos están en un solo nivel, incluidas las diez imágenes anatomy-01.png a anatomy-10.png. No reconstruyas la carpeta exercises. No subas el ZIP sin descomprimir.
 
-MANUAL DE REFERENCIA
-Se consultaron las láminas disponibles del ejemplar de Delavier aportado para identificar regiones musculares y contrastar variantes. Las nuevas imágenes son ilustraciones originales generadas con IA: no son las láminas del libro ni una traducción de ellas. El manual completo y sus escaneos no se incluyen en este ZIP. No se presenta la colección como modelo anatómico clínico o validación profesional de la técnica.
+PASOS PARA TU PUBLICACIÓN
+1. Descomprime este ZIP y entra al repositorio wilovaldivia/Salud-Will.
+2. Add file / Upload files: selecciona TODOS los archivos descomprimidos y confirma el cambio en la raíz, donde está index.html. Reemplaza los existentes. Los PNG nuevos también deben quedar junto a index.html.
+3. Espera a que GitHub Pages termine de publicar el commit.
+4. Abre https://wilovaldivia.github.io/Salud-Will/actualizar-3.3.1.html
+5. Pulsa «1. Comprobar publicación». Todos los archivos deben ser correctos. Si alguno falta o es distinto, la lista indica su nombre.
+6. Pulsa «2. Actualizar conservando mis datos», espera confirmación y «3. Abrir TEMPLE actualizado».
+7. Verifica v3.3.1 al pie y «Ver todas las guías ilustradas» en Entreno.
+No borres datos de Brave ni cambies PIN o perfiles. Mantén la misma dirección y navegador.
 
-ACTUALIZAR
-1. Exporta tu respaldo habitual desde Mi info cuando puedas acceder.
-2. Publica TODO el contenido del ZIP en el mismo repositorio y dirección de GitHub Pages, incluidas exercises/anatomy/ y docs/.
-3. Abre actualizar.html dentro de la dirección de tu app y pulsa «Actualizar conservando mis datos».
-4. Tras la descarga, abre TEMPLE con el mismo perfil y PIN. La nueva versión figura solo al pie: v3.3.0.
-No borres el almacenamiento del navegador. Si el repositorio conserva archivos antiguos de guías, la nueva app no los carga; el ZIP solo incluye la colección nueva. La descarga inicial contiene las diez láminas originales para disponer de ellas sin conexión.
+CORRECCIONES
+- Imágenes al mismo nivel que la app para que el selector de archivos de GitHub no omita subcarpetas.
+- Scripts/estilos con identificador de versión para evitar mezclar versiones por caché.
+- Comprobador de publicación: detecta archivos ausentes o diferentes mediante SHA-256, antes de instalar.
+- Navegación con prioridad a la versión de red y respaldo sin conexión.
+- Instalación de los controles separada de las láminas: una imagen ausente ya no impide actualizar botones y acceso.
+- Avisos visibles si falla una actualización o faltan guías. Las láminas se descargan en segundo plano para usar sin conexión cuando finaliza la descarga.
+- Mantiene el estado pulsado de los botones, los ajustes móviles de 3.2.1 y las 30 variantes ilustradas de 3.3.
 
 DATOS
-Se conservan perfiles locales con PIN, historial por fechas, versiones de suplementos, alimentación, medidas, fotografías y la arquitectura local anterior. No hay cuentas en nube, sincronización, pagos ni analítica. Mantén la misma dirección y navegador; Safari y Brave no comparten sus datos. El PIN bloquea la interfaz, no cifra el almacenamiento.
-
-VALIDACIÓN
-Comprobación de cobertura de todos los nombres de las cuatro rutinas y sus alternativas por equipamiento. Los 30 registros apuntan a archivos de la misma colección, con encuadres y recursos de precarga. Pruebas de regresión de perfiles, fechas, suplementos y respaldo. Revisión visual de las diez láminas y comprobación de guías y ampliación dentro del navegador.
-
-Lee docs/GUIAS_UNIFORMES_3.3.md para conocer la colección, el tratamiento de variantes y sus límites.
+La corrección solo cambia archivos estáticos y sus cachés. No cambia el esquema de perfiles/PIN, registros, suplementos, medidas ni fotos. No hay nube, pagos ni sincronización de datos personales.
