@@ -4,7 +4,7 @@ El isotipo seleccionado se adaptó a fondo transparente con la herramienta de im
 
 ## Compatibilidad y menús
 
-La versión previa deshabilitaba las pestañas hasta completar el onboarding. Un navegador sin los datos del otro empezaba con el perfil vacío. Ahora todas las pestañas responden desde el principio. Los cálculos que requieren perfil explican el requisito y llevan a Mi info.
+La versión previa deshabilitaba las pestañas hasta completar el onboarding. Un navegador sin los datos del otro empezaba con el perfil vacío. Ahora todas las pestañas responden desde el principio. Los cálculos que requieren perfil explican el requisito y llevan a Mi Temple.
 Se elimina la dependencia de Array.at en el gráfico y se añade alternativa a crypto.randomUUID para identificadores. Las etiquetas de selectores se vinculan con sus controles. El acceso al almacenamiento muestra un aviso si no puede guardar. Los paneles usan details/summary nativos. El service worker precarga todo el conjunto de archivos de la versión y permite una recarga explícita al activar una actualización.
 Estas correcciones se verificaron en Safari de macOS. No se conoce la versión del iPhone ni se accedió a la URL publicada del usuario; no se atribuye la incidencia original a una única causa demostrada.
 

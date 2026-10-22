@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="temple-build" content="3.3.1">
+<meta name="temple-build" content="3.4.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#101315">
 <link rel="manifest" href="manifest.json">
@@ -49,8 +49,8 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
 .pill{display:inline-block;border-radius:999px;background:#2c342f;color:#dce8d8;padding:4px 8px;font-size:10px}
 @media(min-width:760px){main{padding:18px}.grid4{grid-template-columns:repeat(4,1fr)}}
 </style>
-<link rel="stylesheet" href="experience.css?v=3.3.1"><link rel="icon" href="icon-192.png"><link rel="stylesheet" href="account-history.css?v=3.3.1"><link rel="stylesheet" href="anatomy.css?v=3.3.1"></head>
-<body class="auth-pending" data-temple-build="3.3.1">
+<link rel="stylesheet" href="experience.css?v=3.4.0"><link rel="icon" href="icon-192.png"><link rel="stylesheet" href="account-history.css?v=3.4.0"><link rel="stylesheet" href="anatomy.css?v=3.4.0"><link rel="stylesheet" href="temple340.css?v=3.4.0"></head>
+<body class="auth-pending" data-temple-build="3.4.0">
 <header><div class="brand"><img src="logo.png"><div><h1>TEMPLE</h1><p>Fortaleza que se construye cada día</p></div></div></header>
 
 <main><section class="datebar"><label for="entryDate">Fecha de registro</label><input id="entryDate" type="date" onchange="changeEntryDate(this.value)"><button onclick="changeEntryDate(isoToday())">Hoy</button><span id="dateContext"></span></section><div id="statusMessage" role="status" aria-live="polite"></div>
@@ -273,7 +273,7 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
     <label style="margin-top:8px">Alimentos preferidos</label><div id="pPreferredFoods"></div>
     <label style="margin-top:8px">Notas de rutina / viajes</label><div id="travelFields" class="grid2"></div><label>Notas opcionales</label><textarea id="pNotes"></textarea>
     <div class="row" style="margin-top:8px">
-      <div><label>Última cafeína</label><input id="pCaffeineCutoff" type="time"></div>
+      
       <div><label>Semana actual del plan</label><input id="pCurrentWeek" type="number" min="1" max="12"></div>
     </div>
     <button style="margin-top:10px" onclick="saveProfile()">Guardar configuración</button>
@@ -297,7 +297,7 @@ canvas{width:100%;height:190px;background:#111517;border-radius:12px}
   <button data-tab="comida">Comida</button>
   <button data-tab="entreno">Entreno</button>
   <button data-tab="progreso">Progreso</button>
-  <button data-tab="datos">Mi info</button>
+  <button data-tab="datos">Mi Temple</button>
 </div>
 
-<dialog id="identityDialog" aria-labelledby="identityTitle"></dialog><dialog id="exerciseDialog"><div id="exerciseDetail"></div><button onclick="document.getElementById('exerciseDialog').close()">Cerrar guía</button></dialog><script src="config.js?v=3.3.1"></script><script src="core.js?v=3.3.1"></script><script src="app.js?v=3.3.1"></script><script src="upgrade.js?v=3.3.1"></script><script src="experience.js?v=3.3.1"></script><script src="media-data.js?v=3.3.1"></script><script src="library.js?v=3.3.1"></script><script src="anatomy-data.js?v=3.3.1"></script><script src="anatomy.js?v=3.3.1"></script><script src="account-history.js?v=3.3.1"></script><script src="identity.js?v=3.3.1"></script><script src="feedback.js?v=3.3.1"></script><script src="bootstrap.js?v=3.3.1"></script><script src="updates.js?v=3.3.1"></script></body></html>
+<dialog id="identityDialog" aria-labelledby="identityTitle"></dialog><dialog id="exerciseDialog"><div id="exerciseDetail"></div><button onclick="document.getElementById('exerciseDialog').close()">Cerrar guía</button></dialog><script src="config.js?v=3.4.0"></script><script src="core.js?v=3.4.0"></script><script src="app.js?v=3.4.0"></script><script src="upgrade.js?v=3.4.0"></script><script src="experience.js?v=3.4.0"></script><script src="media-data.js?v=3.4.0"></script><script src="library.js?v=3.4.0"></script><script src="anatomy-data.js?v=3.4.0"></script><script src="anatomy.js?v=3.4.0"></script><script src="account-history.js?v=3.4.0"></script><script src="identity.js?v=3.4.0"></script><script src="feedback.js?v=3.4.0"></script><script src="temple340.js?v=3.4.0"></script><script src="bootstrap.js?v=3.4.0"></script><script src="updates.js?v=3.4.0"></script></body></html>

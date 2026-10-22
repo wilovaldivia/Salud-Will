@@ -20,7 +20,7 @@ Estas láminas NO tienen las licencias CC de las imágenes anteriores de TEMPLE.
 
 ## Instalación y datos
 
-Conservar el mismo origen y navegador para acceder a los perfiles existentes. Respaldar desde Mi info antes de cualquier actualización habitual. La copia no ha sido publicada. Se mantiene `actualizar.html`; la caché nueva incluye los ocho recursos y los archivos de las guías.
+Conservar el mismo origen y navegador para acceder a los perfiles existentes. Respaldar desde Mi Temple antes de cualquier actualización habitual. La copia no ha sido publicada. Se mantiene `actualizar.html`; la caché nueva incluye los ocho recursos y los archivos de las guías.
 
 ## Estado de la traducción del manual
 
