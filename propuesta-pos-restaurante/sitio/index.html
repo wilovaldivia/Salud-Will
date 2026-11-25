@@ -1,0 +1,3910 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Propuesta POS Multi-Formato</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5f8b'/%3E%3Cpath d='M8 10h16v3H8zm0 5h16v3H8zm0 5h10v3H8z' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --text:#1b1f24; --muted:#5b6470; --border:#dfe3e8;
+  --accent:#1f5f8b; --accent-soft:#e6f0f7; --code:#f0f2f5; --row:#fafbfc;
+  --t-sup:#7a4b00; --t-sup-bg:#fff3d6; --t-est:#5a3d8a; --t-est-bg:#efe8fb;
+  --t-rec:#0f6b3f; --t-rec-bg:#e2f5ea; --t-req:#9b1c1c; --t-req-bg:#fde7e7;
+  --t-dat:#1f5f8b; --t-dat-bg:#e6f0f7;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1216; --surface:#161b21; --text:#e6e9ed; --muted:#9aa4b0; --border:#2a313a;
+  --accent:#6fb3e0; --accent-soft:#1a2a37; --code:#1d232a; --row:#1a2027;
+  --t-sup:#ffd27a; --t-sup-bg:#3a2d10; --t-est:#c9b2f2; --t-est-bg:#2b2240;
+  --t-rec:#7fdcaa; --t-rec-bg:#13321f; --t-req:#ff9c9c; --t-req-bg:#3d1717;
+  --t-dat:#6fb3e0; --t-dat-bg:#1a2a37;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1216; --surface:#161b21; --text:#e6e9ed; --muted:#9aa4b0; --border:#2a313a;
+  --accent:#6fb3e0; --accent-soft:#1a2a37; --code:#1d232a; --row:#1a2027;
+  --t-sup:#ffd27a; --t-sup-bg:#3a2d10; --t-est:#c9b2f2; --t-est-bg:#2b2240;
+  --t-rec:#7fdcaa; --t-rec-bg:#13321f; --t-req:#ff9c9c; --t-req-bg:#3d1717;
+  --t-dat:#6fb3e0; --t-dat-bg:#1a2a37;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
+header.top h1{font-size:16px;margin:0;font-weight:650;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top button{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer}
+#menuBtn{display:none}
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1400px;margin:0 auto}
+nav.side{position:sticky;top:57px;height:calc(100vh - 57px);overflow:auto;padding:16px 12px;border-right:1px solid var(--border)}
+nav.side a{display:flex;gap:10px;align-items:baseline;padding:8px 10px;border-radius:8px;color:var(--text);text-decoration:none;font-size:14px}
+nav.side a:hover{background:var(--accent-soft)}
+nav.side a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+nav.side .num{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;min-width:18px}
+main{padding:24px 32px 64px;min-width:0}
+section.doc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 28px 24px;margin-bottom:24px}
+section.doc h1{font-size:24px;line-height:1.3;margin:20px 0 12px}
+section.doc h2{font-size:19px;margin:28px 0 10px;padding-top:12px;border-top:1px solid var(--border)}
+section.doc h3{font-size:16px;margin:20px 0 8px}
+a{color:var(--accent)}
+blockquote{margin:12px 0;padding:8px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre.code{background:var(--code);padding:14px;border-radius:8px;overflow:auto;font-size:13px;line-height:1.5}
+pre.code code{background:none;padding:0}
+.table-wrap{overflow-x:auto;margin:12px 0;border:1px solid var(--border);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+th{background:var(--code);font-weight:600;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--row)}
+tbody tr:last-child td{border-bottom:none}
+.diagram{overflow-x:auto;margin:16px 0;padding:12px;border:1px solid var(--border);border-radius:8px;background:#fff}
+.diagram pre.mermaid{margin:0;text-align:center;background:none}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:0 6px;border-radius:999px;white-space:nowrap}
+.tag-supuesto{color:var(--t-sup);background:var(--t-sup-bg)}
+.tag-estimacion{color:var(--t-est);background:var(--t-est-bg)}
+.tag-recomendacion{color:var(--t-rec);background:var(--t-rec-bg)}
+.tag-requiere{color:var(--t-req);background:var(--t-req-bg)}
+.tag-dato{color:var(--t-dat);background:var(--t-dat-bg)}
+section.doc hr{display:none}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:16px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  #menuBtn{display:inline-block}
+  nav.side{display:none;position:fixed;top:57px;left:0;right:0;height:auto;max-height:70vh;background:var(--surface);z-index:9;border-bottom:1px solid var(--border);border-right:none}
+  nav.side.open{display:block}
+  main{padding:16px}
+  section.doc{padding:4px 16px 16px}
+  section.doc h1{font-size:20px}
+}
+@media print{header.top,nav.side{display:none}.layout{display:block}section.doc{border:none;page-break-after:always}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button id="menuBtn" aria-label="Abrir índice">Índice</button>
+  <h1>Propuesta — Sistema POS Multi-Formato con Delivery y Facturación Electrónica</h1>
+  <button id="themeBtn" aria-label="Cambiar tema">Tema</button>
+</header>
+<div class="layout">
+  <nav class="side" id="side"><a href="#doc-00" data-target="doc-00"><span class="num">00</span>Resumen e índice</a>
+<a href="#doc-01" data-target="doc-01"><span class="num">01</span>Arquitectura, flujo de datos y stack tecnológico</a>
+<a href="#doc-02" data-target="doc-02"><span class="num">02</span>Módulos funcionales y reglas de negocio</a>
+<a href="#doc-03" data-target="doc-03"><span class="num">03</span>Modelo entidad-relación preliminar</a>
+<a href="#doc-04" data-target="doc-04"><span class="num">04</span>Flujos de pantalla</a>
+<a href="#doc-05" data-target="doc-05"><span class="num">05</span>Diseño de integración: delivery/agregadores y facturación electrónica</a>
+<a href="#doc-06" data-target="doc-06"><span class="num">06</span>Backlog priorizado (MoSCoW)</a>
+<a href="#doc-07" data-target="doc-07"><span class="num">07</span>Plan de implementación por fases</a>
+<a href="#doc-08" data-target="doc-08"><span class="num">08</span>Criterios de aceptación por módulo</a>
+<a href="#doc-09" data-target="doc-09"><span class="num">09</span>Riesgos, supuestos, dependencias y preguntas críticas</a></nav>
+  <main>
+<section id="doc-00" class="doc"><h1>Propuesta integral — Sistema de Ventas Multi-Formato para Restaurantes (POS omnicanal + Delivery + Facturación Electrónica)</h1>
+<p><strong>Versión:</strong> 0.1 (borrador para revisión) · <strong>Fecha:</strong> 2026-11-25 · <strong>Rol principal:</strong> Arquitectura de software · <strong>Roles de apoyo:</strong> Analista funcional POS, Director de operaciones, Financista.</p>
+<blockquote>
+<p>Convención de etiquetas: <strong><span class="tag tag-dato">Dato entregado</span></strong> viene del requerimiento; <strong><span class="tag tag-supuesto">Supuesto</span></strong> se asumió para avanzar; <strong><span class="tag tag-estimacion">Estimación</span></strong> es un cálculo de orden de magnitud; <strong><span class="tag tag-recomendacion">Recomendación</span></strong> es una decisión propuesta; <strong><span class="tag tag-requiere">Requiere validación</span></strong> debe confirmarse con especialista, proveedor o normativa vigente antes de construir.</p>
+</blockquote>
+<hr>
+<h2>1. Índice de entregables</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>#</th>
+<th>Entregable solicitado</th>
+<th>Archivo</th>
+</tr>
+</thead><tbody><tr>
+<td>1</td>
+<td>Diagrama de arquitectura por componentes y flujo de datos + stack justificado</td>
+<td><a href="#doc-01">01_arquitectura.md</a></td>
+</tr>
+<tr>
+<td>—</td>
+<td>Módulos funcionales y reglas de negocio (alcance funcional 1–9)</td>
+<td><a href="#doc-02">02_modulos_funcionales.md</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Modelo entidad-relación preliminar</td>
+<td><a href="#doc-03">03_modelo_datos.md</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Flujos de pantalla (salón, delivery, agregador, comprobante, cierre de caja)</td>
+<td><a href="#doc-04">04_flujos_pantalla.md</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Diseño de integración con delivery y facturación electrónica</td>
+<td><a href="#doc-05">05_integraciones.md</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Backlog priorizado con historias de usuario (MoSCoW)</td>
+<td><a href="#doc-06">06_backlog_moscow.md</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Plan de implementación por fases (MVP e iteraciones)</td>
+<td><a href="#doc-07">07_plan_implementacion.md</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Criterios de aceptación por módulo</td>
+<td><a href="#doc-08">08_criterios_aceptacion.md</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Riesgos, supuestos, dependencias legales/técnicas y preguntas críticas</td>
+<td><a href="#doc-09">09_riesgos_supuestos_preguntas.md</a></td>
+</tr>
+</tbody></table></div><hr>
+<h2>2. Resumen ejecutivo</h2>
+<ul>
+<li><strong>Arquitectura recomendada: monolito modular en la nube + nodo local por sucursal (&quot;Edge Hub&quot;) + apps POS/KDS offline-first.</strong> El Edge Hub permite que caja, KDS, impresoras y facturación sigan operando sin internet y coordinados entre sí; un POS que sólo es PWA offline no puede coordinar varios dispositivos ni garantizar numeración fiscal. <span class="tag tag-recomendacion">Recomendación</span></li>
+<li><strong>Stack: TypeScript de punta a punta</strong> (React + NestJS + PostgreSQL), con Python/FastAPI reservado para analítica y pronósticos en fases posteriores. Una sola lengua reduce costo de equipo y permite compartir el modelo de dominio (tipos, validaciones, motor de precios) entre nube, Edge Hub y POS. <span class="tag tag-recomendacion">Recomendación</span></li>
+<li><strong>Lo fiscal y lo de agregadores se aísla en &quot;capas anticorrupción&quot; con adaptadores enchufables.</strong> El núcleo sólo conoce un <em>Documento Fiscal Canónico</em> y un <em>Pedido Canónico</em>; las reglas por país (tipos de comprobante, impuestos, series, plazos, contingencia) viven en tablas versionadas por vigencia, no en código. <span class="tag tag-recomendacion">Recomendación</span></li>
+<li><strong>MVP en ~6 meses</strong> (Fase 0 + Fase 1: salón/barra/mostrador, KDS, caja, facturación electrónica de un país, inventario por receta básico, offline) más <strong>piloto de 6 semanas</strong> en 1 sucursal; delivery propio y 1–2 agregadores en la fase 2; multi-marca/formato avanzado, CRM y analítica en la fase 3 (v1.0 completa en <del>54 semanas). Esfuerzo ≈ <strong>60 persona-mes hasta el MVP</strong> y **</del>133 persona-mes hasta v1.0**. <span class="tag tag-estimacion">Estimación</span></li>
+<li><strong>Decisión que debe tomarse antes de construir: build vs. buy.</strong> Construir un POS completo sólo se justifica si la operación multi-marca/dark kitchen es una ventaja estratégica o si el número de sucursales hace que las licencias SaaS superen el costo de propiedad. Se recomienda un <strong>modelo híbrido</strong>: construir el núcleo (pedidos, precios, KDS, caja, inventario) y <strong>comprar</strong> lo commodity (proveedor OSE/PSE, pasarela de pago, opcionalmente middleware de agregadores). Ver §4. <span class="tag tag-recomendacion">Recomendación</span></li>
+<li><strong>Riesgo #1:</strong> cumplimiento fiscal en modo offline/contingencia; <strong>riesgo #2:</strong> acceso a APIs de agregadores (requiere convenio de partner); <strong>riesgo #3:</strong> calidad de datos de recetas (sin recetas correctas el costeo y el inventario automático no sirven). <span class="tag tag-supuesto">Supuesto basado en experiencia sectorial</span></li>
+</ul>
+<hr>
+<h2>3. Supuestos globales y nivel de confianza</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Tema</th>
+<th>Supuesto adoptado</th>
+<th>Etiqueta</th>
+<th>Impacto si es falso</th>
+</tr>
+</thead><tbody><tr>
+<td>País piloto</td>
+<td><strong>Perú</strong> (el requerimiento usa &quot;boletas&quot; y &quot;OSE/PSE&quot;, terminología de SUNAT). El diseño es multi-país.</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Cambia el adaptador fiscal piloto y el catálogo de tipos de documento; no cambia la arquitectura.</td>
+</tr>
+<tr>
+<td>Escala inicial</td>
+<td>3–10 sucursales, 1–3 marcas, 2–6 terminales POS + 1–3 KDS por sucursal; picos de 300–1.500 pedidos/día por sucursal.</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Por encima de ~200 sucursales conviene adelantar particionamiento y bus de eventos dedicado.</td>
+</tr>
+<tr>
+<td>Moneda</td>
+<td>Una moneda funcional por país (PEN en piloto); soporte de moneda extranjera sólo para cobro.</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Multi-moneda contable agrega complejidad al cierre de caja.</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>Tablets Android / mini-PC Windows/Linux para POS; impresoras térmicas ESC/POS por red; terminales de tarjeta integrados (no se almacena PAN).</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Hardware heterogéneo eleva costo de certificación.</td>
+</tr>
+<tr>
+<td>Pagos con tarjeta</td>
+<td>Vía terminal/pasarela certificada; el sistema sólo guarda token/últimos 4 dígitos/autorización.</td>
+<td><span class="tag tag-recomendacion">Recomendación</span></td>
+<td>Guardar datos de tarjeta obliga a alcance PCI DSS completo.</td>
+</tr>
+<tr>
+<td>Facturación</td>
+<td>Se usará un proveedor OSE/PSE (o PAC/proveedor tecnológico en otros países); no emisión directa al ente tributario.</td>
+<td><span class="tag tag-recomendacion">Recomendación</span></td>
+<td>Emisión directa exige certificación propia y mayor riesgo regulatorio.</td>
+</tr>
+<tr>
+<td>Agregadores</td>
+<td>Al menos un agregador ofrece API de partner en el país; si no, se usa middleware de terceros o tablet del agregador + digitación.</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+<td>Sin API, la conciliación será manual/por archivos.</td>
+</tr>
+<tr>
+<td>Equipo</td>
+<td>Equipo propio o tercerizado de ~9–11 personas para el MVP.</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Con menos personas el MVP se alarga proporcionalmente.</td>
+</tr>
+</tbody></table></div><p><strong>Nivel de confianza global:</strong> <em>Alto</em> en arquitectura, modelo de datos y flujos (patrones probados en POS gastronómicos). <em>Medio</em> en estimaciones de esfuerzo (sin datos de volumen reales ni equipo definido). <em>Bajo-medio</em> en detalles normativos: las referencias fiscales son ilustrativas y <strong>todas requieren validación</strong> con un contador/tributarista y con el proveedor OSE/PSE elegido. No se verificaron fuentes externas en esta sesión.</p>
+<hr>
+<h2>4. Decisión previa: construir vs. comprar vs. híbrido</h2>
+<p>Criterios ponderados (escala 1–5; 5 = mejor). Pesos y puntajes son <span class="tag tag-estimacion">Estimación</span> para un grupo de 3–10 sucursales multi-marca.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Criterio</th>
+<th>Peso</th>
+<th>A. Comprar POS SaaS regional</th>
+<th>B. Construir todo</th>
+<th>C. Híbrido (núcleo propio + fiscal/pagos/agregadores comprados)</th>
+</tr>
+</thead><tbody><tr>
+<td>Ajuste a multi-formato/multi-marca/dark kitchen</td>
+<td>20%</td>
+<td>2</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Tiempo a valor</td>
+<td>15%</td>
+<td>5</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Costo total 3 años (TCO)</td>
+<td>15%</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Riesgo de cumplimiento fiscal</td>
+<td>15%</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Control de datos y analítica</td>
+<td>10%</td>
+<td>2</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Riesgo de ejecución</td>
+<td>10%</td>
+<td>5</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Diferenciación / escalabilidad del modelo</td>
+<td>15%</td>
+<td>1</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr>
+<td><strong>Total ponderado</strong></td>
+<td>100%</td>
+<td><strong>3,05</strong></td>
+<td><strong>3,10</strong></td>
+<td><strong>3,90</strong></td>
+</tr>
+</tbody></table></div><p><strong><span class="tag tag-recomendacion">Recomendación</span></strong> Opción C. Condición de go: que la gerencia confirme que la operación multi-marca/multi-formato es estratégica a 3+ años y que existe presupuesto para un equipo estable. Si el objetivo es sólo &quot;operar ya&quot; en ≤3 sucursales de un solo formato, la opción A es más racional.</p>
+<hr>
+<h2>5. Recomendación principal y alternativas</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Opción</th>
+<th>Descripción</th>
+<th>Cuándo elegirla</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>Principal</strong></td>
+<td>Híbrido: monolito modular NestJS + PostgreSQL en la nube, Edge Hub por sucursal, POS/KDS React empaquetado (Capacitor/Tauri), adaptadores fiscales y de delivery enchufables.</td>
+<td>Crecimiento a multi-marca/dark kitchen; necesidad de datos propios.</td>
+</tr>
+<tr>
+<td>Alternativa 1</td>
+<td>Mismo diseño pero con middleware de agregadores de terceros en vez de integraciones directas.</td>
+<td>Si los convenios de API directa demoran &gt;3 meses o se operan 3+ agregadores.</td>
+</tr>
+<tr>
+<td>Alternativa 2</td>
+<td>POS SaaS comprado + capa propia de datos/BI + integración por API.</td>
+<td>Presupuesto o plazo restringidos; operación de formato único.</td>
+</tr>
+</tbody></table></div><h2>6. Mejoras opcionales a considerar</h2>
+<ol>
+<li><strong>Motor de pronóstico de demanda (fase 4):</strong> usar el historial de ventas por franja/canal para sugerir producción (mise en place) y compras; impacto típico esperado en mermas, a medir con piloto A/B. <span class="tag tag-recomendacion">Recomendación</span></li>
+<li><strong>&quot;Menú dinámico por capacidad de cocina&quot;:</strong> pausar automáticamente productos o canales (p. ej. agregadores) cuando la carga del KDS supera un umbral de tiempo de preparación, protegiendo el SLA del salón. <span class="tag tag-recomendacion">Recomendación</span></li>
+</ol>
+<h2>7. Próximos pasos inmediatos</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>#</th>
+<th>Acción</th>
+<th>Responsable sugerido</th>
+<th>Plazo</th>
+<th>Métrica de cierre</th>
+</tr>
+</thead><tbody><tr>
+<td>1</td>
+<td>Responder las preguntas críticas (archivo 09, §5)</td>
+<td>Gerencia general + Finanzas</td>
+<td>1 semana</td>
+<td>100% de preguntas &quot;bloqueantes&quot; respondidas</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Decisión build/buy/híbrido con TCO real</td>
+<td>Gerencia + Finanzas + TI</td>
+<td>2 semanas</td>
+<td>Acta de decisión firmada</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Seleccionar proveedor OSE/PSE y validar API/sandbox</td>
+<td>TI + Contabilidad</td>
+<td>3 semanas</td>
+<td>Comprobante de prueba aceptado en sandbox</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Solicitar acceso partner a agregadores prioritarios</td>
+<td>Comercial / Delivery</td>
+<td>4 semanas</td>
+<td>Credenciales sandbox recibidas</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Levantamiento de recetas y catálogo de una sucursal piloto</td>
+<td>Operaciones + Chef corporativo</td>
+<td>4 semanas</td>
+<td>≥90% de productos con receta y costo</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Fase 0 (Discovery técnico y prototipos de pantallas)</td>
+<td>Product Owner + Arquitecto</td>
+<td>4 semanas</td>
+<td>Backlog MVP validado y prototipo probado con cajeros</td>
+</tr>
+</tbody></table></div></section>
+<section id="doc-01" class="doc"><h1>01 — Arquitectura, flujo de datos y stack tecnológico</h1>
+<h2>1. Principios de arquitectura</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>#</th>
+<th>Principio</th>
+<th>Consecuencia de diseño</th>
+</tr>
+</thead><tbody><tr>
+<td>P1</td>
+<td><strong>La caja nunca se detiene</strong></td>
+<td>Toda operación crítica (pedido, cobro, comanda, comprobante) se completa contra el Edge Hub local; la nube es destino de sincronización, no requisito.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><strong>Hechos inmutables</strong></td>
+<td>Pedidos, pagos, movimientos de caja, movimientos de inventario y comprobantes son <em>append-only</em>; las correcciones son nuevos registros (anulación, nota de crédito, ajuste). Base de la trazabilidad y la auditoría.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><strong>Reglas como datos</strong></td>
+<td>Precios, impuestos, series, tipos de comprobante, promociones, recargos y comisiones se configuran por país/marca/formato/sucursal/canal/horario con <strong>vigencias</strong> (<code>valid_from</code>/<code>valid_to</code>). Nada fiscal se hardcodea.</td>
+</tr>
+<tr>
+<td>P4</td>
+<td><strong>Anticorrupción en los bordes</strong></td>
+<td>Agregadores, proveedores fiscales, pasarelas e impresoras se integran mediante <em>puertos</em> (interfaces) y <em>adaptadores</em>; el dominio sólo conoce modelos canónicos.</td>
+</tr>
+<tr>
+<td>P5</td>
+<td><strong>Monolito modular primero</strong></td>
+<td>Un despliegue, módulos con límites estrictos (bounded contexts) y comunicación por eventos internos. Se extraen servicios sólo cuando una métrica lo justifique (carga, ritmo de cambio, equipo).</td>
+</tr>
+<tr>
+<td>P6</td>
+<td><strong>Multi-tenant por diseño</strong></td>
+<td>Jerarquía <code>Grupo (tenant) → Marca → Formato → Sucursal → Terminal</code>; aislamiento con <code>tenant_id</code> + Row-Level Security en PostgreSQL.</td>
+</tr>
+<tr>
+<td>P7</td>
+<td><strong>Idempotencia en todo</strong></td>
+<td>IDs generados en el origen (UUIDv7), claves de idempotencia en APIs y webhooks; reintentos seguros.</td>
+</tr>
+</tbody></table></div><h2>2. Vista de componentes</h2>
+<div class="diagram"><pre class="mermaid">flowchart LR
+  subgraph SUC["Sucursal (red local)"]
+    POS1["POS táctil&lt;br/&gt;(salón/barra/mostrador)&lt;br/&gt;React + SQLite local"]
+    POS2["POS móvil mesero&lt;br/&gt;(tablet/teléfono)"]
+    KDS["KDS cocina/barra&lt;br/&gt;(pantallas)"]
+    KIOSK["Autoservicio / pickup&lt;br/&gt;(opcional)"]
+    HUB["EDGE HUB&lt;br/&gt;Node/NestJS + SQLite/PostgreSQL&lt;br/&gt;- Motor de pedidos local&lt;br/&gt;- Router de comandas&lt;br/&gt;- Numerador fiscal local&lt;br/&gt;- Cola de sincronización (outbox)&lt;br/&gt;- Spooler de impresión"]
+    PRN["Impresoras térmicas&lt;br/&gt;ESC/POS"]
+    PINPAD["Terminal de tarjeta / QR"]
+    POS1 &lt;--&gt; HUB
+    POS2 &lt;--&gt; HUB
+    KDS &lt;--&gt; HUB
+    KIOSK &lt;--&gt; HUB
+    HUB --&gt; PRN
+    POS1 --- PINPAD
+  end
+
+  subgraph CLOUD["Nube (región principal + réplica)"]
+    GW["API Gateway / BFF&lt;br/&gt;(REST + WebSocket)&lt;br/&gt;Auth, rate limit, WAF"]
+    subgraph CORE["Monolito modular NestJS"]
+      CAT["Catálogo y Menús"]
+      PRC["Precios, Impuestos&lt;br/&gt;y Motor de Reglas"]
+      ORD["Pedidos omnicanal"]
+      KIT["Producción / KDS central"]
+      INV["Inventario y Recetas"]
+      DLV["Delivery propio"]
+      CSH["Caja y Pagos"]
+      FIS["Fiscal (núcleo)"]
+      CRM["Clientes y Fidelización"]
+      IAM["IAM, Roles y Auditoría"]
+    end
+    SYNC["Servicio de Sincronización&lt;br/&gt;(ingesta de eventos del Edge,&lt;br/&gt;publicación de configuración)"]
+    HUBI["Integration Hub&lt;br/&gt;(adaptadores)"]
+    BUS["Bus de eventos&lt;br/&gt;(Redis Streams/BullMQ → NATS/Kafka)"]
+    PG[("PostgreSQL&lt;br/&gt;OLTP + RLS")]
+    OBJ[("Object storage&lt;br/&gt;XML/PDF/CDR fiscales,&lt;br/&gt;respaldos")]
+    DWH[("Analítica&lt;br/&gt;réplica + vistas materializadas&lt;br/&gt;→ DWH columnar")]
+    ADM["Backoffice web&lt;br/&gt;(React)"]
+    APP["Web/app de pedidos&lt;br/&gt;propia + tracking"]
+    RIDER["App repartidor"]
+  end
+
+  subgraph EXT["Externos"]
+    AGG["Agregadores&lt;br/&gt;(APIs/webhooks)"]
+    OSE["Proveedor fiscal&lt;br/&gt;OSE/PSE/PAC"]
+    TAX["Ente tributario"]
+    PAY["Pasarelas / billeteras / QR"]
+    MAP["Mapas / geocodificación"]
+    MSG["Email / SMS / WhatsApp"]
+  end
+
+  HUB &lt;--&gt;|"HTTPS + WebSocket&lt;br/&gt;(sync bidireccional)"| SYNC
+  SYNC &lt;--&gt; BUS
+  GW &lt;--&gt; CORE
+  CORE &lt;--&gt; PG
+  CORE &lt;--&gt; BUS
+  BUS &lt;--&gt; HUBI
+  HUBI &lt;--&gt; AGG
+  HUBI &lt;--&gt; OSE
+  OSE &lt;--&gt; TAX
+  HUBI &lt;--&gt; PAY
+  HUBI &lt;--&gt; MAP
+  HUBI &lt;--&gt; MSG
+  FIS --&gt; OBJ
+  PG --&gt; DWH
+  ADM --&gt; GW
+  APP --&gt; GW
+  RIDER --&gt; GW
+  HUB -.-&gt;|"emisión directa al proveedor&lt;br/&gt;fiscal si hay internet"| OSE</pre></div><h3>2.1 Responsabilidad por componente</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Componente</th>
+<th>Responsabilidad</th>
+<th>Ubicación</th>
+<th>Criticidad</th>
+</tr>
+</thead><tbody><tr>
+<td>POS táctil</td>
+<td>Toma de pedidos, mesas, cobro, impresión, operación offline con base local</td>
+<td>Dispositivo</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>KDS</td>
+<td>Recepción y estados de comandas, priorización, tiempos</td>
+<td>Dispositivo</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td><strong>Edge Hub</strong></td>
+<td>Fuente de verdad local de la sucursal durante el turno: pedidos abiertos, ruteo de comandas, numeración fiscal, cola de emisión/sincronización, spooler de impresión</td>
+<td>Mini-PC en sucursal (con UPS)</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>API Gateway/BFF</td>
+<td>Autenticación, autorización, rate limiting, agregación para frontends</td>
+<td>Nube</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Monolito modular</td>
+<td>Lógica de dominio por módulo (ver archivo 02)</td>
+<td>Nube</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicio de Sincronización</td>
+<td>Ingesta idempotente de eventos del Edge; distribución de configuración versionada (catálogo, precios, reglas, usuarios)</td>
+<td>Nube</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Integration Hub</td>
+<td>Adaptadores de agregadores, fiscal, pagos, mensajería; reintentos, DLQ, mapeo de estados</td>
+<td>Nube (+ adaptador fiscal también en Edge)</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Bus de eventos</td>
+<td>Desacople entre módulos e integraciones</td>
+<td>Nube</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>OLTP multi-tenant</td>
+<td>Nube (primario + réplica síncrona/asíncrona)</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Object storage</td>
+<td>XML firmados, constancias de recepción, PDF, respaldos (retención legal)</td>
+<td>Nube</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Analítica</td>
+<td>Reportes y tableros sin cargar el OLTP</td>
+<td>Nube</td>
+<td>Media</td>
+</tr>
+</tbody></table></div><h2>3. Flujo de datos</h2>
+<h3>3.1 Flujo principal de una venta (online u offline)</h3>
+<div class="diagram"><pre class="mermaid">sequenceDiagram
+  autonumber
+  participant P as POS
+  participant H as Edge Hub
+  participant K as KDS/Impresora
+  participant C as Nube (Sync + Core)
+  participant F as Proveedor fiscal (OSE/PSE)
+
+  P-&gt;&gt;H: CrearPedido(items, canal, mesa) [UUIDv7, idempotency-key]
+  H-&gt;&gt;H: Resolver precios/impuestos/promos (reglas en caché versionada)
+  H-&gt;&gt;K: Comanda por estación (cocina/barra)
+  K--&gt;&gt;H: Estados (en preparación / listo)
+  P-&gt;&gt;H: Cobrar(pagos[])
+  H-&gt;&gt;H: Asignar serie+correlativo (rango local reservado)
+  H-&gt;&gt;H: Generar Documento Fiscal Canónico + representación impresa (QR)
+  alt Hay internet
+    H-&gt;&gt;F: Enviar comprobante (adaptador)
+    F--&gt;&gt;H: Aceptado / Rechazado / Observado
+  else Sin internet
+    H-&gt;&gt;H: Encolar en outbox (estado PENDIENTE_ENVIO)
+  end
+  H--&gt;&gt;P: Ticket impreso / email
+  H-&gt;&gt;C: Sincronizar eventos (pedido, pago, comprobante, consumo de insumos)
+  C-&gt;&gt;C: Proyecciones: inventario, caja consolidada, reportes, CRM</pre></div><h3>3.2 Flujo de configuración (nube → sucursal)</h3>
+<ol>
+<li>El backoffice publica cambios (precio, menú, regla) como una <strong>versión de configuración</strong> con fecha de vigencia.</li>
+<li>El Servicio de Sincronización empaqueta el delta por sucursal y lo envía al Edge Hub.</li>
+<li>El Edge Hub aplica la versión atómicamente y la distribuye a POS/KDS; los pedidos ya abiertos conservan la versión con la que se crearon (precio &quot;congelado&quot; en la línea).</li>
+</ol>
+<h3>3.3 Flujo de pedidos externos (agregadores/web propia → sucursal)</h3>
+<p>Webhook del agregador → Integration Hub (validación de firma, deduplicación, mapeo a Pedido Canónico) → Core Pedidos → Sync → Edge Hub de la sucursal destino → KDS. Los cambios de estado vuelven por el camino inverso al agregador. Detalle en <a href="#doc-05">05_integraciones.md</a>.</p>
+<h2>4. Estrategia offline-first y sincronización</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Aspecto</th>
+<th>Diseño</th>
+<th>Justificación</th>
+</tr>
+</thead><tbody><tr>
+<td>Identificadores</td>
+<td>UUIDv7 generados en el dispositivo</td>
+<td>Sin colisiones ni dependencia de la nube; ordenables por tiempo.</td>
+</tr>
+<tr>
+<td>Modelo de datos transaccional</td>
+<td>Event log append-only por agregado (pedido, caja, comprobante) + proyecciones</td>
+<td>Fusión sin conflictos: los eventos se ordenan, no se sobrescriben.</td>
+</tr>
+<tr>
+<td>Datos de configuración</td>
+<td>Autoridad única: la nube; versión monotónica</td>
+<td>Evita conflictos &quot;last-write-wins&quot; en precios o impuestos.</td>
+</tr>
+<tr>
+<td>Conflictos en pedidos abiertos</td>
+<td>Bloqueo optimista en el Edge Hub (versión del pedido); el Edge es autoridad local durante el turno</td>
+<td>Dos meseros no pueden editar la misma cuenta con datos desfasados.</td>
+</tr>
+<tr>
+<td>POS sin Edge Hub (caída del hub)</td>
+<td>Modo degradado: POS opera con su SQLite, usa su <strong>propia sub-serie/rango fiscal</strong> de contingencia y reencola al hub</td>
+<td>Elimina punto único de falla en caja. <span class="tag tag-requiere">Requiere validación</span> fiscal del uso de series por terminal.</td>
+</tr>
+<tr>
+<td>Numeración fiscal offline</td>
+<td><strong>Reserva de rangos</strong>: la nube asigna series por sucursal/terminal; el correlativo se incrementa localmente sin huecos</td>
+<td>Nunca dos dispositivos emiten el mismo número.</td>
+</tr>
+<tr>
+<td>Transporte</td>
+<td>Outbox local + entrega &quot;at-least-once&quot; + deduplicación por <code>event_id</code> en la nube</td>
+<td>Reintentos seguros.</td>
+</tr>
+<tr>
+<td>Ventana de autonomía objetivo</td>
+<td>≥ 72 h offline sin pérdida de datos</td>
+<td><span class="tag tag-supuesto">Supuesto</span> a validar con el plazo legal de envío de comprobantes.</td>
+</tr>
+</tbody></table></div><h2>5. Stack tecnológico recomendado y justificación</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Capa</th>
+<th>Elección</th>
+<th>Justificación</th>
+<th>Alternativa evaluada</th>
+<th>Por qué no como primera opción</th>
+</tr>
+</thead><tbody><tr>
+<td>POS / KDS</td>
+<td><strong>React + TypeScript</strong>, empaquetado con <strong>Capacitor</strong> (Android) o <strong>Tauri</strong> (Windows/Linux); SQLite local</td>
+<td>Un solo código para POS, KDS, backoffice y web de pedidos; acceso nativo a impresoras, cajón, escáner vía plugins; amplio mercado de talento.</td>
+<td>Flutter</td>
+<td>Excelente en rendimiento táctil, pero obliga a un segundo lenguaje (Dart) y duplica modelos de dominio respecto al backend TS; elegible si el equipo ya domina Flutter.</td>
+</tr>
+<tr>
+<td>Backoffice web</td>
+<td>React + TypeScript (Vite), librería de componentes accesible</td>
+<td>Reutiliza diseño y lógica con POS.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td><strong>Node.js + NestJS</strong> (monolito modular, DDD ligero, CQRS en módulos de alta lectura)</td>
+<td>Mismo lenguaje que el frontend; módulos, inyección de dependencias y guards facilitan límites de contexto y permisos; buen soporte de WebSocket para KDS.</td>
+<td>Python/FastAPI</td>
+<td>Muy productivo; se reserva para analítica, pronósticos y ciencia de datos (fase 4) donde su ecosistema es superior.</td>
+</tr>
+<tr>
+<td>Edge Hub</td>
+<td>NestJS (mismo código de dominio) + SQLite (o PostgreSQL ligero) en mini-PC</td>
+<td>Reutiliza el motor de precios/pedidos del core: un solo comportamiento en nube y sucursal.</td>
+<td>Lógica sólo en POS</td>
+<td>No coordina múltiples dispositivos ni numeración fiscal de forma segura.</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td><strong>PostgreSQL 16+</strong> con RLS, particionamiento por fecha en tablas de hechos, JSONB para atributos variables</td>
+<td>ACID para caja y fiscal; RLS para multi-tenant; JSONB permite payloads de agregadores y metadatos fiscales por país sin migraciones constantes.</td>
+<td>MySQL / NoSQL</td>
+<td>Menor expresividad (RLS, JSONB indexado, particionamiento declarativo).</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>Redis + BullMQ (colas, reintentos) → NATS JetStream o Kafka al escalar</td>
+<td>Simple al inicio; ruta clara a un bus robusto.</td>
+<td>Kafka desde el día 1</td>
+<td>Sobredimensionado para 3–10 sucursales.</td>
+</tr>
+<tr>
+<td>Analítica</td>
+<td>Réplica de lectura + vistas materializadas → DWH columnar (ClickHouse/BigQuery) en fase 3</td>
+<td>Reportes sin impactar caja.</td>
+<td>Reportes sobre OLTP</td>
+<td>Riesgo de latencia en horas pico.</td>
+</tr>
+<tr>
+<td>Identidad</td>
+<td>OIDC (Keycloak autogestionado o servicio gestionado) + <strong>PIN/tarjeta</strong> de empleado en POS + MFA para backoffice</td>
+<td>Estándar; PIN rápido en caja con permisos por rol.</td>
+<td>Auth propia</td>
+<td>Riesgo de seguridad innecesario.</td>
+</tr>
+<tr>
+<td>Infraestructura</td>
+<td>Docker; contenedores gestionados (ECS/Cloud Run/App Service) → Kubernetes si &gt;~50 sucursales; IaC con Terraform; CI/CD con GitHub Actions</td>
+<td>Bajo costo operativo inicial y reproducibilidad.</td>
+<td>Kubernetes desde el inicio</td>
+<td>Costo de operación alto para el tamaño inicial.</td>
+</tr>
+<tr>
+<td>Observabilidad</td>
+<td>OpenTelemetry + Prometheus/Grafana + logs centralizados; monitoreo de Edge Hubs (heartbeat)</td>
+<td>Detectar sucursales offline, colas fiscales atascadas, latencias.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Impresión</td>
+<td>ESC/POS por red (TCP 9100) desde el spooler del Edge Hub; plantillas por país</td>
+<td>Independiente de drivers del sistema operativo.</td>
+<td>Drivers del SO</td>
+<td>Frágil y difícil de soportar en flota.</td>
+</tr>
+</tbody></table></div><h2>6. Capa de adaptadores (patrón Puertos y Adaptadores)</h2>
+<div class="diagram"><pre class="mermaid">classDiagram
+  class FiscalProviderPort {
+    &lt;&lt;interface&gt;&gt;
+    +emit(doc: CanonicalFiscalDocument) EmissionResult
+    +void(ref, reason) VoidResult
+    +getStatus(ref) FiscalStatus
+    +sendSummary(batch) SummaryResult
+    +validateTaxId(type, number) TaxIdInfo
+  }
+  class DeliveryChannelPort {
+    &lt;&lt;interface&gt;&gt;
+    +parseWebhook(raw, headers) CanonicalOrderEvent
+    +acceptOrder(extId, prepMinutes)
+    +rejectOrder(extId, reason)
+    +updateStatus(extId, status)
+    +syncMenu(menu: CanonicalMenu)
+    +setItemAvailability(sku, available)
+    +fetchSettlements(period) Settlement[]
+  }
+  class PaymentPort {
+    &lt;&lt;interface&gt;&gt;
+    +authorize(amount, method, ref) PaymentResult
+    +refund(paymentRef, amount)
+    +createQr(amount, ref) QrPayload
+  }
+  class PrinterPort {
+    &lt;&lt;interface&gt;&gt;
+    +print(template, data, device)
+    +openDrawer(device)
+  }
+  FiscalProviderPort &lt;|.. AdaptadorPE_OSE
+  FiscalProviderPort &lt;|.. AdaptadorCL_DTE
+  FiscalProviderPort &lt;|.. AdaptadorMX_PAC
+  FiscalProviderPort &lt;|.. AdaptadorCO_DIAN
+  DeliveryChannelPort &lt;|.. AdaptadorAgregadorA
+  DeliveryChannelPort &lt;|.. AdaptadorAgregadorB
+  DeliveryChannelPort &lt;|.. AdaptadorMiddleware
+  DeliveryChannelPort &lt;|.. AdaptadorWebPropia
+  PaymentPort &lt;|.. AdaptadorPasarela
+  PaymentPort &lt;|.. AdaptadorBilleteraQR
+  PrinterPort &lt;|.. EscPosNetwork</pre></div><p>Reglas de la capa: (1) cada adaptador es un paquete versionado con su propia suite de pruebas de contrato; (2) se registra por configuración (<code>tenant</code> × <code>país</code> × <code>canal</code>), no por <code>if</code> en el código; (3) todo intercambio se persiste crudo (request/response) para auditoría y reproceso; (4) los errores se clasifican en <em>reintentable</em> / <em>no reintentable</em> / <em>requiere acción humana</em>.</p>
+<h2>7. Requisitos no funcionales: cómo se cumplen</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>RNF</th>
+<th>Objetivo medible</th>
+<th>Táctica de arquitectura</th>
+</tr>
+</thead><tbody><tr>
+<td>Respuesta &lt; 2 s en operaciones críticas</td>
+<td>p95 &lt; 500 ms local (agregar ítem, enviar comanda); p95 &lt; 2 s cobro + impresión; p95 &lt; 3 s emisión en línea (dependiente del proveedor)</td>
+<td>Operación contra Edge Hub en LAN; emisión fiscal asíncrona con impresión inmediata de la representación; caché de reglas versionadas.</td>
+</tr>
+<tr>
+<td>Offline-first</td>
+<td>72 h de autonomía; 0 pérdida de transacciones</td>
+<td>Ver §4.</td>
+</tr>
+<tr>
+<td>Alta disponibilidad caja/facturación</td>
+<td>Caja: no depende de la nube. Nube: 99,9% mensual (SLO)</td>
+<td>Edge Hub con UPS y modo degradado en POS; nube multi-AZ, réplica de BD, colas persistentes, DLQ.</td>
+</tr>
+<tr>
+<td>Escalabilidad</td>
+<td>Lineal por sucursal</td>
+<td>Particionamiento por tenant/fecha; módulos extraíbles; colas.</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Cifrado TLS 1.2+ en tránsito, AES-256 en reposo; secretos en vault; mínimo privilegio</td>
+<td>RLS, RBAC/ABAC por sucursal-formato-función, MFA backoffice, firma de webhooks, rotación de credenciales de proveedores, certificados digitales fiscales en HSM/KMS.</td>
+</tr>
+<tr>
+<td>Protección de datos personales</td>
+<td>Minimización, consentimiento, derecho de acceso/supresión</td>
+<td>Datos de cliente en módulo CRM con seudonimización en analítica; registro de consentimiento; políticas de retención. <span class="tag tag-requiere">Requiere validación</span> con ley local (en Perú, Ley N.º 29733 y su reglamento).</td>
+</tr>
+<tr>
+<td>Trazabilidad</td>
+<td>Reconstrucción completa de pedido → pago → comprobante → inventario</td>
+<td>Event log inmutable, <code>correlation_id</code> de punta a punta, bitácora de auditoría con hash encadenado.</td>
+</tr>
+<tr>
+<td>Respaldos</td>
+<td>RPO ≤ 5 min (nube), RTO ≤ 1 h; Edge Hub respalda a nube en continuo</td>
+<td>Backups PITR de PostgreSQL; outbox del Edge persistente.</td>
+</tr>
+</tbody></table></div><h2>8. Topología de despliegue</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Entorno</th>
+<th>Propósito</th>
+<th>Notas</th>
+</tr>
+</thead><tbody><tr>
+<td>Desarrollo</td>
+<td>Trabajo diario</td>
+<td>Docker Compose con simuladores de agregador y de proveedor fiscal (mocks de contrato).</td>
+</tr>
+<tr>
+<td>QA / Staging</td>
+<td>Pruebas integradas</td>
+<td>Conectado a sandboxes del proveedor OSE/PSE y agregadores; datos anonimizados.</td>
+</tr>
+<tr>
+<td>Piloto</td>
+<td>1 sucursal real</td>
+<td>Feature flags por sucursal; monitoreo reforzado.</td>
+</tr>
+<tr>
+<td>Producción</td>
+<td>Todas las sucursales</td>
+<td>Despliegue progresivo (canary por sucursal); Edge Hubs actualizados por anillos fuera de horario de servicio.</td>
+</tr>
+</tbody></table></div></section>
+<section id="doc-02" class="doc"><h1>02 — Módulos funcionales y reglas de negocio</h1>
+<p>Mapa de módulos (bounded contexts) del monolito modular. Cada módulo publica eventos y expone una API interna; ningún módulo lee tablas de otro.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>#</th>
+<th>Módulo</th>
+<th>Alcance (resumen)</th>
+<th>Eventos principales que publica</th>
+</tr>
+</thead><tbody><tr>
+<td>M1</td>
+<td>Configuración organizacional</td>
+<td>Grupo, marcas, formatos, sucursales, terminales, almacenes, horarios</td>
+<td><code>BranchConfigured</code>, <code>ConfigVersionPublished</code></td>
+</tr>
+<tr>
+<td>M2</td>
+<td>Catálogo, recetas e inventario</td>
+<td>Productos, variantes, modificadores, combos, recetas, insumos, stock, mermas, producción, transferencias, costeo</td>
+<td><code>StockMoved</code>, <code>StockBelowMinimum</code>, <code>RecipeCostChanged</code></td>
+</tr>
+<tr>
+<td>M3</td>
+<td>Precios, impuestos y motor de reglas</td>
+<td>Listas de precio, franjas horarias, impuestos, promociones, recargos, comisiones</td>
+<td><code>PriceListPublished</code>, <code>PromotionActivated</code></td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Pedidos omnicanal</td>
+<td>POS, mesas, cuentas, pedidos externos, programados, estados</td>
+<td><code>OrderCreated</code>, <code>OrderItemAdded</code>, <code>OrderSentToKitchen</code>, <code>OrderClosed</code>, <code>OrderCancelled</code></td>
+</tr>
+<tr>
+<td>M5</td>
+<td>Cocina, barra y producción (KDS)</td>
+<td>Ruteo por estación, priorización, tiempos, alertas, cocina central</td>
+<td><code>TicketStarted</code>, <code>TicketReady</code>, <code>TicketDelayed</code></td>
+</tr>
+<tr>
+<td>M6</td>
+<td>Delivery y agregadores</td>
+<td>Zonas, tarifas, repartidores, tracking, conciliación</td>
+<td><code>DeliveryAssigned</code>, <code>DeliveryCompleted</code>, <code>SettlementImported</code></td>
+</tr>
+<tr>
+<td>M7</td>
+<td>Caja y pagos</td>
+<td>Sesiones de caja, pagos, propinas, arqueo, retiros</td>
+<td><code>CashSessionOpened</code>, <code>PaymentCaptured</code>, <code>CashSessionClosed</code></td>
+</tr>
+<tr>
+<td>M8</td>
+<td>Facturación electrónica (núcleo fiscal)</td>
+<td>Comprobantes, series, notas, contingencia, envío</td>
+<td><code>FiscalDocumentIssued</code>, <code>FiscalDocumentAccepted</code>, <code>FiscalDocumentRejected</code></td>
+</tr>
+<tr>
+<td>M9</td>
+<td>Clientes, fidelización y CRM</td>
+<td>Perfil, direcciones, historial, puntos, cupones, segmentos</td>
+<td><code>CustomerRegistered</code>, <code>PointsEarned</code>, <code>CouponRedeemed</code></td>
+</tr>
+<tr>
+<td>M10</td>
+<td>Reportes y analítica</td>
+<td>Reportes operativos, fiscales, de delivery y márgenes</td>
+<td>— (consume)</td>
+</tr>
+<tr>
+<td>M11</td>
+<td>Administración y seguridad</td>
+<td>Usuarios, roles, permisos, auditoría, respaldos</td>
+<td><code>PermissionChanged</code>, <code>SensitiveActionPerformed</code></td>
+</tr>
+</tbody></table></div><hr>
+<h2>M1. Configuración multi-formato, multi-marca y multi-sucursal</h2>
+<p><strong>Jerarquía:</strong> <code>Grupo (tenant) → Marca → Formato (casual, cafetería, bar, fast food, dark kitchen, food court) → Sucursal → Área (salón, barra, terraza, mostrador) → Terminal</code>. Una sucursal puede alojar varias marcas/formatos (caso dark kitchen o food court).</p>
+<p><strong>Reglas clave</strong></p>
+<ul>
+<li>Toda configuración hereda de arriba hacia abajo y puede sobrescribirse en un nivel inferior (p. ej. precio de marca → excepción por sucursal → excepción por canal).</li>
+<li>Cada sucursal tiene uno o varios almacenes (principal, barra, cocina, cámara) y una zona horaria.</li>
+<li>El <em>Formato</em> define comportamientos por defecto: servicio en mesa vs. mostrador, pago antes/después, propina sugerida, flujo KDS.</li>
+</ul>
+<h2>M2. Productos, recetas e inventario</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Capacidad</th>
+<th>Detalle funcional</th>
+</tr>
+</thead><tbody><tr>
+<td>Catálogo central</td>
+<td>Producto maestro (SKU) con <strong>variantes</strong> por marca/formato/sucursal/canal: nombre comercial, foto, descripción, disponibilidad, estación de preparación.</td>
+</tr>
+<tr>
+<td>Modificadores</td>
+<td>Grupos con mín./máx. de selección (p. ej. &quot;Término de cocción: 1 obligatorio&quot;, &quot;Extras: 0–3&quot;), con precio y receta propios.</td>
+</tr>
+<tr>
+<td>Combos</td>
+<td>Combos fijos y &quot;arma tu combo&quot; con slots; precio de combo y prorrateo para reportes y para la base imponible por línea.</td>
+</tr>
+<tr>
+<td>Recetas</td>
+<td>Receta por producto/variante/modificador con insumos, cantidad, unidad, % de merma estándar; sub-recetas (preparaciones intermedias como salsas o masas).</td>
+</tr>
+<tr>
+<td>Descuento automático</td>
+<td>Al <strong>enviar a cocina</strong> (configurable: al enviar o al cobrar) se generan movimientos de consumo teórico; la anulación posterior genera reverso o merma según el estado de preparación.</td>
+</tr>
+<tr>
+<td>Stock</td>
+<td>Por almacén; unidades de compra/almacenaje/consumo con factores de conversión.</td>
+</tr>
+<tr>
+<td>Movimientos</td>
+<td>Ingreso por compra, consumo por venta, producción, transferencia (envío/recepción en 2 pasos), merma (con motivo), ajuste por inventario físico.</td>
+</tr>
+<tr>
+<td>Alertas</td>
+<td>Stock mínimo/punto de reorden, merma anómala (&gt; umbral), transferencias pendientes de recepción &gt; X h.</td>
+</tr>
+<tr>
+<td>Costeo</td>
+<td>Costo promedio ponderado por almacén <span class="tag tag-recomendacion">Recomendación para MVP</span>; costo teórico de receta; margen bruto por producto y por canal (descontando comisión del agregador).</td>
+</tr>
+<tr>
+<td>Consumo teórico vs. real</td>
+<td>Comparativo por periodo con inventario físico; variación por insumo.</td>
+</tr>
+</tbody></table></div><h2>M3. Precios, impuestos y motor de reglas</h2>
+<p><strong>Resolución de precio</strong> (prioridad de mayor a menor especificidad, con vigencia):</p>
+<pre class="code"><code>precio(producto, contexto) =
+  primera coincidencia en listas ordenadas por especificidad:
+  [sucursal+canal+franja] &gt; [sucursal+canal] &gt; [formato+canal+franja] &gt; [marca+canal] &gt; [marca] &gt; precio base</code></pre><p>Contexto = <code>{marca, formato, sucursal, canal, franja horaria, fecha, tipo de cliente}</code>.</p>
+<p><strong>Motor de reglas (promociones, combos, recargos, comisiones)</strong> — reglas declarativas con estructura <em>condición → acción</em>, evaluadas en orden de prioridad y con política de acumulación:</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Tipo de regla</th>
+<th>Ejemplo</th>
+<th>Acción</th>
+</tr>
+</thead><tbody><tr>
+<td>Descuento por franja</td>
+<td>Happy hour 18–20 h en barra, cerveza 2x1</td>
+<td>% / monto / NxM</td>
+</tr>
+<tr>
+<td>Combo dinámico</td>
+<td>Hamburguesa + bebida + papas = precio fijo</td>
+<td>Precio de paquete</td>
+</tr>
+<tr>
+<td>Recargo por canal</td>
+<td>Delivery propio +S/ 2 por pedido; precios agregador +15%</td>
+<td>Recargo línea o pedido</td>
+</tr>
+<tr>
+<td>Recargo por zona</td>
+<td>Zona B: tarifa de envío S/ 6; pedido mínimo S/ 40</td>
+<td>Tarifa de envío / bloqueo</td>
+</tr>
+<tr>
+<td>Comisión de canal</td>
+<td>Agregador A: 22% sobre subtotal + IGV de la comisión</td>
+<td>Cálculo para margen y conciliación (no afecta al cliente)</td>
+</tr>
+<tr>
+<td>Cupón</td>
+<td><code>BIENVENIDO10</code> 10% primer pedido, uso único por cliente</td>
+<td>Descuento con validación</td>
+</tr>
+<tr>
+<td>Servicio</td>
+<td>Cargo por servicio salón 10% (si aplica legalmente)</td>
+<td>Cargo pedido</td>
+</tr>
+</tbody></table></div><p>Los montos y porcentajes son <strong>ejemplos ilustrativos</strong>, no datos del negocio.</p>
+<p><strong>Política de acumulación:</strong> cada regla define <code>stackable</code> (sí/no), <code>exclusive_group</code> y tope máximo de descuento por pedido. El resultado se explica en el ticket (&quot;Promo happy hour −S/ 12,00&quot;).</p>
+<p><strong>Impuestos:</strong> <code>tax_rule(país, régimen del emisor, categoría tributaria del producto, tipo de operación, vigencia) → {tributo, tasa, base, código de afectación}</code>. Permite modelar tasas reducidas o especiales (p. ej. regímenes para restaurantes MYPE en Perú, impuesto a bolsas plásticas, exoneraciones) sin tocar código. <span class="tag tag-requiere">Requiere validación</span> de tasas vigentes al momento de configurar.</p>
+<h2>M4. Toma de pedidos omnicanal</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Canal / modo</th>
+<th>Capacidades</th>
+</tr>
+</thead><tbody><tr>
+<td>Salón</td>
+<td>Mapa de mesas por área (arrastrar/soltar), estados (libre, ocupada, por cobrar, reservada, sucia), comensales, mesero asignado, <strong>unir mesas, transferir mesa/ítems entre mesas, dividir cuenta</strong> (por ítem, por comensal, en partes iguales, por monto), cursos/tiempos (&quot;enviar segundos&quot;).</td>
+</tr>
+<tr>
+<td>Barra</td>
+<td>Cuentas abiertas por nombre/tarjeta, rondas rápidas, pre-autorización de tarjeta (si el medio lo permite).</td>
+</tr>
+<tr>
+<td>Mostrador / fast food</td>
+<td>Flujo de pago anticipado, número de turno/llamador, pantalla de cliente.</td>
+</tr>
+<tr>
+<td>Pickup / para llevar</td>
+<td>Hora prometida, cliente, notas de empaque.</td>
+</tr>
+<tr>
+<td>Delivery propio</td>
+<td>Búsqueda de cliente por teléfono, dirección geocodificada, validación de zona/cobertura/pedido mínimo, tarifa de envío, método de pago (incluye contra entrega con vuelto).</td>
+</tr>
+<tr>
+<td>Agregadores</td>
+<td>Ingreso automático (ver M6); aceptación manual o automática según configuración.</td>
+</tr>
+<tr>
+<td>Programados</td>
+<td>Fecha/hora objetivo; el sistema libera la comanda a cocina en <code>hora objetivo − tiempo de preparación − tiempo de traslado</code>.</td>
+</tr>
+</tbody></table></div><p><strong>Reglas transversales</strong></p>
+<ul>
+<li>La línea de pedido &quot;congela&quot; precio, impuestos, promoción aplicada y versión de configuración.</li>
+<li>Anular ítem enviado a cocina requiere motivo y, según rol, aprobación de supervisor (PIN); queda en auditoría.</li>
+<li>Estados del pedido: <code>BORRADOR → CONFIRMADO → EN_PREPARACION → LISTO → (EN_REPARTO) → ENTREGADO → CERRADO</code>, con <code>CANCELADO</code> y <code>DEVUELTO</code> como terminales controlados.</li>
+</ul>
+<h2>M5. Cocina, barra y logística (KDS)</h2>
+<ul>
+<li><strong>Ruteo</strong> de cada línea a la estación configurada (parrilla, fríos, bebidas, postres, barra) y por sucursal/cocina central.</li>
+<li><strong>Priorización</strong> por puntaje: <code>prioridad = f(tiempo transcurrido / SLA del canal, canal, tipo de servicio, VIP, hora prometida)</code>. Ej.: delivery con repartidor en camino sube de prioridad.</li>
+<li><strong>Tiempos</strong>: inicio, listo, despachado, entregado; SLA por producto y canal; semáforo (verde/ámbar/rojo).</li>
+<li><strong>Alertas</strong>: pedido retrasado, cancelación de pedido ya en preparación (aviso visual + sonoro), ítem agotado (&quot;86&quot;) que se propaga a POS y agregadores.</li>
+<li><strong>Coordinación cocina central ↔ sucursales/dark kitchens</strong>: órdenes de producción, pedidos internos de abastecimiento (genera transferencia), consolidación de comandas multi-marca en una misma cocina con identificación visual por marca.</li>
+<li><strong>Expedición</strong>: pantalla de pase que agrupa todas las estaciones de un pedido y marca &quot;completo para entregar&quot;.</li>
+</ul>
+<h2>M6. Delivery propio y agregadores</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Capacidad</th>
+<th>Detalle</th>
+</tr>
+</thead><tbody><tr>
+<td>Recepción unificada</td>
+<td>Bandeja única de pedidos de todos los canales con origen, hora prometida y estado; mismo flujo hacia KDS.</td>
+</tr>
+<tr>
+<td>Zonas y tarifas</td>
+<td>Polígonos por sucursal, tarifa, pedido mínimo, tiempo estimado base, horario por zona.</td>
+</tr>
+<tr>
+<td>Asignación de repartidores</td>
+<td>Manual o sugerida (cercanía, carga, orden de salida); agrupación de pedidos por ruta.</td>
+</tr>
+<tr>
+<td>Tracking</td>
+<td>Estados del reparto y ubicación por app del repartidor; enlace de seguimiento al cliente.</td>
+</tr>
+<tr>
+<td>Tiempos estimados</td>
+<td>ETA = cola de cocina + preparación + traslado estimado por zona; recalculado en cada cambio de estado.</td>
+</tr>
+<tr>
+<td>Contra entrega</td>
+<td>Liquidación del repartidor al final del turno (efectivo recibido vs. pedidos entregados).</td>
+</tr>
+<tr>
+<td>Conciliación agregadores</td>
+<td>Importación de liquidaciones (API o archivo), cruce pedido a pedido: monto, comisión, promociones financiadas por el agregador vs. por el restaurante, cancelaciones y reembolsos, diferencias.</td>
+</tr>
+</tbody></table></div><h2>M7. Caja y cobros</h2>
+<ul>
+<li><strong>Sesión de caja</strong> por terminal/cajero: apertura con fondo, movimientos (ingresos/retiros con motivo), cierre con arqueo ciego (el cajero declara antes de ver el esperado), diferencia y aprobación.</li>
+<li><strong>Métodos de pago</strong>: efectivo (con vuelto y multi-moneda de cobro), tarjeta (terminal integrado), transferencia, QR, billeteras, pago contra entrega, crédito corporativo (cuenta por cobrar), vale/cupón, pago mixto.</li>
+<li><strong>Propinas</strong>: por medio de pago, distribución configurable (por mesero, pozo común), reporte para planilla. <span class="tag tag-requiere">Requiere validación</span> tratamiento tributario/laboral.</li>
+<li><strong>Descuentos y anulaciones controladas</strong>: límites por rol, motivo obligatorio, aprobación por PIN de supervisor por encima del límite.</li>
+<li><strong>Cierre de turno/día</strong>: consolida cajas, cuadra con pagos electrónicos (lotes de tarjeta), genera reporte Z interno y dispara resúmenes fiscales si el país lo exige.</li>
+</ul>
+<h2>M8. Facturación electrónica (núcleo fiscal)</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Capacidad</th>
+<th>Detalle</th>
+</tr>
+</thead><tbody><tr>
+<td>Tipos de documento</td>
+<td>Catálogo por país: p. ej. Perú → factura, boleta, nota de crédito, nota de débito; otros países → equivalentes (DTE, CFDI, documento equivalente POS, etc.). <span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>Determinación del documento</td>
+<td>Regla por país: tipo de documento según identificación del cliente (p. ej. RUC → factura; DNI/consumidor final → boleta) y montos límite para identificar al consumidor. <span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>Series y numeración</td>
+<td>Serie por sucursal × formato × canal × terminal (configurable); correlativo sin huecos; rangos reservados para offline.</td>
+</tr>
+<tr>
+<td>Datos fiscales del cliente</td>
+<td>Captura y validación de documento (dígito verificador local + consulta en línea al padrón vía proveedor cuando hay conexión); caché de clientes frecuentes.</td>
+</tr>
+<tr>
+<td>Emisión</td>
+<td>Generación del Documento Fiscal Canónico → adaptador del país (formato XML/JSON, firma o envío al proveedor) → respuesta → almacenamiento del XML y la constancia.</td>
+</tr>
+<tr>
+<td>Representación impresa</td>
+<td>Ticket con QR y datos obligatorios según país; plantilla por país/marca.</td>
+</tr>
+<tr>
+<td>Notas y anulaciones</td>
+<td>Nota de crédito total/parcial ligada al documento origen (devolución, descuento posterior, error); comunicación de baja o anulación según reglas del país.</td>
+</tr>
+<tr>
+<td>Contingencia</td>
+<td>Emisión offline con envío diferido dentro del plazo legal; monitor de vencimientos; procedimiento de contingencia del país cuando corresponda. <span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>Envío al cliente</td>
+<td>Email con PDF/XML, enlace/QR de consulta, reimpresión.</td>
+</tr>
+<tr>
+<td>Consulta de estado</td>
+<td>Panel por documento: pendiente, enviado, aceptado, aceptado con observaciones, rechazado, anulado; reproceso.</td>
+</tr>
+</tbody></table></div><h2>M9. Clientes, fidelización y CRM básico</h2>
+<ul>
+<li>Perfil único por cliente (teléfono como llave principal en delivery), direcciones múltiples, preferencias y alergias, consentimientos de marketing.</li>
+<li>Historial de pedidos omnicanal (los de agregadores sólo con los datos que el agregador comparta; usualmente limitados).</li>
+<li>Puntos por monto gastado con reglas por marca, canjes por productos/descuentos, vencimiento; cupones con condiciones.</li>
+<li>Segmentación básica RFM (recencia, frecuencia, monto) y por canal preferido; exportación para campañas.</li>
+</ul>
+<h2>M10. Reportes y analítica</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Familia</th>
+<th>Reportes / KPIs</th>
+</tr>
+</thead><tbody><tr>
+<td>Ventas</td>
+<td>Ventas netas e impuestos por sucursal, marca, formato, canal, turno, franja, producto, categoría, empleado; ticket promedio; ítems por ticket; horas pico (mapa de calor); comparativos período contra período.</td>
+</tr>
+<tr>
+<td>Margen</td>
+<td>Costo teórico, margen bruto por producto/categoría/canal (neto de comisiones); ingeniería de menú (popularidad vs. margen).</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>Tiempo de preparación, de espera de repartidor, de entrega; % a tiempo; cancelaciones por motivo/canal; comisiones; rentabilidad por canal.</td>
+</tr>
+<tr>
+<td>Caja</td>
+<td>Arqueos, diferencias por cajero, descuentos y anulaciones por usuario (control de fraude).</td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td>Consumo teórico vs. real, mermas por motivo, valorización de stock, rotación.</td>
+</tr>
+<tr>
+<td>Fiscal</td>
+<td>Comprobantes emitidos/anulados/notas por serie y estado de envío; pendientes por vencer; conciliación ventas vs. comprobantes.</td>
+</tr>
+</tbody></table></div><h2>M11. Administración y seguridad</h2>
+<ul>
+<li><strong>RBAC + alcance</strong>: permiso = <code>rol × acción × ámbito (grupo/marca/formato/sucursal)</code>. Roles base: dueño, gerente de marca, administrador de sucursal, cajero, mesero, cocinero, jefe de cocina, repartidor, contador, auditor, soporte.</li>
+<li><strong>Acciones sensibles</strong> (anulación, descuento sobre límite, reapertura de cuenta, apertura de cajón sin venta, cambio de precio en línea) requieren permiso explícito y quedan registradas con usuario, aprobador, terminal, hora, antes/después.</li>
+<li><strong>Bitácora inmutable</strong> con hash encadenado; exportable para auditoría fiscal.</li>
+<li><strong>Autenticación</strong>: OIDC + MFA para backoffice; PIN/tarjeta para POS con bloqueo por intentos; sesión ligada al terminal registrado.</li>
+<li><strong>Respaldos</strong>: PITR en nube; respaldo continuo del Edge; prueba de restauración trimestral.</li>
+</ul>
+</section>
+<section id="doc-03" class="doc"><h1>03 — Modelo entidad-relación preliminar</h1>
+<p><strong>Convenciones</strong> <span class="tag tag-recomendacion">Recomendación</span></p>
+<ul>
+<li>Todas las tablas de negocio llevan <code>tenant_id</code> (RLS), <code>id</code> UUIDv7, <code>created_at</code>, <code>created_by</code>, <code>version</code> (bloqueo optimista).</li>
+<li>Montos en <code>NUMERIC(14,4)</code> con <code>currency_code</code>; cantidades de inventario en <code>NUMERIC(14,6)</code>.</li>
+<li>Tablas de hechos (pedidos, pagos, movimientos, comprobantes) son <strong>append-only</strong>; correcciones = nuevos registros.</li>
+<li>Configuración con vigencia: <code>valid_from</code>, <code>valid_to</code>, <code>config_version</code>.</li>
+<li>Atributos dependientes del país o del canal en <code>JSONB</code> validado por esquema (p. ej. <code>fiscal_metadata</code>, <code>external_payload</code>).</li>
+</ul>
+<p>Por legibilidad, el modelo se divide en 6 dominios. Las relaciones entre dominios se indican con la entidad compartida.</p>
+<h2>1. Organización, seguridad y auditoría</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  TENANT ||--o{ BRAND : posee
+  TENANT ||--o{ LEGAL_ENTITY : "razón social"
+  BRAND ||--o{ BRAND_FORMAT : opera
+  FORMAT ||--o{ BRAND_FORMAT : clasifica
+  LEGAL_ENTITY ||--o{ BRANCH : "emite por"
+  BRANCH ||--o{ BRANCH_BRAND_FORMAT : aloja
+  BRAND_FORMAT ||--o{ BRANCH_BRAND_FORMAT : "se ofrece en"
+  BRANCH ||--o{ AREA : contiene
+  AREA ||--o{ DINING_TABLE : contiene
+  BRANCH ||--o{ TERMINAL : registra
+  BRANCH ||--o{ WAREHOUSE : tiene
+  BRANCH ||--o{ KITCHEN_STATION : tiene
+  BRANCH ||--|| EDGE_HUB : "es servida por"
+  USER ||--o{ USER_ROLE_SCOPE : tiene
+  ROLE ||--o{ USER_ROLE_SCOPE : asigna
+  ROLE ||--o{ ROLE_PERMISSION : incluye
+  PERMISSION ||--o{ ROLE_PERMISSION : "es parte de"
+  USER ||--o{ AUDIT_LOG : genera
+
+  LEGAL_ENTITY {
+    uuid id PK
+    string country_code
+    string tax_id
+    string legal_name
+    string tax_regime
+    jsonb fiscal_metadata
+  }
+  BRANCH {
+    uuid id PK
+    uuid legal_entity_id FK
+    string name
+    string timezone
+    string fiscal_establishment_code
+    geography location
+  }
+  TERMINAL {
+    uuid id PK
+    uuid branch_id FK
+    string type "POS|KDS|KIOSK|MOBILE"
+    string device_fingerprint
+    string status
+  }
+  USER_ROLE_SCOPE {
+    uuid user_id FK
+    uuid role_id FK
+    string scope_type "TENANT|BRAND|FORMAT|BRANCH"
+    uuid scope_id
+  }
+  AUDIT_LOG {
+    uuid id PK
+    uuid user_id FK
+    uuid approver_id
+    uuid terminal_id
+    string action
+    string entity_type
+    uuid entity_id
+    jsonb before_after
+    string prev_hash
+    string hash
+    timestamptz at
+  }</pre></div><h2>2. Catálogo, precios, impuestos y reglas</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  CATEGORY ||--o{ PRODUCT : agrupa
+  PRODUCT ||--o{ PRODUCT_VARIANT : "se expone como"
+  PRODUCT ||--o{ PRODUCT_MODIFIER_GROUP : admite
+  MODIFIER_GROUP ||--o{ PRODUCT_MODIFIER_GROUP : "se usa en"
+  MODIFIER_GROUP ||--o{ MODIFIER : contiene
+  PRODUCT ||--o{ COMBO_SLOT : "es combo con"
+  COMBO_SLOT ||--o{ COMBO_SLOT_OPTION : ofrece
+  MENU ||--o{ MENU_ITEM : publica
+  PRODUCT_VARIANT ||--o{ MENU_ITEM : aparece
+  MENU ||--o{ MENU_SCHEDULE : "disponible en"
+  PRICE_LIST ||--o{ PRICE_LIST_ITEM : contiene
+  PRODUCT_VARIANT ||--o{ PRICE_LIST_ITEM : "tiene precio"
+  TAX_CATEGORY ||--o{ PRODUCT : clasifica
+  TAX_CATEGORY ||--o{ TAX_RULE : "se grava por"
+  RULE ||--o{ RULE_CONDITION : evalua
+  RULE ||--o{ RULE_ACTION : ejecuta
+  CHANNEL ||--o{ MENU : "vende por"
+
+  PRODUCT {
+    uuid id PK
+    string sku
+    string name
+    uuid category_id FK
+    uuid tax_category_id FK
+    string type "SIMPLE|COMBO|MODIFIER_ONLY"
+    uuid default_station_id
+  }
+  PRODUCT_VARIANT {
+    uuid id PK
+    uuid product_id FK
+    uuid brand_id
+    uuid format_id
+    uuid branch_id "nullable"
+    uuid channel_id "nullable"
+    string display_name
+    bool available
+  }
+  PRICE_LIST {
+    uuid id PK
+    uuid brand_id
+    uuid format_id "nullable"
+    uuid branch_id "nullable"
+    uuid channel_id "nullable"
+    string daypart "nullable"
+    int priority
+    date valid_from
+    date valid_to
+  }
+  TAX_RULE {
+    uuid id PK
+    string country_code
+    string tax_regime
+    uuid tax_category_id FK
+    string operation_type
+    string tax_code
+    numeric rate
+    string affectation_code
+    date valid_from
+    date valid_to
+  }
+  RULE {
+    uuid id PK
+    string type "PROMO|COMBO|SURCHARGE|COMMISSION|COUPON"
+    int priority
+    bool stackable
+    string exclusive_group
+    jsonb scope
+    timestamptz valid_from
+    timestamptz valid_to
+  }
+  CHANNEL {
+    uuid id PK
+    string code "DINE_IN|BAR|COUNTER|PICKUP|OWN_DELIVERY|AGGREGATOR_X|WEB"
+    uuid integration_id "nullable"
+  }</pre></div><h2>3. Recetas e inventario</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  INGREDIENT ||--o{ RECIPE_LINE : "se usa en"
+  RECIPE ||--o{ RECIPE_LINE : compone
+  RECIPE ||--o| RECIPE : "sub-receta"
+  PRODUCT_VARIANT ||--o| RECIPE : "se prepara con"
+  MODIFIER ||--o| RECIPE : "agrega"
+  INGREDIENT ||--o{ UNIT_CONVERSION : convierte
+  WAREHOUSE ||--o{ STOCK_BALANCE : mantiene
+  INGREDIENT ||--o{ STOCK_BALANCE : "saldo de"
+  WAREHOUSE ||--o{ STOCK_MOVEMENT : registra
+  INGREDIENT ||--o{ STOCK_MOVEMENT : mueve
+  TRANSFER ||--o{ TRANSFER_LINE : detalla
+  WAREHOUSE ||--o{ TRANSFER : "origen/destino"
+  PRODUCTION_ORDER ||--o{ STOCK_MOVEMENT : genera
+  PHYSICAL_COUNT ||--o{ PHYSICAL_COUNT_LINE : detalla
+
+  INGREDIENT {
+    uuid id PK
+    string code
+    string name
+    string base_unit
+    numeric min_stock
+    numeric reorder_point
+  }
+  RECIPE_LINE {
+    uuid recipe_id FK
+    uuid ingredient_id FK
+    uuid sub_recipe_id "nullable"
+    numeric quantity
+    string unit
+    numeric waste_pct
+  }
+  STOCK_BALANCE {
+    uuid warehouse_id FK
+    uuid ingredient_id FK
+    numeric qty
+    numeric avg_cost
+    timestamptz updated_at
+  }
+  STOCK_MOVEMENT {
+    uuid id PK
+    uuid warehouse_id FK
+    uuid ingredient_id FK
+    string type "PURCHASE|SALE|PRODUCTION|TRANSFER_OUT|TRANSFER_IN|WASTE|ADJUST"
+    numeric qty
+    numeric unit_cost
+    string reason
+    string source_type
+    uuid source_id
+    timestamptz at
+  }
+  TRANSFER {
+    uuid id PK
+    uuid from_warehouse_id
+    uuid to_warehouse_id
+    string status "DRAFT|SENT|RECEIVED|DISCREPANCY"
+  }</pre></div><h2>4. Pedidos, cocina y delivery</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  CUSTOMER ||--o{ ORDER : realiza
+  CUSTOMER ||--o{ CUSTOMER_ADDRESS : tiene
+  ORDER ||--o{ ORDER_LINE : contiene
+  ORDER_LINE ||--o{ ORDER_LINE_MODIFIER : personaliza
+  ORDER_LINE ||--o{ ORDER_LINE_ADJUSTMENT : "descuento/recargo"
+  ORDER ||--o{ ORDER_EVENT : historial
+  ORDER ||--o{ CHECK : "se divide en"
+  CHECK ||--o{ CHECK_LINE : asigna
+  ORDER_LINE ||--o{ CHECK_LINE : "se cobra en"
+  DINING_TABLE ||--o{ ORDER : atiende
+  ORDER ||--o{ KITCHEN_TICKET : genera
+  KITCHEN_TICKET ||--o{ KITCHEN_TICKET_ITEM : contiene
+  KITCHEN_STATION ||--o{ KITCHEN_TICKET : recibe
+  ORDER ||--o| DELIVERY : "se entrega por"
+  DELIVERY_ZONE ||--o{ DELIVERY : cubre
+  COURIER ||--o{ DELIVERY : realiza
+  DELIVERY ||--o{ DELIVERY_EVENT : traza
+  ORDER ||--o| EXTERNAL_ORDER : "proviene de"
+  INTEGRATION ||--o{ EXTERNAL_ORDER : recibe
+
+  ORDER {
+    uuid id PK
+    uuid branch_id
+    uuid brand_id
+    uuid format_id
+    uuid channel_id
+    uuid table_id "nullable"
+    uuid customer_id "nullable"
+    string status
+    string service_type "DINE_IN|TAKEAWAY|DELIVERY|PICKUP"
+    timestamptz scheduled_for "nullable"
+    timestamptz promised_at
+    int config_version
+    numeric subtotal
+    numeric discount_total
+    numeric surcharge_total
+    numeric tax_total
+    numeric total
+    uuid correlation_id
+  }
+  ORDER_LINE {
+    uuid id PK
+    uuid order_id FK
+    uuid product_variant_id
+    numeric qty
+    numeric unit_price
+    jsonb tax_breakdown
+    string status "ACTIVE|VOIDED"
+    string void_reason
+    uuid station_id
+    int course
+  }
+  EXTERNAL_ORDER {
+    uuid id PK
+    uuid integration_id FK
+    string external_id UK
+    string external_status
+    jsonb raw_payload
+    numeric commission_expected
+  }
+  DELIVERY {
+    uuid id PK
+    uuid order_id FK
+    uuid zone_id FK
+    uuid courier_id
+    string status
+    numeric fee
+    timestamptz eta
+    numeric cash_to_collect
+  }
+  KITCHEN_TICKET {
+    uuid id PK
+    uuid order_id FK
+    uuid station_id FK
+    int priority_score
+    string status "QUEUED|IN_PROGRESS|READY|BUMPED|CANCELLED"
+    timestamptz started_at
+    timestamptz ready_at
+  }</pre></div><h2>5. Caja, pagos y facturación electrónica</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  TERMINAL ||--o{ CASH_SESSION : abre
+  USER ||--o{ CASH_SESSION : opera
+  CASH_SESSION ||--o{ CASH_MOVEMENT : registra
+  CASH_SESSION ||--o{ PAYMENT : recibe
+  CHECK ||--o{ PAYMENT : "se paga con"
+  PAYMENT_METHOD ||--o{ PAYMENT : clasifica
+  PAYMENT ||--o{ TIP : incluye
+  CASH_SESSION ||--o{ CASH_COUNT : arquea
+  CHECK ||--o| FISCAL_DOCUMENT : "se documenta en"
+  FISCAL_DOCUMENT ||--o{ FISCAL_DOCUMENT_LINE : detalla
+  FISCAL_DOCUMENT ||--o{ FISCAL_DOCUMENT : "nota referencia a"
+  FISCAL_SERIES ||--o{ FISCAL_DOCUMENT : numera
+  FISCAL_SERIES ||--o{ SERIES_RANGE_RESERVATION : reserva
+  TERMINAL ||--o{ SERIES_RANGE_RESERVATION : usa
+  FISCAL_DOCUMENT ||--o{ FISCAL_SUBMISSION : envia
+  FISCAL_DOCUMENT_TYPE ||--o{ FISCAL_SERIES : define
+  FISCAL_SUMMARY ||--o{ FISCAL_DOCUMENT : agrupa
+
+  CASH_SESSION {
+    uuid id PK
+    uuid terminal_id FK
+    uuid user_id FK
+    numeric opening_float
+    numeric expected_cash
+    numeric declared_cash
+    numeric difference
+    string status "OPEN|CLOSING|CLOSED|APPROVED"
+    timestamptz opened_at
+    timestamptz closed_at
+  }
+  PAYMENT {
+    uuid id PK
+    uuid check_id FK
+    uuid cash_session_id FK
+    uuid method_id FK
+    numeric amount
+    numeric tendered
+    numeric change
+    string currency_code
+    string provider_ref
+    string card_last4
+    string status "CAPTURED|REFUNDED|VOIDED|PENDING"
+  }
+  FISCAL_SERIES {
+    uuid id PK
+    uuid legal_entity_id
+    uuid branch_id
+    uuid document_type_id FK
+    string series_code
+    uuid channel_id "nullable"
+    uuid terminal_id "nullable"
+    bigint last_number
+    bool contingency
+  }
+  FISCAL_DOCUMENT {
+    uuid id PK
+    uuid series_id FK
+    bigint number
+    string document_type_code
+    uuid reference_document_id "nullable"
+    string customer_doc_type
+    string customer_doc_number
+    string customer_name
+    numeric taxable_base
+    jsonb taxes
+    numeric total
+    string currency_code
+    string status "DRAFT|ISSUED_LOCAL|SENT|ACCEPTED|ACCEPTED_WITH_OBS|REJECTED|VOIDED"
+    string hash_or_digest
+    string qr_payload
+    string xml_uri
+    string receipt_uri
+    timestamptz issued_at
+    jsonb fiscal_metadata
+  }
+  FISCAL_SUBMISSION {
+    uuid id PK
+    uuid fiscal_document_id FK
+    string provider
+    int attempt
+    string request_uri
+    string response_code
+    string response_message
+    timestamptz at
+  }</pre></div><p>Restricciones fiscales clave: <code>UNIQUE(series_id, number)</code>; <code>FISCAL_DOCUMENT</code> no admite <code>UPDATE</code> de campos económicos una vez emitido (trigger); toda modificación es nota de crédito/débito o anulación según reglas del país.</p>
+<h2>6. Clientes, fidelización e integraciones</h2>
+<div class="diagram"><pre class="mermaid">erDiagram
+  CUSTOMER ||--o{ CUSTOMER_TAX_PROFILE : "datos fiscales"
+  CUSTOMER ||--o{ CONSENT : otorga
+  CUSTOMER ||--o| LOYALTY_ACCOUNT : participa
+  LOYALTY_ACCOUNT ||--o{ LOYALTY_LEDGER : movimientos
+  LOYALTY_PROGRAM ||--o{ LOYALTY_ACCOUNT : agrupa
+  COUPON ||--o{ COUPON_REDEMPTION : canjea
+  CUSTOMER ||--o{ COUPON_REDEMPTION : usa
+  INTEGRATION ||--o{ INTEGRATION_CREDENTIAL : autentica
+  INTEGRATION ||--o{ INTEGRATION_MESSAGE : intercambia
+  INTEGRATION ||--o{ SETTLEMENT : liquida
+  SETTLEMENT ||--o{ SETTLEMENT_LINE : detalla
+  SETTLEMENT_LINE }o--o| EXTERNAL_ORDER : concilia
+
+  CUSTOMER {
+    uuid id PK
+    string phone
+    string email
+    string name
+    jsonb preferences
+    string segment
+  }
+  INTEGRATION {
+    uuid id PK
+    string kind "AGGREGATOR|FISCAL|PAYMENT|MESSAGING|MAPS"
+    string adapter_code
+    string adapter_version
+    jsonb settings
+    string status
+  }
+  INTEGRATION_MESSAGE {
+    uuid id PK
+    uuid integration_id FK
+    string direction "IN|OUT"
+    string idempotency_key UK
+    jsonb payload
+    string status "RECEIVED|PROCESSED|FAILED|DLQ"
+    int attempts
+  }
+  SETTLEMENT_LINE {
+    uuid id PK
+    uuid settlement_id FK
+    string external_order_id
+    numeric gross
+    numeric commission
+    numeric promo_funded_by_platform
+    numeric promo_funded_by_restaurant
+    numeric net
+    string match_status "MATCHED|DIFFERENCE|MISSING_IN_POS|MISSING_IN_SETTLEMENT"
+  }</pre></div><h2>7. Volumetría preliminar <span class="tag tag-estimacion">Estimación</span></h2>
+<p>Base: 10 sucursales × 800 pedidos/día × 4 líneas/pedido.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>Tabla</th>
+<th>Filas/día</th>
+<th>Filas/año</th>
+<th>Estrategia</th>
+</tr>
+</thead><tbody><tr>
+<td>ORDER</td>
+<td>8.000</td>
+<td>~2,9 M</td>
+<td>Partición mensual</td>
+</tr>
+<tr>
+<td>ORDER_LINE</td>
+<td>32.000</td>
+<td>~11,7 M</td>
+<td>Partición mensual</td>
+</tr>
+<tr>
+<td>ORDER_EVENT</td>
+<td>~64.000</td>
+<td>~23 M</td>
+<td>Partición mensual; archivado a frío &gt; 24 meses</td>
+</tr>
+<tr>
+<td>STOCK_MOVEMENT</td>
+<td>~100.000 (consumo por insumo)</td>
+<td>~36 M</td>
+<td>Partición mensual; consumo agregado por pedido como alternativa</td>
+</tr>
+<tr>
+<td>FISCAL_DOCUMENT</td>
+<td>~8.500</td>
+<td>~3,1 M</td>
+<td>Partición anual; retención según ley <span class="tag tag-requiere">Requiere validación del plazo</span></td>
+</tr>
+</tbody></table></div><p>Volúmenes manejables en una sola instancia PostgreSQL bien dimensionada durante los primeros años.</p>
+</section>
+<section id="doc-04" class="doc"><h1>04 — Flujos de pantalla</h1>
+<p>Principios de UX para POS/KDS <span class="tag tag-recomendacion">Recomendación</span>: objetivos táctiles ≥ 48 px; máximo 3 toques para agregar un ítem frecuente; acciones destructivas con confirmación y motivo; indicador permanente de estado de conexión (en línea / offline / pendientes de sincronizar) y de cola fiscal; modo alto contraste para cocina; idioma y formato numérico por sucursal.</p>
+<hr>
+<h2>Flujo 1 — Pedido en salón</h2>
+<div class="diagram"><pre class="mermaid">flowchart TD
+  A["Login con PIN&lt;br/&gt;(terminal registrado)"] --&gt; B{"¿Caja abierta?&lt;br/&gt;(sólo si el rol cobra)"}
+  B -- No --&gt; B1["Apertura de caja&lt;br/&gt;(fondo inicial)"] --&gt; C
+  B -- Sí --&gt; C["Mapa de mesas&lt;br/&gt;(áreas, estados por color)"]
+  C --&gt; D["Seleccionar mesa libre&lt;br/&gt;→ N.º comensales"]
+  D --&gt; E["Pantalla de pedido&lt;br/&gt;Categorías | Productos | Cuenta"]
+  E --&gt; F{"¿Producto con&lt;br/&gt;modificadores?"}
+  F -- Sí --&gt; F1["Modal modificadores&lt;br/&gt;(obligatorios / opcionales,&lt;br/&gt;notas, alergias)"] --&gt; G
+  F -- No --&gt; G["Línea agregada&lt;br/&gt;(asignar a comensal/curso)"]
+  G --&gt; H{"¿Más ítems?"}
+  H -- Sí --&gt; E
+  H -- No --&gt; I["Enviar a cocina&lt;br/&gt;(todo o por curso)"]
+  I --&gt; J["KDS/impresoras por estación&lt;br/&gt;+ estado en mesa: 'En preparación'"]
+  J --&gt; K{"Acciones durante el servicio"}
+  K --&gt;|Agregar| E
+  K --&gt;|Transferir ítems/mesa| K1["Seleccionar destino&lt;br/&gt;(registro en auditoría)"]
+  K --&gt;|Unir mesas| K2["Seleccionar mesas&lt;br/&gt;→ cuenta consolidada"]
+  K --&gt;|Anular ítem enviado| K3["Motivo + PIN supervisor&lt;br/&gt;→ aviso a KDS"]
+  K --&gt;|Pre-cuenta| L
+  L["Pre-cuenta impresa&lt;br/&gt;(no fiscal)"] --&gt; M{"¿Dividir cuenta?"}
+  M -- Sí --&gt; M1["Dividir por ítem / comensal /&lt;br/&gt;partes iguales / monto"] --&gt; N
+  M -- No --&gt; N["Ir a cobro → Flujo 4"]
+  N --&gt; O["Mesa pasa a 'Por limpiar'&lt;br/&gt;→ 'Libre'"]</pre></div><p><strong>Pantallas clave</strong></p>
+<div class="table-wrap"><table><thead><tr>
+<th>Pantalla</th>
+<th>Elementos</th>
+<th>Reglas</th>
+</tr>
+</thead><tbody><tr>
+<td>Mapa de mesas</td>
+<td>Áreas en pestañas, mesas con color por estado, tiempo de ocupación, mesero, monto acumulado</td>
+<td>Arrastrar mesa sobre otra = unir; mantener presionado = menú de acciones</td>
+</tr>
+<tr>
+<td>Pedido</td>
+<td>Barra de búsqueda, categorías, grilla de productos con foto opcional, panel de cuenta con comensales y cursos</td>
+<td>Productos agotados (&quot;86&quot;) se muestran deshabilitados; precio según canal/franja vigente</td>
+</tr>
+<tr>
+<td>Modificadores</td>
+<td>Grupos con mín./máx. visibles, precio adicional, campo de nota</td>
+<td>No permite confirmar si falta un obligatorio</td>
+</tr>
+<tr>
+<td>División de cuenta</td>
+<td>Columnas por subcuenta, arrastrar ítems; ítem compartido dividible en fracciones</td>
+<td>La suma de subcuentas debe igualar el total; cada subcuenta genera su propio comprobante</td>
+</tr>
+</tbody></table></div><hr>
+<h2>Flujo 2 — Pedido delivery propio (call center / WhatsApp / mostrador)</h2>
+<div class="diagram"><pre class="mermaid">flowchart TD
+  A["Nuevo pedido → Canal: Delivery propio"] --&gt; B["Buscar cliente por teléfono"]
+  B --&gt; C{"¿Existe?"}
+  C -- No --&gt; C1["Alta rápida: nombre, teléfono,&lt;br/&gt;consentimiento de datos"] --&gt; D
+  C -- Sí --&gt; D["Seleccionar dirección guardada&lt;br/&gt;o ingresar nueva (autocompletado + pin en mapa)"]
+  D --&gt; E{"¿Dentro de zona de cobertura&lt;br/&gt;y horario de la zona?"}
+  E -- No --&gt; E1["Ofrecer pickup u otra sucursal&lt;br/&gt;que cubra la dirección"]
+  E -- Sí --&gt; F["Asignar sucursal/marca + tarifa de envío&lt;br/&gt;+ pedido mínimo + ETA"]
+  F --&gt; G["Carga de productos (menú del canal delivery)&lt;br/&gt;+ sugerencias del historial"]
+  G --&gt; H{"¿Cumple pedido mínimo?"}
+  H -- No --&gt; G
+  H -- Sí --&gt; I["¿Ahora o programado?&lt;br/&gt;(fecha/hora)"]
+  I --&gt; J["Método de pago:&lt;br/&gt;online (link/QR) · contra entrega (efectivo con vuelto / POS móvil)"]
+  J --&gt; K["Datos fiscales: boleta/factura&lt;br/&gt;(validación de documento)"]
+  K --&gt; L["Confirmar → SMS/WhatsApp con&lt;br/&gt;resumen + enlace de seguimiento"]
+  L --&gt; M["Liberación a cocina&lt;br/&gt;(inmediata o en hora calculada si es programado)"]
+  M --&gt; N["KDS → Listo → Expedición"]
+  N --&gt; O["Asignar repartidor&lt;br/&gt;(manual o sugerido; agrupar por ruta)"]
+  O --&gt; P["App repartidor: recoger → en camino → entregado&lt;br/&gt;(foto/firma opcional, cobro contra entrega)"]
+  P --&gt; Q["Cierre del pedido + comprobante&lt;br/&gt;(emitido al cobrar o al confirmar pago online)"]
+  Q --&gt; R["Liquidación del repartidor al fin de turno"]</pre></div><hr>
+<h2>Flujo 3 — Integración con agregador (recepción automática)</h2>
+<div class="diagram"><pre class="mermaid">sequenceDiagram
+  autonumber
+  participant AG as Agregador
+  participant IH as Integration Hub
+  participant OR as Core Pedidos
+  participant EH as Edge Hub sucursal
+  participant UI as POS (bandeja) / KDS
+
+  AG-&gt;&gt;IH: Webhook "nuevo pedido" (firma HMAC)
+  IH-&gt;&gt;IH: Verificar firma, deduplicar por external_id, guardar crudo
+  IH-&gt;&gt;IH: Mapear a Pedido Canónico (SKU externos → variantes internas)
+  alt Mapeo incompleto (SKU desconocido)
+    IH-&gt;&gt;UI: Alerta "pedido requiere revisión" (no se pierde)
+  end
+  IH-&gt;&gt;OR: CreateOrder(canal=AGREGADOR_X, precios del agregador)
+  OR-&gt;&gt;EH: Push pedido (WebSocket)
+  EH-&gt;&gt;UI: Bandeja unificada + sonido
+  alt Aceptación automática habilitada y capacidad OK
+    EH-&gt;&gt;OR: Aceptar(tiempo prep estimado)
+  else Manual
+    UI-&gt;&gt;EH: Cajero acepta / rechaza (motivo)
+  end
+  OR-&gt;&gt;IH: Accept/Reject
+  IH-&gt;&gt;AG: API accept (prepTime) / reject
+  EH-&gt;&gt;UI: Comandas a KDS
+  UI-&gt;&gt;EH: Listo para recoger
+  EH-&gt;&gt;OR: Status READY
+  OR-&gt;&gt;IH: Status update
+  IH-&gt;&gt;AG: "Pedido listo"
+  AG--&gt;&gt;IH: Webhook "repartidor llegó" / "entregado" / "cancelado"
+  IH-&gt;&gt;OR: Actualizar estado (cancelación tardía → alerta KDS + merma)</pre></div><p><strong>Pantalla &quot;Bandeja unificada&quot;</strong>: columnas por estado (Nuevos · En preparación · Listos · En reparto · Entregados), tarjeta con logo del canal, número externo corto, hora prometida, cuenta regresiva, botón aceptar/rechazar, indicador de pago (prepagado / cobrar). Filtros por canal y marca. Interruptor para <strong>pausar canal</strong> o <strong>marcar ítem agotado</strong> que se sincroniza con el agregador.</p>
+<hr>
+<h2>Flujo 4 — Emisión de comprobante electrónico (cobro)</h2>
+<div class="diagram"><pre class="mermaid">flowchart TD
+  A["Cuenta / subcuenta lista para cobrar"] --&gt; B["Pantalla de cobro:&lt;br/&gt;total, propina sugerida, descuentos autorizados"]
+  B --&gt; C["Tipo de comprobante&lt;br/&gt;(sugerido por regla del país)"]
+  C --&gt; D{"¿Requiere identificar al cliente?&lt;br/&gt;(factura, o monto sobre umbral legal)"}
+  D -- Sí --&gt; D1["Ingresar tipo y n.º de documento"] --&gt; D2{"Validación&lt;br/&gt;(dígito verificador local;&lt;br/&gt;padrón en línea si hay conexión)"}
+  D2 -- Inválido --&gt; D1
+  D2 -- Válido --&gt; E
+  D -- No --&gt; E["Consumidor final"]
+  E --&gt; F["Seleccionar medios de pago&lt;br/&gt;(mixto: efectivo + tarjeta + QR...)"]
+  F --&gt; F1{"¿Tarjeta/QR?"}
+  F1 -- Sí --&gt; F2["Terminal integrado / QR dinámico&lt;br/&gt;→ autorización"] --&gt; G
+  F1 -- No --&gt; G["Efectivo: monto recibido → vuelto"]
+  G --&gt; H{"¿Pagos = total?"}
+  H -- No --&gt; F
+  H -- Sí --&gt; I["Edge Hub: asigna serie + correlativo&lt;br/&gt;(rango local reservado)"]
+  I --&gt; J["Genera documento canónico&lt;br/&gt;→ representación impresa con QR"]
+  J --&gt; K["Imprimir ticket / enviar email-WhatsApp&lt;br/&gt;+ abrir cajón si hubo efectivo"]
+  K --&gt; L{"¿Conexión con proveedor fiscal?"}
+  L -- Sí --&gt; L1["Envío inmediato (asíncrono)&lt;br/&gt;→ ACEPTADO / OBSERVADO / RECHAZADO"]
+  L -- No --&gt; L2["Cola de contingencia&lt;br/&gt;PENDIENTE_ENVIO + monitor de plazo"]
+  L1 --&gt; M{"¿Rechazado?"}
+  M -- Sí --&gt; M1["Alerta a supervisor/contador:&lt;br/&gt;corregir datos → reemisión según regla del país"]
+  M -- No --&gt; N["Fin"]
+  L2 --&gt; N</pre></div><p><strong>Flujo relacionado — Nota de crédito</strong>: Buscar comprobante (n.º, fecha, cliente, QR) → seleccionar motivo del catálogo del país → total o parcial (selección de líneas) → aprobación por rol → reembolso (mismo medio de pago o vale) → emisión de nota con referencia al documento original → reverso de inventario si el producto no se preparó.</p>
+<hr>
+<h2>Flujo 5 — Cierre de caja</h2>
+<div class="diagram"><pre class="mermaid">flowchart TD
+  A["Cajero: 'Cerrar caja'"] --&gt; B{"¿Cuentas abiertas o pagos&lt;br/&gt;pendientes en esta caja?"}
+  B -- Sí --&gt; B1["Listar pendientes:&lt;br/&gt;cobrar, transferir a otra caja o&lt;br/&gt;escalar a supervisor"] --&gt; B
+  B -- No --&gt; C["Arqueo ciego:&lt;br/&gt;conteo por denominación&lt;br/&gt;(el esperado NO se muestra)"]
+  C --&gt; D["Declarar otros medios:&lt;br/&gt;vouchers de tarjeta, QR, transferencias,&lt;br/&gt;vales, cobros contra entrega"]
+  D --&gt; E["Sistema calcula esperado vs. declarado&lt;br/&gt;por medio de pago"]
+  E --&gt; F{"¿Diferencia dentro&lt;br/&gt;de tolerancia?"}
+  F -- No --&gt; F1["Recontar (1 vez) o&lt;br/&gt;justificar con motivo"] --&gt; G
+  F -- Sí --&gt; G["Supervisor revisa y aprueba (PIN)"]
+  G --&gt; H["Reporte de cierre:&lt;br/&gt;ventas por medio, propinas, descuentos,&lt;br/&gt;anulaciones, retiros, diferencia"]
+  H --&gt; I["Depósito/retiro a bóveda&lt;br/&gt;(registro de movimiento)"]
+  I --&gt; J{"¿Último cierre del día&lt;br/&gt;en la sucursal?"}
+  J -- Sí --&gt; K["Cierre de día:&lt;br/&gt;- consolidación de cajas&lt;br/&gt;- cuadre con lotes de tarjeta&lt;br/&gt;- resumen fiscal si el país lo exige&lt;br/&gt;- verificación de cola fiscal vacía&lt;br/&gt;- liquidación de repartidores"]
+  J -- No --&gt; L["Fin"]
+  K --&gt; L</pre></div><p><strong>Pantalla de arqueo</strong>: teclado numérico por denominación (billetes y monedas) con subtotal automático, campos por medio de pago, campo de observaciones, botón &quot;Recontar&quot;. Tras aprobar se muestra la diferencia y el reporte se imprime y queda en el backoffice.</p>
+</section>
+<section id="doc-05" class="doc"><h1>05 — Diseño de integración: delivery/agregadores y facturación electrónica</h1>
+<h2>Parte A — Integración con agregadores y delivery</h2>
+<h3>A.1 Opciones de integración</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Opción</th>
+<th>Descripción</th>
+<th>Ventajas</th>
+<th>Desventajas</th>
+<th>Recomendación</th>
+</tr>
+</thead><tbody><tr>
+<td>A1. API directa por agregador</td>
+<td>Adaptador propio por cada plataforma (webhooks + API)</td>
+<td>Sin intermediario ni costo por pedido; control total</td>
+<td>Requiere convenio de partner y certificación por plataforma; mantenimiento por cambios de API</td>
+<td>Para el agregador de mayor volumen</td>
+</tr>
+<tr>
+<td>A2. Middleware de agregación (terceros)</td>
+<td>Un proveedor consolida varias plataformas y expone una sola API</td>
+<td>Un solo adaptador; rápida cobertura multi-plataforma</td>
+<td>Costo recurrente; dependencia de un tercero; latencia adicional</td>
+<td>Si se operan ≥3 agregadores o el convenio directo demora</td>
+</tr>
+<tr>
+<td>A3. Tablet del agregador + digitación</td>
+<td>Sin integración</td>
+<td>Costo cero de desarrollo</td>
+<td>Errores, doble digitación, sin conciliación automática</td>
+<td>Sólo como contingencia</td>
+</tr>
+</tbody></table></div><p><span class="tag tag-recomendacion">Recomendación</span> Diseñar el puerto <code>DeliveryChannelPort</code> de modo que A1 y A2 sean intercambiables. La disponibilidad de APIs y condiciones de cada plataforma en el país <strong><span class="tag tag-requiere">Requiere validación</span></strong> comercial.</p>
+<h3>A.2 Modelo de Pedido Canónico (extracto)</h3>
+<pre class="code"><code>{
+  "canonical_version": "1.0",
+  "source": { "channel": "AGGREGATOR_X", "integration_id": "uuid", "external_id": "AX-123456", "external_display_id": "4F2" },
+  "branch_id": "uuid", "brand_id": "uuid",
+  "service_type": "DELIVERY",
+  "fulfillment": { "by": "PLATFORM | RESTAURANT", "promised_at": "2026-11-25T20:15:00-05:00", "scheduled_for": null },
+  "customer": { "name": "Cliente A.", "phone_masked": "***1234", "tax_id": null, "notes": "Sin cebolla" },
+  "address": { "line1": "…", "reference": "…", "geo": { "lat": 0, "lng": 0 } },
+  "items": [
+    { "external_sku": "BURG-01", "variant_id": "uuid|null", "qty": 2, "unit_price": 25.90,
+      "modifiers": [{ "external_sku": "EXT-QUESO", "modifier_id": "uuid|null", "qty": 1, "unit_price": 3.00 }],
+      "notes": "" }
+  ],
+  "totals": { "subtotal": 57.80, "platform_discount": 5.00, "restaurant_discount": 0, "delivery_fee": 0, "total_charged_to_customer": 52.80 },
+  "payment": { "status": "PREPAID | COLLECT_ON_DELIVERY", "method": "PLATFORM" },
+  "fiscal": { "document_requested": "RECEIPT | INVOICE", "issuer_responsibility": "RESTAURANT | PLATFORM" }
+}</code></pre><p>Datos ilustrativos. El campo <code>fiscal.issuer_responsibility</code> es clave: quién emite el comprobante al consumidor final y sobre qué monto varía por país y por contrato con la plataforma. <strong><span class="tag tag-requiere">Requiere validación</span></strong> contable/tributaria.</p>
+<h3>A.3 Mapeo de estados (ejemplo)</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Estado interno</th>
+<th>Evento que lo dispara</th>
+<th>Notificación saliente al agregador</th>
+<th>Observación</th>
+</tr>
+</thead><tbody><tr>
+<td><code>RECEIVED</code></td>
+<td>Webhook nuevo pedido</td>
+<td>—</td>
+<td>Persistido crudo + deduplicado</td>
+</tr>
+<tr>
+<td><code>ACCEPTED</code></td>
+<td>Aceptación auto/manual</td>
+<td><code>accept(prep_minutes)</code></td>
+<td>SLA de aceptación del agregador (p. ej. pocos minutos) <span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td><code>REJECTED</code></td>
+<td>Rechazo con motivo</td>
+<td><code>reject(reason_code)</code></td>
+<td>Motivos mapeados a catálogo de la plataforma</td>
+</tr>
+<tr>
+<td><code>IN_PREPARATION</code></td>
+<td>Primer ticket KDS iniciado</td>
+<td><code>status(preparing)</code> si la API lo soporta</td>
+<td></td>
+</tr>
+<tr>
+<td><code>READY</code></td>
+<td>Expedición completa</td>
+<td><code>status(ready)</code></td>
+<td>Activa alerta si el repartidor no llega en X min</td>
+</tr>
+<tr>
+<td><code>PICKED_UP</code></td>
+<td>Webhook de la plataforma / marcado manual</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>DELIVERED</code></td>
+<td>Webhook</td>
+<td>—</td>
+<td>Cierra pedido</td>
+</tr>
+<tr>
+<td><code>CANCELLED</code></td>
+<td>Webhook o rechazo</td>
+<td><code>cancel</code> si es iniciativa propia</td>
+<td>Si ya estaba en preparación → merma + registro para disputa en conciliación</td>
+</tr>
+</tbody></table></div><h3>A.4 Sincronización de menú y disponibilidad</h3>
+<ul>
+<li><strong>Menú por canal</strong> (<code>MENU</code> con <code>channel_id</code>): nombres, fotos, precios del canal, modificadores; publicación al agregador mediante <code>syncMenu()</code> al aprobar una versión.</li>
+<li><strong>Tabla de mapeo</strong> <code>external_sku ↔ variant_id/modifier_id</code> por integración; pedidos con SKU sin mapeo no se rechazan automáticamente: van a revisión con alerta.</li>
+<li><strong>Disponibilidad en tiempo real</strong>: marcar &quot;86&quot; en POS/KDS → <code>setItemAvailability()</code> a todos los canales; pausar canal completo ante saturación de cocina.</li>
+<li><strong>Horarios</strong>: horario por canal y sucursal sincronizado con la plataforma.</li>
+</ul>
+<h3>A.5 Confiabilidad del Integration Hub</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Mecanismo</th>
+<th>Implementación</th>
+</tr>
+</thead><tbody><tr>
+<td>Autenticidad</td>
+<td>Verificación de firma (HMAC/OAuth según plataforma), lista de IPs si aplica</td>
+</tr>
+<tr>
+<td>Idempotencia</td>
+<td><code>UNIQUE(integration_id, external_id, event_type, event_version)</code> en <code>INTEGRATION_MESSAGE</code></td>
+</tr>
+<tr>
+<td>Respuesta rápida</td>
+<td>El webhook responde 2xx tras persistir; procesamiento asíncrono en cola</td>
+</tr>
+<tr>
+<td>Reintentos</td>
+<td>Exponencial con jitter; tras N intentos → DLQ + alerta operativa</td>
+</tr>
+<tr>
+<td>Orden</td>
+<td>Procesamiento por <code>external_id</code> en orden de recepción; eventos fuera de orden se reordenan por timestamp de la plataforma</td>
+</tr>
+<tr>
+<td>Reproceso</td>
+<td>Consola para reintentar mensajes desde DLQ con trazabilidad</td>
+</tr>
+<tr>
+<td>Monitoreo</td>
+<td>Tasa de webhooks por plataforma; alerta si una sucursal activa deja de recibir pedidos en su horario pico</td>
+</tr>
+</tbody></table></div><h3>A.6 Conciliación de comisiones y liquidaciones</h3>
+<div class="diagram"><pre class="mermaid">flowchart LR
+  S["Liquidación del agregador&lt;br/&gt;(API o archivo CSV/Excel)"] --&gt; P["Parser del adaptador&lt;br/&gt;→ SETTLEMENT_LINE canónico"]
+  P --&gt; M{"Cruce por external_id"}
+  M --&gt;|Coincide monto y comisión esperada| OK["MATCHED"]
+  M --&gt;|Diferencia| DIF["DIFFERENCE&lt;br/&gt;(comisión, promo, reembolso)"]
+  M --&gt;|No existe en POS| MP["MISSING_IN_POS"]
+  M --&gt;|No liquidado| MS["MISSING_IN_SETTLEMENT"]
+  DIF --&gt; R["Bandeja de disputas&lt;br/&gt;(evidencia: tiempos, estados, fotos)"]
+  MP --&gt; R
+  MS --&gt; R
+  OK --&gt; RPT["Reporte de rentabilidad por canal:&lt;br/&gt;venta bruta − comisión − promos financiadas − cancelaciones = neto"]</pre></div><p>La comisión esperada se calcula con las reglas tipo <code>COMMISSION</code> del motor de reglas (porcentaje, fijo, impuestos sobre la comisión), lo que permite detectar cobros fuera de contrato.</p>
+<h3>A.7 Delivery propio: componentes</h3>
+<ul>
+<li><strong>Zonas</strong>: polígonos GeoJSON por sucursal; consulta &quot;punto en polígono&quot; con PostGIS.</li>
+<li><strong>Geocodificación</strong>: proveedor de mapas mediante adaptador (<code>MapsPort</code>) con caché de direcciones de clientes.</li>
+<li><strong>App repartidor</strong> (PWA o app ligera): lista de entregas, navegación vía app de mapas del teléfono, cambio de estados, cobro contra entrega, envío de ubicación cada N segundos sólo durante la ruta (minimización de datos).</li>
+<li><strong>ETA</strong> = espera en cola KDS + tiempo de preparación (percentil histórico del producto) + traslado estimado (zona o API de rutas).</li>
+<li><strong>Integración opcional con flotas de terceros</strong> (última milla bajo demanda) mediante el mismo patrón de adaptador.</li>
+</ul>
+<hr>
+<h2>Parte B — Facturación electrónica parametrizable por país</h2>
+<h3>B.1 Arquitectura fiscal</h3>
+<div class="diagram"><pre class="mermaid">flowchart TB
+  subgraph DOM["Dominio (agnóstico de país)"]
+    CHK["Cuenta cobrada"] --&gt; DET["Determinación de documento&lt;br/&gt;(reglas por país: tipo, serie, cliente)"]
+    DET --&gt; TAXC["Cálculo de impuestos&lt;br/&gt;(TAX_RULE vigente)"]
+    TAXC --&gt; CFD["Documento Fiscal Canónico"]
+    CFD --&gt; NUM["Numerador&lt;br/&gt;(serie + correlativo,&lt;br/&gt;rangos por terminal)"]
+  end
+  subgraph ADP["Capa de adaptadores fiscales"]
+    REG["Registro de adaptadores&lt;br/&gt;(país × proveedor × versión)"]
+    PE["Adaptador PE&lt;br/&gt;(formato del proveedor OSE/PSE)"]
+    CL["Adaptador CL"]
+    MX["Adaptador MX"]
+    CO["Adaptador CO"]
+    GEN["Adaptador genérico&lt;br/&gt;(no electrónico / pruebas)"]
+  end
+  NUM --&gt; REG
+  REG --&gt; PE &amp; CL &amp; MX &amp; CO &amp; GEN
+  PE --&gt; PRV["Proveedor fiscal"]
+  PRV --&gt; AUT["Ente tributario"]
+  PRV -- "estado / constancia" --&gt; STO["Almacén de XML, constancias, PDF&lt;br/&gt;(object storage, retención legal)"]
+  STO --&gt; CON["Consola fiscal:&lt;br/&gt;estados, reproceso, contingencia, reportes"]</pre></div><h3>B.2 Parametrización por país (sin hardcode)</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Parámetro (tabla/config)</th>
+<th>Ejemplo de contenido</th>
+<th>Uso</th>
+</tr>
+</thead><tbody><tr>
+<td><code>fiscal_document_type</code></td>
+<td>Código oficial, nombre, si requiere identificación, si admite consumidor final, plantilla de impresión</td>
+<td>Catálogo de comprobantes por país</td>
+</tr>
+<tr>
+<td><code>fiscal_doc_determination_rule</code></td>
+<td>&quot;Si cliente tiene identificador tributario de empresa → factura; si no → boleta; si monto &gt; umbral → exigir documento de identidad&quot;</td>
+<td>Sugerencia automática en el cobro</td>
+</tr>
+<tr>
+<td><code>tax_rule</code></td>
+<td>Tributo, tasa, base, código de afectación, vigencia, régimen</td>
+<td>Cálculo de impuestos</td>
+</tr>
+<tr>
+<td><code>customer_id_type</code></td>
+<td>Tipos de documento de identidad, longitud, algoritmo de dígito verificador</td>
+<td>Validación local offline</td>
+</tr>
+<tr>
+<td><code>fiscal_series_policy</code></td>
+<td>Formato de serie, alcance (sucursal/terminal/canal), prefijo de contingencia</td>
+<td>Numeración</td>
+</tr>
+<tr>
+<td><code>submission_policy</code></td>
+<td>Envío individual o por resumen diario, plazo máximo de envío, ventana de anulación</td>
+<td>Cola y monitor de plazos</td>
+</tr>
+<tr>
+<td><code>void_policy</code></td>
+<td>Anulación por comunicación de baja vs. obligatoriedad de nota de crédito, motivos válidos</td>
+<td>Flujo de anulaciones</td>
+</tr>
+<tr>
+<td><code>print_template</code></td>
+<td>Campos obligatorios en representación impresa, formato de QR</td>
+<td>Ticket</td>
+</tr>
+<tr>
+<td><code>rounding_policy</code></td>
+<td>Redondeo por línea o por total, decimales</td>
+<td>Consistencia con el validador del ente</td>
+</tr>
+</tbody></table></div><p><strong>Ilustración por país</strong> (referencial; <strong>todo <span class="tag tag-requiere">Requiere validación</span></strong> con normativa vigente y con el proveedor elegido):</p>
+<div class="table-wrap"><table><thead><tr>
+<th>País</th>
+<th>Esquema general conocido</th>
+<th>Actor intermedio habitual</th>
+</tr>
+</thead><tbody><tr>
+<td>Perú (piloto)</td>
+<td>Comprobantes de pago electrónicos SUNAT en formato UBL; facturas y boletas; resúmenes diarios para boletas y comunicaciones de baja; tasas IGV con regímenes especiales para restaurantes MYPE e impuesto a las bolsas de plástico</td>
+<td>OSE / PSE</td>
+</tr>
+<tr>
+<td>Chile</td>
+<td>Documentos Tributarios Electrónicos del SII (incluye boleta electrónica)</td>
+<td>Proveedor de facturación certificado / emisión propia</td>
+</tr>
+<tr>
+<td>México</td>
+<td>CFDI del SAT, facturas globales para ventas a público en general</td>
+<td>PAC</td>
+</tr>
+<tr>
+<td>Colombia</td>
+<td>Factura electrónica y documento equivalente POS electrónico de la DIAN</td>
+<td>Proveedor tecnológico</td>
+</tr>
+</tbody></table></div><h3>B.3 Ciclo de vida del comprobante</h3>
+<div class="diagram"><pre class="mermaid">stateDiagram-v2
+  [*] --&gt; DRAFT
+  DRAFT --&gt; ISSUED_LOCAL: numerado y firmado/armado en Edge
+  ISSUED_LOCAL --&gt; SENT: enviado al proveedor
+  ISSUED_LOCAL --&gt; CONTINGENCY: sin conexión / proveedor caído
+  CONTINGENCY --&gt; SENT: conexión restablecida (antes del plazo)
+  CONTINGENCY --&gt; OVERDUE: plazo legal por vencer/vencido (alerta crítica)
+  OVERDUE --&gt; SENT
+  SENT --&gt; ACCEPTED
+  SENT --&gt; ACCEPTED_WITH_OBS
+  SENT --&gt; REJECTED
+  SENT --&gt; SENT: reintento por error técnico
+  REJECTED --&gt; [*]: corrección por reemisión según regla del país
+  ACCEPTED --&gt; VOIDED: comunicación de baja / anulación (si el país lo permite)
+  ACCEPTED --&gt; CREDITED: nota de crédito total
+  ACCEPTED_WITH_OBS --&gt; VOIDED
+  VOIDED --&gt; [*]
+  CREDITED --&gt; [*]</pre></div><h3>B.4 Contingencia y alta disponibilidad fiscal</h3>
+<div class="table-wrap"><table><thead><tr>
+<th>Escenario</th>
+<th>Comportamiento</th>
+</tr>
+</thead><tbody><tr>
+<td>Sin internet en la sucursal</td>
+<td>Edge Hub emite localmente con su rango reservado, imprime representación con datos y QR, encola envío; monitor de plazo por documento.</td>
+</tr>
+<tr>
+<td>Proveedor OSE/PSE no disponible</td>
+<td>Reintentos con backoff; si persiste más de X horas → alerta; opción de <strong>proveedor secundario</strong> (segundo adaptador configurado) <span class="tag tag-recomendacion">Recomendación, sujeta a viabilidad contractual y técnica</span>.</td>
+</tr>
+<tr>
+<td>Caída del Edge Hub</td>
+<td>POS usa sub-serie de contingencia propia (rango reservado al terminal) y reencola al hub al volver. <span class="tag tag-requiere">Requiere validación</span> de que el uso de series por terminal/contingencia es aceptado en el país.</td>
+</tr>
+<tr>
+<td>Rechazo del documento</td>
+<td>No se &quot;edita&quot;: se registra el rechazo, se notifica a contabilidad y se corrige por el mecanismo que defina el país.</td>
+</tr>
+<tr>
+<td>Agotamiento de rango local</td>
+<td>Alerta al llegar al 80% de uso; la nube asigna un nuevo rango al reconectar; si el rango se agota offline, el terminal bloquea sólo la emisión de ese tipo de documento (no la toma de pedidos).</td>
+</tr>
+</tbody></table></div><h3>B.5 Seguridad fiscal</h3>
+<ul>
+<li>Certificado digital de firma (cuando lo emite el contribuyente) almacenado en KMS/HSM; nunca en el dispositivo POS. Si la firma debe hacerse en el Edge para operar offline, se usa almacén protegido por hardware (TPM) y rotación controlada <span class="tag tag-requiere">Requiere validación de viabilidad con el proveedor</span>.</li>
+<li>Credenciales del proveedor por razón social, en vault, con rotación.</li>
+<li>Inmutabilidad: documento emitido no modificable (triggers + permisos); toda acción en bitácora con hash encadenado.</li>
+<li>Retención de XML y constancias por el plazo legal del país en almacenamiento WORM (escritura única).</li>
+</ul>
+<h3>B.6 Pruebas de contrato y certificación</h3>
+<ol>
+<li>Suite de pruebas por adaptador con casos oficiales: boleta simple, factura con varias tasas, operación exonerada/inafecta, descuento global, nota de crédito parcial, anulación, contingencia, redondeos extremos.</li>
+<li>Homologación en sandbox del proveedor antes de piloto; evidencia archivada.</li>
+<li>Pruebas de regresión fiscal automáticas en cada despliegue (golden files de XML/JSON esperados).</li>
+<li>Validación final con contador/tributarista: firma de checklist fiscal por país antes de salir a producción.</li>
+</ol>
+<hr>
+<h2>Parte C — Otras integraciones</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Integración</th>
+<th>Puerto</th>
+<th>Notas</th>
+</tr>
+</thead><tbody><tr>
+<td>Pasarelas de pago / terminales de tarjeta</td>
+<td><code>PaymentPort</code></td>
+<td>Integración semi-integrada (el terminal procesa la tarjeta; el POS sólo recibe resultado) para minimizar alcance PCI DSS.</td>
+</tr>
+<tr>
+<td>QR y billeteras</td>
+<td><code>PaymentPort</code></td>
+<td>QR dinámico por monto con confirmación por webhook o consulta; conciliación diaria.</td>
+</tr>
+<tr>
+<td>Impresoras térmicas</td>
+<td><code>PrinterPort</code></td>
+<td>ESC/POS por red; plantillas por país/marca; cola con reintento y reimpresión.</td>
+</tr>
+<tr>
+<td>Lectores de código de barras</td>
+<td>HID teclado</td>
+<td>Búsqueda de producto/cupón en POS.</td>
+</tr>
+<tr>
+<td>Email/SMS/WhatsApp</td>
+<td><code>MessagingPort</code></td>
+<td>Envío de comprobantes, seguimiento de pedidos; sólo con consentimiento cuando sea marketing.</td>
+</tr>
+<tr>
+<td>Contabilidad/ERP</td>
+<td><code>AccountingExportPort</code></td>
+<td>Asientos resumen diarios por sucursal (ventas, impuestos, medios de pago, comisiones).</td>
+</tr>
+</tbody></table></div></section>
+<section id="doc-06" class="doc"><h1>06 — Backlog priorizado (MoSCoW)</h1>
+<p><strong>Criterio de priorización.</strong> MoSCoW se aplica contra la <strong>versión 1.0</strong> (= alcance funcional mínimo solicitado, al cierre de la fase 3). La columna <em>Fase</em> indica la secuencia de construcción (ver <a href="#doc-07">07_plan_implementacion.md</a>). Puntos de historia (SP) en escala Fibonacci son <span class="tag tag-estimacion">Estimación</span> relativa, a recalibrar en el refinamiento con el equipo.</p>
+<ul>
+<li><strong>M — Must:</strong> sin esto no se puede operar legal o comercialmente.</li>
+<li><strong>S — Should:</strong> alto valor; puede postergarse una iteración con un procedimiento manual.</li>
+<li><strong>C — Could:</strong> mejora deseable; entra si hay capacidad.</li>
+<li><strong>W — Won&#39;t (en v1.0):</strong> excluido explícitamente para proteger el alcance.</li>
+</ul>
+<h2>E1. Plataforma, seguridad y configuración</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E1-01</td>
+<td>Como <strong>administrador del grupo</strong>, quiero crear marcas, formatos, sucursales, áreas y terminales, para reflejar la estructura real del negocio.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E1-02</td>
+<td>Como <strong>administrador</strong>, quiero asignar roles con alcance por marca/formato/sucursal, para que cada usuario vea y haga sólo lo que le corresponde.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E1-03</td>
+<td>Como <strong>cajero</strong>, quiero ingresar con PIN en un terminal registrado, para empezar a trabajar en segundos.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E1-04</td>
+<td>Como <strong>auditor</strong>, quiero una bitácora inmutable de acciones sensibles con usuario, aprobador y antes/después, para investigar incidentes.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E1-05</td>
+<td>Como <strong>gerente de TI</strong>, quiero registrar y monitorear el estado de cada Edge Hub (en línea, cola pendiente, versión), para actuar antes de que afecte la operación.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E1-06</td>
+<td>Como <strong>administrador</strong>, quiero MFA para usuarios de backoffice, para proteger configuraciones y datos.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E1-07</td>
+<td>Como <strong>administrador</strong>, quiero publicar configuración versionada con fecha de vigencia, para programar cambios de precio/menú sin intervenir en la noche.</td>
+<td>S</td>
+<td>2</td>
+<td>8</td>
+</tr>
+</tbody></table></div><h2>E2. Catálogo, precios, impuestos y reglas</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E2-01</td>
+<td>Como <strong>gerente de marca</strong>, quiero un catálogo central con categorías, productos y variantes por sucursal/canal, para mantener un solo maestro.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E2-02</td>
+<td>Como <strong>gerente de marca</strong>, quiero grupos de modificadores con mín./máx. y precio, para personalizar platos sin errores.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-03</td>
+<td>Como <strong>gerente de marca</strong>, quiero combos fijos con prorrateo por componente, para venderlos y reportarlos correctamente.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-04</td>
+<td>Como <strong>gerente comercial</strong>, quiero listas de precio por formato, sucursal, canal y franja horaria, para fijar precios diferenciados.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-05</td>
+<td>Como <strong>contador</strong>, quiero configurar impuestos por país, régimen y categoría tributaria con vigencias, para cumplir sin cambios de código.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-06</td>
+<td>Como <strong>gerente comercial</strong>, quiero crear promociones (%, monto, NxM, happy hour) con reglas de acumulación, para ejecutar campañas sin soporte de TI.</td>
+<td>S</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E2-07</td>
+<td>Como <strong>gerente de delivery</strong>, quiero recargos por canal y zona y reglas de comisión por agregador, para medir el margen real por canal.</td>
+<td>M</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-08</td>
+<td>Como <strong>gerente de marca</strong>, quiero combos &quot;arma tu combo&quot; con slots y opciones, para ofrecer más flexibilidad.</td>
+<td>C</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E2-09</td>
+<td>Como <strong>gerente de marca</strong>, quiero menús con horarios de disponibilidad (desayuno, almuerzo, noche), para mostrar sólo lo vendible en cada momento.</td>
+<td>S</td>
+<td>2</td>
+<td>5</td>
+</tr>
+</tbody></table></div><h2>E3. Recetas e inventario</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E3-01</td>
+<td>Como <strong>chef corporativo</strong>, quiero definir recetas y sub-recetas con mermas estándar, para costear y descontar insumos.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E3-02</td>
+<td>Como <strong>administrador de sucursal</strong>, quiero que cada venta descuente insumos automáticamente del almacén correcto, para conocer el stock teórico.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E3-03</td>
+<td>Como <strong>almacenero</strong>, quiero registrar compras/ingresos con costo, para valorizar inventario a costo promedio.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E3-04</td>
+<td>Como <strong>administrador de sucursal</strong>, quiero alertas de stock mínimo, para reponer a tiempo.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E3-05</td>
+<td>Como <strong>jefe de cocina</strong>, quiero registrar mermas con motivo, para controlar pérdidas.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E3-06</td>
+<td>Como <strong>almacenero</strong>, quiero transferencias entre almacenes/sucursales con envío y recepción, para mover stock con trazabilidad.</td>
+<td>S</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E3-07</td>
+<td>Como <strong>controller</strong>, quiero comparar consumo teórico vs. real tras inventario físico, para detectar fugas.</td>
+<td>S</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E3-08</td>
+<td>Como <strong>gerente de marca</strong>, quiero ver costo y margen por producto y por canal, para decidir precios y menú.</td>
+<td>S</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E3-09</td>
+<td>Como <strong>jefe de cocina central</strong>, quiero órdenes de producción que consuman insumos y generen producto intermedio, para abastecer sucursales y dark kitchens.</td>
+<td>C</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E3-10</td>
+<td>Como <strong>comprador</strong>, quiero órdenes de compra a proveedores con sugerencia por punto de reorden.</td>
+<td>W</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table></div><h2>E4. Toma de pedidos omnicanal</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E4-01</td>
+<td>Como <strong>mesero</strong>, quiero un mapa de mesas por área con estados en tiempo real, para atender rápido.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E4-02</td>
+<td>Como <strong>mesero</strong>, quiero tomar el pedido con modificadores, notas y cursos y enviarlo a cocina, para evitar errores de comunicación.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E4-03</td>
+<td>Como <strong>mesero</strong>, quiero unir y transferir mesas e ítems, para adaptarme a cambios del cliente.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E4-04</td>
+<td>Como <strong>cajero</strong>, quiero dividir la cuenta por ítem, comensal, partes iguales o monto, para cobrar a cada cliente su parte.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E4-05</td>
+<td>Como <strong>cajero de mostrador</strong>, quiero un flujo rápido de pago anticipado con número de turno, para formatos fast food y cafetería.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E4-06</td>
+<td>Como <strong>supervisor</strong>, quiero que anular un ítem enviado requiera motivo y mi PIN, para controlar pérdidas y fraude.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E4-07</td>
+<td>Como <strong>cajero</strong>, quiero seguir tomando pedidos y cobrando sin internet, para no detener la venta.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E4-08</td>
+<td>Como <strong>operador de delivery</strong>, quiero buscar al cliente por teléfono, validar dirección y zona y calcular tarifa y ETA, para tomar pedidos de delivery propio.</td>
+<td>M</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E4-09</td>
+<td>Como <strong>cliente/operador</strong>, quiero programar pedidos para una fecha/hora, para que se preparen a tiempo.</td>
+<td>S</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E4-10</td>
+<td>Como <strong>cajero de barra</strong>, quiero cuentas abiertas por nombre con rondas rápidas.</td>
+<td>S</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E4-11</td>
+<td>Como <strong>cliente</strong>, quiero pedir desde una web propia con pago en línea y seguimiento.</td>
+<td>C</td>
+<td>3</td>
+<td>21</td>
+</tr>
+<tr>
+<td>E4-12</td>
+<td>Como <strong>cliente</strong>, quiero pedir desde un kiosco de autoservicio.</td>
+<td>W</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table></div><h2>E5. Cocina, barra y logística (KDS)</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E5-01</td>
+<td>Como <strong>cocinero</strong>, quiero ver las comandas de mi estación en el KDS y marcarlas en preparación/listas, para trabajar sin papel.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E5-02</td>
+<td>Como <strong>jefe de cocina</strong>, quiero semáforos de tiempo por SLA de producto y canal, para priorizar.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E5-03</td>
+<td>Como <strong>cocinero</strong>, quiero alertas visuales y sonoras de cancelaciones y cambios, para no preparar de más.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E5-04</td>
+<td>Como <strong>sucursal sin KDS</strong>, quiero impresión de comandas por estación como alternativa o respaldo.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E5-05</td>
+<td>Como <strong>expedidor</strong>, quiero una pantalla de pase que consolide todas las estaciones de un pedido.</td>
+<td>S</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E5-06</td>
+<td>Como <strong>jefe de cocina</strong>, quiero marcar productos agotados (&quot;86&quot;) que se bloqueen en POS y agregadores.</td>
+<td>M</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E5-07</td>
+<td>Como <strong>jefe de operaciones</strong>, quiero priorización automática por canal, hora prometida y llegada del repartidor.</td>
+<td>S</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E5-08</td>
+<td>Como <strong>dark kitchen multi-marca</strong>, quiero identificar la marca en cada comanda y empaque.</td>
+<td>S</td>
+<td>3</td>
+<td>3</td>
+</tr>
+</tbody></table></div><h2>E6. Delivery propio y agregadores</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E6-01</td>
+<td>Como <strong>cajero</strong>, quiero recibir los pedidos de agregadores automáticamente en una bandeja unificada y aceptarlos/rechazarlos, para no digitarlos.</td>
+<td>M</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E6-02</td>
+<td>Como <strong>cajero</strong>, quiero que los estados (aceptado, listo, cancelado) se sincronicen con el agregador.</td>
+<td>M</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E6-03</td>
+<td>Como <strong>gerente de marca</strong>, quiero publicar menú, precios y disponibilidad al agregador desde el backoffice.</td>
+<td>S</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E6-04</td>
+<td>Como <strong>administrador</strong>, quiero definir zonas de reparto con tarifa, pedido mínimo y horario.</td>
+<td>M</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E6-05</td>
+<td>Como <strong>despachador</strong>, quiero asignar repartidores y agrupar pedidos por ruta.</td>
+<td>M</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E6-06</td>
+<td>Como <strong>repartidor</strong>, quiero una app para ver mis entregas, cambiar estados y registrar cobros contra entrega.</td>
+<td>S</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E6-07</td>
+<td>Como <strong>cliente</strong>, quiero un enlace de seguimiento del pedido.</td>
+<td>C</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E6-08</td>
+<td>Como <strong>controller</strong>, quiero importar liquidaciones de agregadores y conciliarlas pedido a pedido, para detectar cobros indebidos.</td>
+<td>S</td>
+<td>3</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E6-09</td>
+<td>Como <strong>cajero</strong>, quiero liquidar al repartidor al final de su turno (efectivo vs. pedidos entregados).</td>
+<td>M</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E6-10</td>
+<td>Como <strong>operaciones</strong>, quiero integrar flotas de última milla de terceros.</td>
+<td>W</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table></div><h2>E7. Caja y pagos</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E7-01</td>
+<td>Como <strong>cajero</strong>, quiero abrir caja con fondo inicial y registrar ingresos/retiros con motivo.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E7-02</td>
+<td>Como <strong>cajero</strong>, quiero cobrar con efectivo, tarjeta, transferencia, QR y pago mixto.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E7-03</td>
+<td>Como <strong>cajero</strong>, quiero registrar propinas por medio de pago y su distribución.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E7-04</td>
+<td>Como <strong>supervisor</strong>, quiero límites de descuento por rol con aprobación por PIN.</td>
+<td>M</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E7-05</td>
+<td>Como <strong>cajero</strong>, quiero cerrar caja con arqueo ciego por denominación y medio de pago.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E7-06</td>
+<td>Como <strong>administrador</strong>, quiero un cierre de día que consolide cajas y cuadre con lotes de tarjeta.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E7-07</td>
+<td>Como <strong>cajero</strong>, quiero terminal de tarjeta integrado que envíe el monto automáticamente.</td>
+<td>S</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E7-08</td>
+<td>Como <strong>cliente corporativo</strong>, quiero consumir a crédito y recibir factura consolidada.</td>
+<td>C</td>
+<td>3</td>
+<td>8</td>
+</tr>
+</tbody></table></div><h2>E8. Facturación electrónica</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E8-01</td>
+<td>Como <strong>contador</strong>, quiero configurar tipos de comprobante, series y reglas de determinación por país, sucursal, formato y canal.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E8-02</td>
+<td>Como <strong>cajero</strong>, quiero emitir boleta o factura al cobrar con validación del documento del cliente.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E8-03</td>
+<td>Como <strong>sistema</strong>, quiero enviar el comprobante al proveedor OSE/PSE mediante adaptador y registrar su estado y constancia.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E8-04</td>
+<td>Como <strong>cajero</strong>, quiero emitir comprobantes sin internet con envío diferido y control de plazos.</td>
+<td>M</td>
+<td>1</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E8-05</td>
+<td>Como <strong>supervisor</strong>, quiero emitir notas de crédito totales/parciales vinculadas al documento original.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E8-06</td>
+<td>Como <strong>contador</strong>, quiero anular comprobantes según el procedimiento del país (baja/anulación).</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E8-07</td>
+<td>Como <strong>cliente</strong>, quiero recibir el comprobante por email/WhatsApp y consultarlo por QR.</td>
+<td>S</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E8-08</td>
+<td>Como <strong>contador</strong>, quiero una consola fiscal con estados, rechazos, reproceso y alertas de vencimiento.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E8-09</td>
+<td>Como <strong>contador</strong>, quiero notas de débito.</td>
+<td>S</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E8-10</td>
+<td>Como <strong>grupo regional</strong>, quiero un segundo adaptador de país.</td>
+<td>C</td>
+<td>4</td>
+<td>21</td>
+</tr>
+<tr>
+<td>E8-11</td>
+<td>Como <strong>TI</strong>, quiero un proveedor fiscal secundario en conmutación.</td>
+<td>C</td>
+<td>4</td>
+<td>13</td>
+</tr>
+</tbody></table></div><h2>E9. Clientes y fidelización</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E9-01</td>
+<td>Como <strong>operador</strong>, quiero un perfil de cliente con direcciones, datos fiscales e historial.</td>
+<td>M</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E9-02</td>
+<td>Como <strong>cliente</strong>, quiero que se registre mi consentimiento de uso de datos y poder revocarlo.</td>
+<td>M</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>E9-03</td>
+<td>Como <strong>gerente de marketing</strong>, quiero cupones con condiciones y uso único.</td>
+<td>S</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E9-04</td>
+<td>Como <strong>cliente frecuente</strong>, quiero acumular y canjear puntos.</td>
+<td>S</td>
+<td>3</td>
+<td>13</td>
+</tr>
+<tr>
+<td>E9-05</td>
+<td>Como <strong>gerente de marketing</strong>, quiero segmentar clientes por RFM y canal y exportar listas.</td>
+<td>C</td>
+<td>3</td>
+<td>8</td>
+</tr>
+</tbody></table></div><h2>E10. Reportes y analítica</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Historia de usuario</th>
+<th>MoSCoW</th>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>E10-01</td>
+<td>Como <strong>gerente de sucursal</strong>, quiero ventas por turno, producto, categoría, medio de pago y empleado.</td>
+<td>M</td>
+<td>1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E10-02</td>
+<td>Como <strong>contador</strong>, quiero el reporte fiscal de comprobantes emitidos, anulados, notas y estado de envío.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E10-03</td>
+<td>Como <strong>auditor</strong>, quiero reportes de descuentos, anulaciones y diferencias de caja por usuario.</td>
+<td>M</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>E10-04</td>
+<td>Como <strong>gerente general</strong>, quiero ventas consolidadas por sucursal, marca, formato y canal con ticket promedio y horas pico.</td>
+<td>S</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E10-05</td>
+<td>Como <strong>gerente de delivery</strong>, quiero tiempos, cancelaciones, comisiones y rentabilidad por canal.</td>
+<td>S</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E10-06</td>
+<td>Como <strong>gerente de marca</strong>, quiero márgenes e ingeniería de menú.</td>
+<td>S</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>E10-07</td>
+<td>Como <strong>dirección</strong>, quiero pronóstico de demanda por franja y producto.</td>
+<td>W</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table></div><h2>Resumen del backlog <span class="tag tag-estimacion">Estimación</span></h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Prioridad</th>
+<th>N.º historias</th>
+<th>SP</th>
+<th>Comentario</th>
+</tr>
+</thead><tbody><tr>
+<td>Must</td>
+<td>53</td>
+<td>390</td>
+<td>Núcleo operativo, fiscal y de delivery</td>
+</tr>
+<tr>
+<td>Should</td>
+<td>22</td>
+<td>168</td>
+<td>Mayormente fases 2–3</td>
+</tr>
+<tr>
+<td>Could</td>
+<td>8</td>
+<td>95</td>
+<td>Fases 3–4</td>
+</tr>
+<tr>
+<td>Won&#39;t (v1.0)</td>
+<td>4</td>
+<td>—</td>
+<td>Documentados para futuras versiones</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>87</strong></td>
+<td><strong>653</strong></td>
+<td></td>
+</tr>
+</tbody></table></div><div class="table-wrap"><table><thead><tr>
+<th>Fase</th>
+<th>SP</th>
+</tr>
+</thead><tbody><tr>
+<td>Fase 1 (MVP)</td>
+<td>316</td>
+</tr>
+<tr>
+<td>Fase 2</td>
+<td>184</td>
+</tr>
+<tr>
+<td>Fase 3</td>
+<td>119</td>
+</tr>
+<tr>
+<td>Fase 4</td>
+<td>34 (+ evolutivos no detallados)</td>
+</tr>
+</tbody></table></div><p>Velocidad de referencia <span class="tag tag-supuesto">Supuesto</span>: 2 squads × ~30–35 SP/sprint de 2 semanas ≈ 60–70 SP/sprint → Fase 1 ≈ 5 sprints de construcción pura; el plan agrega estabilización, homologación fiscal, hardware y piloto. Las historias técnicas transversales (sync offline, Edge Hub, CI/CD, observabilidad) están embebidas en E1-05, E4-07 y E8-04 y suelen subestimarse: se reserva un 25% de capacidad para ellas.</p>
+</section>
+<section id="doc-07" class="doc"><h1>07 — Plan de implementación por fases</h1>
+<h2>1. Hoja de ruta</h2>
+<div class="diagram"><pre class="mermaid">gantt
+  title Hoja de ruta preliminar <span class="tag tag-estimacion">Estimación</span> — inicio hipotético 2027-01-04
+  dateFormat  YYYY-MM-DD
+  axisFormat  %b %Y
+  section Fase 0
+  Discovery, prototipos, selección de proveedores :f0, 2027-01-04, 28d
+  section Fase 1 — MVP
+  Plataforma, Edge Hub, sync offline            :f1a, after f0, 42d
+  POS salón/mostrador, KDS, caja                :f1b, 2027-02-15, 84d
+  Fiscal (adaptador país piloto) + homologación :f1c, 2027-03-01, 84d
+  Inventario por receta básico, reportes        :f1d, 2027-03-29, 56d
+  Estabilización y pruebas de carga             :f1e, 2027-05-24, 28d
+  section Piloto
+  Piloto 1 sucursal (1ª semana en paralelo)     :p1, after f1e, 42d
+  section Fase 2
+  Delivery propio, agregadores, CRM, multi-sucursal :f2, after p1, 84d
+  section Fase 3
+  Multi-marca avanzado, promociones, fidelización, conciliación, analítica :f3, after f2, 84d
+  section Fase 4
+  Multi-país, cocina central, BI, pronósticos   :f4, after f3, 84d</pre></div><h2>2. Detalle por fase</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Fase</th>
+<th>Duración <span class="tag tag-estimacion">Estimación</span></th>
+<th>Objetivo</th>
+<th>Alcance principal (IDs del backlog)</th>
+<th>Entregables</th>
+<th>Criterio de salida (go/no-go)</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>0. Discovery</strong></td>
+<td>4 semanas</td>
+<td>Reducir incertidumbre crítica</td>
+<td>Respuestas a preguntas críticas; selección OSE/PSE, hardware y agregadores; prototipos navegables de los 5 flujos; arquitectura detallada; backlog MVP refinado</td>
+<td>Documento de decisiones (ADR), prototipo probado con ≥5 cajeros/meseros, plan de pruebas fiscal</td>
+<td>Proveedor fiscal con sandbox operativo; prototipo con tasa de éxito ≥ 90% en tareas clave; presupuesto aprobado</td>
+</tr>
+<tr>
+<td><strong>1. MVP</strong></td>
+<td>20 semanas</td>
+<td>Operar una sucursal de punta a punta, legalmente, con o sin internet</td>
+<td>E1-01…06, E2-01…05, E3-01…05, E4-01…07, E5-01…04, E7-01…06, E8-01…08, E10-01…03</td>
+<td>POS salón/barra/mostrador, KDS, caja, comprobantes electrónicos del país piloto, inventario por receta, reportes operativos y fiscales, Edge Hub, backoffice</td>
+<td>100% de criterios de aceptación Must (archivo 08); homologación fiscal aprobada; prueba de 72 h offline sin pérdida; p95 dentro de objetivo</td>
+</tr>
+<tr>
+<td><strong>Piloto</strong></td>
+<td>6 semanas</td>
+<td>Validar en operación real</td>
+<td>1 sucursal de formato representativo; 1ª semana en paralelo con el sistema actual</td>
+<td>Informe de piloto con KPIs, lista de defectos y ajustes</td>
+<td>Sin incidentes fiscales críticos; ≥ 98% de comprobantes aceptados en primer envío; cierre de caja en ≤ 15 min; satisfacción del personal ≥ 4/5</td>
+</tr>
+<tr>
+<td><strong>2. Omnicanal</strong></td>
+<td>12 semanas</td>
+<td>Delivery y agregadores; despliegue multi-sucursal</td>
+<td>E1-07, E2-06/07/09, E3-06…08, E4-08…10, E5-05/06, E6-01…06/09, E7-07, E8-09, E9-01/02, E10-04</td>
+<td>Bandeja unificada, integración con 1–2 agregadores, delivery propio con app repartidor, CRM básico, transferencias</td>
+<td>≥ 99% de pedidos de agregador ingresados sin digitación; despliegue en ≥ 3 sucursales</td>
+</tr>
+<tr>
+<td><strong>3. Multi-marca y crecimiento</strong></td>
+<td>12 semanas</td>
+<td>Explotar el modelo multi-formato</td>
+<td>E2-08, E3-09, E4-11, E5-07/08, E6-07/08, E7-08, E9-03…05, E10-05/06</td>
+<td>Promociones avanzadas, fidelización, conciliación de liquidaciones, dark kitchen multi-marca, web de pedidos propia, analítica de márgenes</td>
+<td>Conciliación automática ≥ 95% de líneas; v1.0 completa</td>
+</tr>
+<tr>
+<td><strong>4. Escalamiento</strong></td>
+<td>Continuo (trimestres)</td>
+<td>Expansión y ventaja analítica</td>
+<td>E8-10/11, cocina central avanzada, DWH, pronóstico de demanda (Won&#39;t de v1.0 re-priorizados)</td>
+<td>Segundo país, proveedor fiscal secundario, BI</td>
+<td>Según caso de negocio de cada iniciativa</td>
+</tr>
+</tbody></table></div><p><strong>Total hasta v1.0:</strong> <del>54 semanas (</del>12,5 meses) <span class="tag tag-estimacion">Estimación</span>, con valor operativo desde la semana 24–30.</p>
+<h2>3. Equipo propuesto</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Rol</th>
+<th>Fase 0</th>
+<th>Fase 1</th>
+<th>Fase 2–3</th>
+<th>Responsabilidad clave</th>
+</tr>
+</thead><tbody><tr>
+<td>Product Owner (negocio)</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Prioridad, aceptación, decisiones de alcance</td>
+</tr>
+<tr>
+<td>Arquitecto / Tech Lead</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Arquitectura, offline/sync, calidad técnica</td>
+</tr>
+<tr>
+<td>Backend (NestJS)</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>Dominio, integraciones, fiscal</td>
+</tr>
+<tr>
+<td>Frontend (React POS/KDS/backoffice)</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>UI táctil, offline, hardware</td>
+</tr>
+<tr>
+<td>QA automatización</td>
+<td>—</td>
+<td>1</td>
+<td>1</td>
+<td>Pruebas E2E, contrato, carga, regresión fiscal</td>
+</tr>
+<tr>
+<td>DevOps / SRE</td>
+<td>0,5</td>
+<td>1</td>
+<td>0,5</td>
+<td>Infra, CI/CD, Edge Hubs, observabilidad</td>
+</tr>
+<tr>
+<td>Diseñador UX/UI</td>
+<td>1</td>
+<td>0,5</td>
+<td>0,5</td>
+<td>Prototipos, pruebas con usuarios</td>
+</tr>
+<tr>
+<td>Consultor tributario</td>
+<td>0,25</td>
+<td>0,25</td>
+<td>0,1</td>
+<td>Validación normativa y homologación</td>
+</tr>
+<tr>
+<td>Analista funcional / implementador</td>
+<td>0,5</td>
+<td>1</td>
+<td>1</td>
+<td>Configuración, carga de catálogo/recetas, capacitación</td>
+</tr>
+<tr>
+<td><strong>Total FTE</strong></td>
+<td><strong>~6,25</strong></td>
+<td><strong>~11,75</strong></td>
+<td><strong>~11,1</strong></td>
+<td></td>
+</tr>
+</tbody></table></div><h2>4. Esfuerzo y presupuesto (orden de magnitud)</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Bloque</th>
+<th>Cálculo <span class="tag tag-estimacion">Estimación</span></th>
+<th>Persona-mes</th>
+</tr>
+</thead><tbody><tr>
+<td>Fase 0</td>
+<td>6,25 FTE × 0,9 meses</td>
+<td>~6</td>
+</tr>
+<tr>
+<td>Fase 1</td>
+<td>11,75 FTE × 4,6 meses</td>
+<td>~54</td>
+</tr>
+<tr>
+<td>Piloto</td>
+<td>~8 FTE × 1,4 meses</td>
+<td>~11</td>
+</tr>
+<tr>
+<td>Fase 2</td>
+<td>11,1 FTE × 2,8 meses</td>
+<td>~31</td>
+</tr>
+<tr>
+<td>Fase 3</td>
+<td>11,1 FTE × 2,8 meses</td>
+<td>~31</td>
+</tr>
+<tr>
+<td><strong>Total hasta v1.0</strong></td>
+<td></td>
+<td><strong>~133</strong></td>
+</tr>
+</tbody></table></div><p><strong>Fórmula de presupuesto</strong> (completar con tarifas reales; no se asumen tarifas en este documento):</p>
+<pre class="code"><code>Costo_v1.0 = Σ(persona-mes × tarifa_mensual_rol)
+           + Infra_nube_mensual × meses
+           + Hardware_por_sucursal × n_sucursales   (Edge Hub + UPS + tablets/POS + KDS + impresoras + red)
+           + Licencias/servicios (proveedor fiscal por documento o plan, mapas, mensajería, middleware agregadores, pasarela)
+           + Contingencia 15–20%</code></pre><p>Para el análisis de <strong>TCO a 3 años</strong> comparar contra el costo de licencias SaaS por terminal/sucursal × n.º de sucursales proyectado; el punto de equilibrio suele depender más del número de sucursales que del costo de construcción. <span class="tag tag-recomendacion">Recomendación</span> Modelar escenarios pesimista/base/optimista de crecimiento de sucursales.</p>
+<h2>5. Estrategia de despliegue y gestión del cambio</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>Elemento</th>
+<th>Plan</th>
+</tr>
+</thead><tbody><tr>
+<td>Migración de datos</td>
+<td>Catálogo, recetas, clientes y saldos de stock desde el sistema actual vía plantillas Excel validadas; sin migrar historial transaccional fiscal (se mantiene consultable en el sistema anterior).</td>
+</tr>
+<tr>
+<td>Corte</td>
+<td>Fuera de horario de servicio, al inicio de un periodo fiscal o de una semana operativa; plan de reversión documentado.</td>
+</tr>
+<tr>
+<td>Capacitación</td>
+<td>Por rol (mesero 1 h, cajero 2 h, cocina 30 min, administrador 4 h, contador 3 h); modo entrenamiento en POS que no emite comprobantes reales.</td>
+</tr>
+<tr>
+<td>Soporte</td>
+<td>Hypercare de 2 semanas por sucursal con soporte en sitio el primer día; mesa de ayuda con SLA definido.</td>
+</tr>
+<tr>
+<td>Despliegue progresivo</td>
+<td>Anillos: piloto → 2 sucursales → resto en olas de 3–5; feature flags por sucursal y canal.</td>
+</tr>
+<tr>
+<td>Gobernanza</td>
+<td>Comité quincenal (Gerencia, Operaciones, Finanzas, TI) con tablero de KPIs del proyecto: avance de SP, defectos críticos abiertos, tasa de aceptación fiscal, incidentes por sucursal.</td>
+</tr>
+</tbody></table></div><h2>6. KPIs de éxito del proyecto</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>KPI</th>
+<th>Línea base</th>
+<th>Meta</th>
+<th>Fuente</th>
+</tr>
+</thead><tbody><tr>
+<td>Tiempo promedio de toma de pedido en salón</td>
+<td>[Requiere medición en Fase 0]</td>
+<td>−20%</td>
+<td>Logs del POS</td>
+</tr>
+<tr>
+<td>Comprobantes aceptados al primer envío</td>
+<td>—</td>
+<td>≥ 98%</td>
+<td>Consola fiscal</td>
+</tr>
+<tr>
+<td>Pedidos de agregador digitados manualmente</td>
+<td>[Requiere medición]</td>
+<td>≤ 1%</td>
+<td>Integration Hub</td>
+</tr>
+<tr>
+<td>Tiempo de cierre de caja</td>
+<td>[Requiere medición]</td>
+<td>≤ 15 min</td>
+<td>Sesiones de caja</td>
+</tr>
+<tr>
+<td>Diferencia de inventario teórico vs. real (insumos críticos)</td>
+<td>[Requiere medición]</td>
+<td>≤ 3%</td>
+<td>Inventario físico</td>
+</tr>
+<tr>
+<td>Disponibilidad percibida de caja (minutos sin poder cobrar/mes)</td>
+<td>—</td>
+<td>0</td>
+<td>Monitoreo Edge</td>
+</tr>
+</tbody></table></div></section>
+<section id="doc-08" class="doc"><h1>08 — Criterios de aceptación por módulo</h1>
+<p>Formato: escenarios <em>Dado / Cuando / Entonces</em> para comportamiento funcional y umbrales medibles para requisitos no funcionales. Todos los criterios se automatizan como pruebas E2E o de contrato salvo indicación. Los montos son ilustrativos.</p>
+<h2>M1. Configuración multi-formato, multi-marca y multi-sucursal</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M1-01</td>
+<td><strong>Dado</strong> un grupo con 2 marcas y 3 sucursales, <strong>cuando</strong> se crea una sucursal que aloja ambas marcas, <strong>entonces</strong> cada terminal de esa sucursal puede vender ambas marcas y cada venta queda asociada a la marca correcta.</td>
+</tr>
+<tr>
+<td>CA-M1-02</td>
+<td><strong>Dado</strong> un precio de marca y una excepción para la sucursal B, <strong>cuando</strong> se vende en B, <strong>entonces</strong> se aplica la excepción; en las demás sucursales, el precio de marca.</td>
+</tr>
+<tr>
+<td>CA-M1-03</td>
+<td><strong>Dado</strong> un cambio de configuración publicado con vigencia futura, <strong>cuando</strong> llega la fecha/hora de vigencia, <strong>entonces</strong> todos los Edge Hubs conectados lo aplican en ≤ 5 min y los pedidos abiertos conservan su precio original.</td>
+</tr>
+</tbody></table></div><h2>M2. Productos, recetas e inventario</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M2-01</td>
+<td><strong>Dado</strong> un producto con receta (200 g de carne, 1 pan) y modificador &quot;extra carne&quot; (+100 g), <strong>cuando</strong> se envía a cocina 1 unidad con el modificador, <strong>entonces</strong> se descuentan 300 g de carne y 1 pan del almacén configurado, aplicando la merma estándar.</td>
+</tr>
+<tr>
+<td>CA-M2-02</td>
+<td><strong>Dado</strong> un ítem anulado antes de prepararse, <strong>cuando</strong> se confirma la anulación, <strong>entonces</strong> se revierte el consumo; si ya estaba en preparación, se registra merma con motivo.</td>
+</tr>
+<tr>
+<td>CA-M2-03</td>
+<td><strong>Dado</strong> un insumo con stock mínimo 5 kg, <strong>cuando</strong> el saldo cae por debajo, <strong>entonces</strong> se genera alerta visible en backoffice y notificación al responsable en ≤ 1 min (con conexión).</td>
+</tr>
+<tr>
+<td>CA-M2-04</td>
+<td><strong>Dado</strong> una transferencia enviada de 10 kg y recibida 9,5 kg, <strong>cuando</strong> se registra la recepción, <strong>entonces</strong> el estado es <code>DISCREPANCY</code> y la diferencia queda pendiente de justificación.</td>
+</tr>
+<tr>
+<td>CA-M2-05</td>
+<td>El costo teórico de un producto se recalcula al cambiar el costo promedio de cualquiera de sus insumos, y el margen por canal descuenta la comisión configurada del agregador.</td>
+</tr>
+</tbody></table></div><h2>M3. Precios, impuestos y motor de reglas</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M3-01</td>
+<td><strong>Dado</strong> un happy hour 18:00–20:00 en barra, <strong>cuando</strong> se agrega el producto a las 19:59 y se cobra a las 20:05, <strong>entonces</strong> se respeta el precio con el que se agregó la línea.</td>
+</tr>
+<tr>
+<td>CA-M3-02</td>
+<td><strong>Dado</strong> dos promociones no acumulables del mismo grupo exclusivo, <strong>cuando</strong> ambas aplican, <strong>entonces</strong> se aplica sólo la de mayor beneficio para el cliente (o la de mayor prioridad, según configuración) y el ticket muestra cuál.</td>
+</tr>
+<tr>
+<td>CA-M3-03</td>
+<td><strong>Dado</strong> un cambio de tasa de impuesto con vigencia a partir de una fecha, <strong>cuando</strong> se emiten documentos antes y después, <strong>entonces</strong> cada uno usa la tasa vigente a su fecha de emisión, sin despliegue de código.</td>
+</tr>
+<tr>
+<td>CA-M3-04</td>
+<td>Los totales calculados por el motor coinciden al céntimo con los del validador del proveedor fiscal en el 100% de los casos de la suite de redondeo.</td>
+</tr>
+</tbody></table></div><h2>M4. Toma de pedidos omnicanal</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M4-01</td>
+<td>Agregar un ítem sin modificadores toma ≤ 2 toques desde la pantalla de pedido; p95 de respuesta ≤ 500 ms en LAN.</td>
+</tr>
+<tr>
+<td>CA-M4-02</td>
+<td><strong>Dado</strong> una mesa con 6 ítems, <strong>cuando</strong> se divide en 3 partes iguales, <strong>entonces</strong> se generan 3 subcuentas cuya suma iguala el total y el redondeo residual se asigna a la última.</td>
+</tr>
+<tr>
+<td>CA-M4-03</td>
+<td><strong>Dado</strong> dos meseros editando la misma mesa, <strong>cuando</strong> ambos guardan, <strong>entonces</strong> el segundo recibe aviso de conflicto con la versión actualizada y no se pierden ítems.</td>
+</tr>
+<tr>
+<td>CA-M4-04</td>
+<td><strong>Dado</strong> un pedido programado para las 13:00 con preparación de 20 min y traslado de 15 min, <strong>entonces</strong> la comanda se libera a cocina a las 12:25.</td>
+</tr>
+<tr>
+<td>CA-M4-05</td>
+<td><strong>Dado</strong> que se corta internet, <strong>cuando</strong> se toman, envían y cobran pedidos durante 72 h simuladas, <strong>entonces</strong> no se pierde ninguna transacción y todas se sincronizan en ≤ 30 min tras reconectar.</td>
+</tr>
+<tr>
+<td>CA-M4-06</td>
+<td>Anular un ítem enviado sin permiso exige PIN de supervisor y motivo; el evento aparece en la bitácora con ambos usuarios.</td>
+</tr>
+</tbody></table></div><h2>M5. Cocina, barra y logística</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M5-01</td>
+<td>Una comanda aparece en el KDS de su estación en ≤ 2 s desde &quot;enviar a cocina&quot; (p95, LAN).</td>
+</tr>
+<tr>
+<td>CA-M5-02</td>
+<td><strong>Dado</strong> un SLA de 12 min, <strong>cuando</strong> transcurren 9 y 12 min, <strong>entonces</strong> la tarjeta cambia a ámbar y rojo respectivamente.</td>
+</tr>
+<tr>
+<td>CA-M5-03</td>
+<td><strong>Dado</strong> un pedido cancelado en preparación, <strong>entonces</strong> el KDS muestra alerta visual y sonora que requiere confirmación del cocinero.</td>
+</tr>
+<tr>
+<td>CA-M5-04</td>
+<td><strong>Dado</strong> un producto marcado &quot;86&quot;, <strong>entonces</strong> queda bloqueado en todos los POS de la sucursal en ≤ 5 s y en los agregadores integrados en ≤ 2 min (sujeto a la API de la plataforma).</td>
+</tr>
+<tr>
+<td>CA-M5-05</td>
+<td>Si el KDS falla, la comanda se imprime automáticamente en la impresora de respaldo de la estación.</td>
+</tr>
+</tbody></table></div><h2>M6. Delivery propio y agregadores</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M6-01</td>
+<td><strong>Dado</strong> un webhook de pedido válido, <strong>entonces</strong> el pedido aparece en la bandeja de la sucursal en ≤ 10 s (p95) y el webhook se responde en ≤ 2 s.</td>
+</tr>
+<tr>
+<td>CA-M6-02</td>
+<td><strong>Dado</strong> el mismo webhook recibido 3 veces, <strong>entonces</strong> existe un único pedido.</td>
+</tr>
+<tr>
+<td>CA-M6-03</td>
+<td><strong>Dado</strong> un SKU externo sin mapeo, <strong>entonces</strong> el pedido no se pierde: queda en estado &quot;requiere revisión&quot; con alerta y puede mapearse y aceptarse manualmente.</td>
+</tr>
+<tr>
+<td>CA-M6-04</td>
+<td><strong>Dado</strong> una dirección fuera de todos los polígonos, <strong>entonces</strong> el sistema impide confirmar delivery y ofrece pickup o la sucursal que la cubre.</td>
+</tr>
+<tr>
+<td>CA-M6-05</td>
+<td><strong>Dado</strong> un pedido bajo el mínimo de la zona, <strong>entonces</strong> no se puede confirmar y se muestra el faltante.</td>
+</tr>
+<tr>
+<td>CA-M6-06</td>
+<td><strong>Dado</strong> una liquidación importada, <strong>entonces</strong> cada línea queda clasificada (<code>MATCHED</code>, <code>DIFFERENCE</code>, <code>MISSING_IN_POS</code>, <code>MISSING_IN_SETTLEMENT</code>) y el reporte de rentabilidad por canal cuadra con la suma de líneas.</td>
+</tr>
+<tr>
+<td>CA-M6-07</td>
+<td>La liquidación del repartidor muestra efectivo esperado = Σ pedidos contra entrega entregados − vueltos registrados, con diferencia y aprobación.</td>
+</tr>
+</tbody></table></div><h2>M7. Caja y cobros</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M7-01</td>
+<td>No se puede cobrar sin caja abierta en el terminal (salvo rol sin manejo de efectivo con medios electrónicos, si se configura).</td>
+</tr>
+<tr>
+<td>CA-M7-02</td>
+<td><strong>Dado</strong> un pago mixto (S/ 50 efectivo + S/ 30 tarjeta) sobre S/ 80, <strong>entonces</strong> la cuenta se cierra y cada medio queda registrado en la sesión de caja.</td>
+</tr>
+<tr>
+<td>CA-M7-03</td>
+<td>En el arqueo ciego el esperado no es visible antes de declarar; tras declarar se muestran diferencias por medio de pago.</td>
+</tr>
+<tr>
+<td>CA-M7-04</td>
+<td>Una diferencia fuera de tolerancia exige motivo y aprobación de supervisor para cerrar.</td>
+</tr>
+<tr>
+<td>CA-M7-05</td>
+<td>El cierre de día no se completa si hay cajas abiertas o comprobantes del día en estado <code>DRAFT</code>; advierte (sin bloquear) si hay documentos en cola de contingencia dentro de plazo.</td>
+</tr>
+<tr>
+<td>CA-M7-06</td>
+<td>Cobro + impresión de ticket en p95 ≤ 2 s (excluye tiempo de autorización del terminal de tarjeta).</td>
+</tr>
+<tr>
+<td>CA-M7-07</td>
+<td>El sistema no almacena número completo de tarjeta ni CVV en ninguna base, log o respaldo (verificado por escaneo automatizado).</td>
+</tr>
+</tbody></table></div><h2>M8. Facturación electrónica</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M8-01</td>
+<td><strong>Dado</strong> un cliente con identificador tributario de empresa válido, <strong>entonces</strong> el sistema sugiere factura; con consumidor final, boleta (según reglas configuradas del país piloto).</td>
+</tr>
+<tr>
+<td>CA-M8-02</td>
+<td>La numeración por serie es correlativa y sin huecos ni duplicados, incluso con 4 terminales emitiendo simultáneamente online y offline (prueba de concurrencia de 10.000 documentos).</td>
+</tr>
+<tr>
+<td>CA-M8-03</td>
+<td>El 100% de los casos de la suite de homologación del proveedor es aceptado en sandbox.</td>
+</tr>
+<tr>
+<td>CA-M8-04</td>
+<td><strong>Dado</strong> un documento emitido offline, <strong>entonces</strong> se envía automáticamente al reconectar y la consola alerta si faltan ≤ 24 h (configurable) para el vencimiento del plazo legal.</td>
+</tr>
+<tr>
+<td>CA-M8-05</td>
+<td>Un documento emitido no puede modificarse en sus campos económicos (verificado a nivel de base de datos); la corrección sólo es posible por nota o anulación.</td>
+</tr>
+<tr>
+<td>CA-M8-06</td>
+<td><strong>Dado</strong> una nota de crédito parcial, <strong>entonces</strong> referencia al documento origen, su monto no supera el saldo no acreditado y revierte inventario si corresponde.</td>
+</tr>
+<tr>
+<td>CA-M8-07</td>
+<td>El XML/representación y la constancia de cada documento quedan almacenados y recuperables por su número en ≤ 3 s.</td>
+</tr>
+<tr>
+<td>CA-M8-08</td>
+<td>El ticket impreso contiene todos los campos obligatorios y el QR del país piloto (checklist firmado por el consultor tributario).</td>
+</tr>
+<tr>
+<td>CA-M8-09</td>
+<td>Agregar un nuevo país o proveedor no requiere modificar módulos del dominio: sólo un nuevo adaptador y configuración (verificado por revisión de arquitectura).</td>
+</tr>
+</tbody></table></div><h2>M9. Clientes, fidelización y CRM</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M9-01</td>
+<td>La búsqueda por teléfono devuelve el cliente, sus direcciones y últimos 5 pedidos en ≤ 1 s.</td>
+</tr>
+<tr>
+<td>CA-M9-02</td>
+<td>Sin consentimiento de marketing registrado, el cliente no aparece en exportaciones para campañas.</td>
+</tr>
+<tr>
+<td>CA-M9-03</td>
+<td>Los puntos se acreditan sólo sobre pedidos cerrados y pagados y se revierten ante nota de crédito.</td>
+</tr>
+<tr>
+<td>CA-M9-04</td>
+<td>Un cupón de uso único no puede canjearse dos veces, ni siquiera desde dos terminales offline (validación al sincronizar con regla de conflicto documentada).</td>
+</tr>
+</tbody></table></div><h2>M10. Reportes y analítica</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M10-01</td>
+<td>Las ventas netas del reporte de ventas cuadran al céntimo con la suma de comprobantes aceptados − notas de crédito del mismo periodo y sucursal.</td>
+</tr>
+<tr>
+<td>CA-M10-02</td>
+<td>Los reportes del día anterior están disponibles antes de las 06:00; los reportes operativos del día en curso tienen latencia ≤ 15 min.</td>
+</tr>
+<tr>
+<td>CA-M10-03</td>
+<td>Todo reporte permite filtrar por sucursal, marca, formato, canal, turno y rango de fechas, y exportar a Excel/CSV.</td>
+</tr>
+<tr>
+<td>CA-M10-04</td>
+<td>Un usuario sólo ve datos de su ámbito (sucursal/marca) según sus permisos.</td>
+</tr>
+</tbody></table></div><h2>M11. Administración y seguridad</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-M11-01</td>
+<td>Un cajero de la sucursal A no puede ver ni operar datos de la sucursal B (prueba de RLS automatizada en API y base de datos).</td>
+</tr>
+<tr>
+<td>CA-M11-02</td>
+<td>La bitácora detecta cualquier alteración (verificación de cadena de hash diaria sin errores).</td>
+</tr>
+<tr>
+<td>CA-M11-03</td>
+<td>5 intentos fallidos de PIN bloquean el usuario en ese terminal y notifican al supervisor.</td>
+</tr>
+<tr>
+<td>CA-M11-04</td>
+<td>Restauración de respaldo a un punto en el tiempo probada con RTO ≤ 1 h y RPO ≤ 5 min.</td>
+</tr>
+<tr>
+<td>CA-M11-05</td>
+<td>Sin vulnerabilidades críticas o altas abiertas en el pentest previo a producción.</td>
+</tr>
+</tbody></table></div><h2>Requisitos no funcionales transversales</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Criterio</th>
+<th>Método de verificación</th>
+</tr>
+</thead><tbody><tr>
+<td>CA-NF-01</td>
+<td>p95 ≤ 2 s en operaciones críticas con 20 terminales concurrentes por sucursal y 3× el pico esperado</td>
+<td>Prueba de carga (k6/Gatling)</td>
+</tr>
+<tr>
+<td>CA-NF-02</td>
+<td>72 h de operación offline sin pérdida de datos</td>
+<td>Prueba de caos (corte de red, reinicio de Edge, corte de energía con UPS)</td>
+</tr>
+<tr>
+<td>CA-NF-03</td>
+<td>Disponibilidad nube ≥ 99,9% mensual</td>
+<td>SLO medido</td>
+</tr>
+<tr>
+<td>CA-NF-04</td>
+<td>UI usable en tablet de 8&quot; y pantalla de 15&quot;; objetivos táctiles ≥ 48 px</td>
+<td>Revisión de diseño + pruebas con usuarios</td>
+</tr>
+<tr>
+<td>CA-NF-05</td>
+<td>Trazabilidad: dado un número de comprobante, se reconstruye pedido, líneas, usuario, pagos, comanda y consumos en una sola consulta</td>
+<td>Prueba funcional</td>
+</tr>
+</tbody></table></div></section>
+<section id="doc-09" class="doc"><h1>09 — Riesgos, supuestos, dependencias y preguntas críticas</h1>
+<h2>1. Matriz de riesgos</h2>
+<p>Probabilidad (P) e impacto (I) en escala 1–5; severidad = P × I. Valores <span class="tag tag-estimacion">Estimación</span>.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Riesgo</th>
+<th>Tipo</th>
+<th>P</th>
+<th>I</th>
+<th>Sev.</th>
+<th>Mitigación</th>
+<th>Responsable sugerido</th>
+<th>Indicador de alerta</th>
+</tr>
+</thead><tbody><tr>
+<td>R01</td>
+<td>Incumplimiento fiscal por documentos offline enviados fuera de plazo o rechazados</td>
+<td>Legal</td>
+<td>3</td>
+<td>5</td>
+<td><strong>15</strong></td>
+<td>Monitor de plazos, alertas escalonadas, proveedor secundario, homologación previa, checklist firmado por tributarista</td>
+<td>Contador + Tech Lead</td>
+<td>Documentos en cola &gt; X h</td>
+</tr>
+<tr>
+<td>R02</td>
+<td>Cambios normativos (tasas, formatos, plazos) durante el proyecto</td>
+<td>Legal</td>
+<td>3</td>
+<td>4</td>
+<td><strong>12</strong></td>
+<td>Reglas parametrizadas con vigencia; proveedor fiscal absorbe cambios de formato; vigilancia normativa mensual</td>
+<td>Contador</td>
+<td>Publicaciones del ente tributario</td>
+</tr>
+<tr>
+<td>R03</td>
+<td>Demora o negativa de acceso a APIs de agregadores</td>
+<td>Técnico/comercial</td>
+<td>4</td>
+<td>3</td>
+<td><strong>12</strong></td>
+<td>Iniciar trámite en Fase 0; alternativa middleware; contingencia con tablet</td>
+<td>Gerente comercial</td>
+<td>Sin sandbox a la semana 8</td>
+</tr>
+<tr>
+<td>R04</td>
+<td>Recetas y catálogo incompletos o erróneos → costos e inventario no confiables</td>
+<td>Datos</td>
+<td>4</td>
+<td>3</td>
+<td><strong>12</strong></td>
+<td>Levantamiento en Fase 0, plantillas validadas, responsable por marca, inventario físico de calibración</td>
+<td>Chef corporativo</td>
+<td>% productos sin receta</td>
+</tr>
+<tr>
+<td>R05</td>
+<td>Complejidad de sincronización offline subestimada (conflictos, duplicados)</td>
+<td>Técnico</td>
+<td>3</td>
+<td>4</td>
+<td><strong>12</strong></td>
+<td>Event log append-only, UUIDv7, pruebas de caos desde el sprint 2, arquitecto con experiencia en offline</td>
+<td>Arquitecto</td>
+<td>Defectos de sync abiertos</td>
+</tr>
+<tr>
+<td>R06</td>
+<td>Ampliación de alcance (scope creep) por requerimientos de cada marca</td>
+<td>Gestión</td>
+<td>4</td>
+<td>3</td>
+<td><strong>12</strong></td>
+<td>MoSCoW estricto, comité de cambios, &quot;Won&#39;t&quot; documentados</td>
+<td>Product Owner</td>
+<td>Variación de SP por sprint &gt; 15%</td>
+</tr>
+<tr>
+<td>R07</td>
+<td>Resistencia del personal / errores de uso en hora pico</td>
+<td>Organizacional</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Prototipos probados con usuarios, modo entrenamiento, hypercare, piloto con operación paralela</td>
+<td>Gerente de operaciones</td>
+<td>Tiempo de pedido en piloto</td>
+</tr>
+<tr>
+<td>R08</td>
+<td>Heterogeneidad de hardware (impresoras, terminales de pago)</td>
+<td>Técnico</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Lista de hardware homologado; ESC/POS por red; compra centralizada</td>
+<td>DevOps</td>
+<td>Incidentes de impresión</td>
+</tr>
+<tr>
+<td>R09</td>
+<td>Fuga de datos personales o de pago</td>
+<td>Seguridad/legal</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Minimización, cifrado, sin PAN, pentest, RLS, gestión de secretos, plan de respuesta a incidentes</td>
+<td>Responsable de seguridad</td>
+<td>Hallazgos de pentest</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>Falla del Edge Hub (hardware) en servicio</td>
+<td>Operativo</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>UPS, modo degradado en POS, hub de repuesto preconfigurado, monitoreo de heartbeat</td>
+<td>Soporte</td>
+<td>Heartbeat perdido</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>Dependencia de un solo proveedor fiscal (caída o quiebra)</td>
+<td>Proveedor</td>
+<td>2</td>
+<td>4</td>
+<td>8</td>
+<td>Adaptador intercambiable; cláusulas de SLA y portabilidad de datos; proveedor secundario evaluado</td>
+<td>Finanzas + TI</td>
+<td>SLA incumplido</td>
+</tr>
+<tr>
+<td>R12</td>
+<td>Rotación de personal clave del equipo de desarrollo</td>
+<td>Gestión</td>
+<td>3</td>
+<td>3</td>
+<td>9</td>
+<td>Documentación (ADR), pair programming, código compartido entre módulos, revisión cruzada</td>
+<td>Tech Lead</td>
+<td>Bus factor &lt; 2 por módulo</td>
+</tr>
+<tr>
+<td>R13</td>
+<td>Desviación del presupuesto/plazo</td>
+<td>Financiero</td>
+<td>3</td>
+<td>4</td>
+<td><strong>12</strong></td>
+<td>Contingencia 15–20%, fases con go/no-go, priorización por valor</td>
+<td>Gerencia</td>
+<td>Burn-up vs. plan</td>
+</tr>
+</tbody></table></div><h2>2. Supuestos</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Supuesto</th>
+<th>Etiqueta</th>
+<th>Validar con</th>
+<th>Cuándo</th>
+</tr>
+</thead><tbody><tr>
+<td>S01</td>
+<td>País piloto: Perú</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Gerencia</td>
+<td>Fase 0, semana 1</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>Se contratará un proveedor fiscal autorizado (OSE/PSE u homólogo)</td>
+<td><span class="tag tag-recomendacion">Recomendación</span></td>
+<td>Contabilidad/TI</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>Cada sucursal cuenta con red local estable y puede alojar un mini-PC con UPS</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Operaciones/TI</td>
+<td>Fase 0 (visita técnica)</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>Escala inicial 3–10 sucursales, 1–3 marcas</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Gerencia</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S05</td>
+<td>Los pagos con tarjeta se procesan en terminales certificados semi-integrados</td>
+<td><span class="tag tag-recomendacion">Recomendación</span></td>
+<td>Finanzas</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S06</td>
+<td>Existe al menos un agregador con API de partner disponible en el país</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+<td>Comercial</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S07</td>
+<td>Las recetas existen (aunque sea en Excel) y pueden normalizarse</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Chef corporativo</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S08</td>
+<td>Una moneda funcional por país</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Finanzas</td>
+<td>Fase 0</td>
+</tr>
+<tr>
+<td>S09</td>
+<td>El negocio acepta operar con un periodo de operación paralela en el piloto</td>
+<td><span class="tag tag-supuesto">Supuesto</span></td>
+<td>Operaciones</td>
+<td>Antes del piloto</td>
+</tr>
+<tr>
+<td>S10</td>
+<td>El uso de series por terminal y procedimientos de contingencia offline es admisible en el país piloto</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+<td>Tributarista + proveedor</td>
+<td>Fase 0 (bloqueante para el diseño de numeración)</td>
+</tr>
+</tbody></table></div><h2>3. Dependencias legales</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Dependencia</th>
+<th>Impacto en el diseño</th>
+<th>Estado</th>
+</tr>
+</thead><tbody><tr>
+<td>DL01</td>
+<td>Normativa de comprobantes electrónicos del país (tipos, formatos, plazos de envío, resúmenes, anulaciones, contingencia)</td>
+<td>Reglas fiscales y adaptador</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL02</td>
+<td>Tasas y regímenes tributarios aplicables a restaurantes (incluidos regímenes especiales o reducidos y tributos específicos como bolsas plásticas)</td>
+<td>Tabla <code>TAX_RULE</code></td>
+<td><span class="tag tag-requiere">Requiere validación</span> con vigencias</td>
+</tr>
+<tr>
+<td>DL03</td>
+<td>Requisitos de la representación impresa (campos, QR)</td>
+<td>Plantillas de impresión</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL04</td>
+<td>Plazo de conservación de comprobantes y libros</td>
+<td>Retención en almacenamiento WORM</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL05</td>
+<td>Ley de protección de datos personales (en Perú, Ley N.º 29733 y su reglamento): registro de bancos de datos, consentimiento, transferencias internacionales si la nube está fuera del país</td>
+<td>Hosting, consentimientos, contratos con encargados</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL06</td>
+<td>Tratamiento tributario y laboral de propinas y cargos por servicio</td>
+<td>Distribución de propinas, reporte para planilla</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL07</td>
+<td>Responsabilidad de emisión de comprobantes en ventas por agregadores (quién emite, sobre qué monto, cómo se documenta la comisión)</td>
+<td>Flujo fiscal de pedidos externos y conciliación</td>
+<td><span class="tag tag-requiere">Requiere validación</span> con contrato de cada plataforma</td>
+</tr>
+<tr>
+<td>DL08</td>
+<td>Normas de defensa del consumidor (exhibición de precios con impuestos, libro de reclamaciones si aplica)</td>
+<td>Menús, web propia, tickets</td>
+<td><span class="tag tag-requiere">Requiere validación</span></td>
+</tr>
+<tr>
+<td>DL09</td>
+<td>PCI DSS (si se procesan tarjetas)</td>
+<td>Arquitectura de pagos semi-integrada</td>
+<td>Definido por diseño: sin PAN</td>
+</tr>
+</tbody></table></div><h2>4. Dependencias técnicas</h2>
+<div class="table-wrap"><table><thead><tr>
+<th>ID</th>
+<th>Dependencia</th>
+<th>Riesgo asociado</th>
+<th>Plan B</th>
+</tr>
+</thead><tbody><tr>
+<td>DT01</td>
+<td>Sandbox y documentación API del proveedor fiscal</td>
+<td>R01, R11</td>
+<td>Proveedor alternativo preseleccionado</td>
+</tr>
+<tr>
+<td>DT02</td>
+<td>Credenciales partner de agregadores</td>
+<td>R03</td>
+<td>Middleware de agregación</td>
+</tr>
+<tr>
+<td>DT03</td>
+<td>SDK/protocolo de terminales de pago y QR locales</td>
+<td>R08</td>
+<td>Modo no integrado (digitación del monto en terminal) temporal</td>
+</tr>
+<tr>
+<td>DT04</td>
+<td>Proveedor de mapas/geocodificación</td>
+<td>—</td>
+<td>Proveedor alternativo vía <code>MapsPort</code>; polígonos dibujados manualmente</td>
+</tr>
+<tr>
+<td>DT05</td>
+<td>Hardware homologado disponible en el país</td>
+<td>R08</td>
+<td>Lista de 2 modelos por tipo de dispositivo</td>
+</tr>
+<tr>
+<td>DT06</td>
+<td>Conectividad mínima por sucursal (incluido respaldo 4G)</td>
+<td>R01</td>
+<td>Router con failover celular <span class="tag tag-recomendacion">Recomendación</span></td>
+</tr>
+<tr>
+<td>DT07</td>
+<td>Servicio de mensajería (email/WhatsApp/SMS)</td>
+<td>—</td>
+<td>Email como canal mínimo</td>
+</tr>
+</tbody></table></div><h2>5. Preguntas críticas antes de iniciar el desarrollo</h2>
+<h3>5.1 Bloqueantes (sin respuesta no se puede cerrar el diseño) — responder primero</h3>
+<ol>
+<li><strong>País(es) y razones sociales:</strong> ¿en qué país(es) se operará en los próximos 24 meses, cuántas razones sociales/RUC emiten y bajo qué régimen tributario está cada una (incluido si aplica algún régimen especial para restaurantes)?</li>
+<li><strong>Escala real:</strong> ¿cuántas sucursales, marcas y formatos hay hoy y cuántos se proyectan a 3 años; cuántos terminales y pedidos/día por sucursal en hora pico?</li>
+<li><strong>Facturación electrónica actual:</strong> ¿ya emiten electrónicamente? ¿con qué proveedor (OSE/PSE) y contrato? ¿qué series usan y qué procedimiento de contingencia aplican hoy?</li>
+<li><strong>Agregadores:</strong> ¿con qué plataformas operan, qué % de las ventas representan, y quién emite el comprobante al consumidor en esas ventas según contrato?</li>
+<li><strong>Decisión estratégica:</strong> ¿el objetivo es tener un producto propio (activo diferenciador, eventualmente comercializable) o resolver la operación al menor costo y plazo? Esto define build/buy/híbrido.</li>
+</ol>
+<h3>5.2 Importantes (afectan alcance y estimación)</h3>
+<ol start="6">
+<li>¿Qué sistema(s) usan hoy (POS, inventario, contabilidad/ERP) y qué deben integrarse o reemplazarse?</li>
+<li>¿Existen recetas estandarizadas con gramajes y costos? ¿Hay cocina central que abastece a sucursales?</li>
+<li>¿El delivery propio usa repartidores en planilla, tercerizados o ambos? ¿Cobran contra entrega?</li>
+<li>¿Qué medios de pago y proveedores (adquirentes, billeteras, QR) son obligatorios desde el día uno?</li>
+<li>¿Qué hardware existe y puede reutilizarse (impresoras, tablets, terminales)? ¿Hay red estable y espacio para un equipo local con UPS por sucursal?</li>
+<li>¿Programa de fidelización existente? ¿Datos de clientes a migrar y con qué consentimiento?</li>
+<li>¿Políticas de propinas y cargo por servicio por formato?</li>
+</ol>
+<h3>5.3 De gobierno del proyecto</h3>
+<ol start="13">
+<li>¿Presupuesto y fecha objetivo de salida en vivo? ¿Hay estacionalidad que impida cortes en ciertos meses?</li>
+<li>¿Quién será el Product Owner con autoridad de decisión y qué disponibilidad tendrá (≥ 50% recomendado)?</li>
+<li>¿Desarrollo con equipo interno, proveedor externo o mixto? ¿Quién será dueño del código y de la propiedad intelectual?</li>
+</ol>
+<h2>6. Próximo paso recomendado</h2>
+<p>Realizar un <strong>taller de 2 horas</strong> con Gerencia, Operaciones, Finanzas/Contabilidad y TI para responder las preguntas 1–5, seguido de la Fase 0 (4 semanas). Responsable sugerido: Product Owner designado. Métrica de cierre: acta con respuestas a las 5 preguntas bloqueantes y decisión build/buy/híbrido.</p>
+</section>
+  <footer>Borrador v0.1 · 2026-11-25 · Documento para revisión interna</footer>
+  </main>
+</div>
+<script src="mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'strict', flowchart: { htmlLabels: true } });
+  const root = document.documentElement;
+  document.getElementById('themeBtn').onclick = () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  };
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  const side = document.getElementById('side');
+  document.getElementById('menuBtn').onclick = () => side.classList.toggle('open');
+  side.addEventListener('click', e => { if (e.target.closest('a')) side.classList.remove('open'); });
+  const links = [...side.querySelectorAll('a')];
+  const obs = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) links.forEach(l => l.classList.toggle('active', l.dataset.target === en.target.id));
+  }), { rootMargin: '-80px 0px -70% 0px' });
+  document.querySelectorAll('section.doc').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
